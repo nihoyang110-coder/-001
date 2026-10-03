@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>日本食品消费税卡片</title>
+<style>
+  :root {
+    --surface: #fcfcfb;
+    --panel: #f3f2ee;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --ink-3: #8a8984;
+    --rule: #e2e1dc;
+    --takeout: #2a78d6;   /* 外带 / 超市 1% */
+    --dinein: #eb6834;    /* 堂食 10% */
+    --accent: #0b0b0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #ddd; font-family: "WenQuanYi Zen Hei", "PingFang SC", "Noto Sans CJK SC", sans-serif; color: var(--ink); }
+  .card {
+    width: 1080px; height: 1440px; background: var(--surface);
+    padding: 88px 96px 72px; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; margin: 0 auto 40px;
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; font-size: 30px; color: var(--ink-3); letter-spacing: 2px; }
+  .tag { border: 2px solid var(--ink); color: var(--ink); padding: 8px 20px; border-radius: 40px; font-size: 28px; letter-spacing: 1px; }
+  .foot { margin-top: auto; padding-top: 28px; border-top: 2px solid var(--rule); font-size: 24px; color: var(--ink-3); line-height: 1.6; display: flex; justify-content: space-between; gap: 40px; }
+  .foot .src { flex: 1; }
+  h1 { font-size: 92px; line-height: 1.22; font-weight: 700; letter-spacing: 1px; }
+  h2 { font-size: 64px; line-height: 1.3; margin: 56px 0 40px; }
+  p, li { font-size: 40px; line-height: 1.65; color: var(--ink-2); }
+  b, strong { color: var(--ink); }
+  .kicker { font-size: 34px; color: var(--ink-2); margin-top: 40px; line-height: 1.6; }
+  .hl-o { color: var(--dinein); }
+  .hl-b { color: var(--takeout); }
+
+  /* cover */
+  .cover h1 { font-size: 104px; margin-top: 150px; }
+  .cover .big { font-size: 300px; font-weight: 700; line-height: 1; color: var(--dinein); margin: 40px 0 0 -8px; }
+  .cover .big small { font-size: 72px; color: var(--ink); margin-left: 16px; }
+  .cover .kicker { font-size: 44px; margin-top: 48px; color: var(--ink); }
+
+  /* facts list */
+  .facts { list-style: none; margin-top: 8px; }
+  .facts li { padding: 30px 0; border-bottom: 2px solid var(--rule); display: flex; gap: 32px; }
+  .facts li .k { flex: 0 0 210px; font-size: 34px; color: var(--ink-3); padding-top: 6px; }
+  .facts li .v { flex: 1; font-size: 42px; color: var(--ink); line-height: 1.5; }
+
+  /* chart */
+  .chart { margin-top: 24px; background: var(--panel); border-radius: 24px; padding: 48px 56px 40px; }
+  .legend { display: flex; gap: 48px; font-size: 32px; color: var(--ink-2); margin-bottom: 36px; }
+  .legend i { display: inline-block; width: 28px; height: 28px; border-radius: 6px; vertical-align: -4px; margin-right: 12px; }
+  .plot { height: 400px; display: flex; align-items: flex-end; gap: 120px; border-bottom: 2px solid var(--ink-3); padding: 0 40px; }
+  .group { flex: 1; display: flex; align-items: flex-end; gap: 4px; height: 100%; }
+  .bar { flex: 1; border-radius: 8px 8px 0 0; position: relative; }
+  .bar span { position: absolute; top: -56px; left: 0; right: 0; text-align: center; font-size: 44px; font-weight: 700; color: var(--ink); }
+  .xl { display: flex; gap: 120px; padding: 20px 40px 0; }
+  .xl div { flex: 1; text-align: center; font-size: 34px; color: var(--ink-2); }
+  .gap-note { display: flex; gap: 120px; padding: 28px 40px 0; }
+  .gap-note div { flex: 1; text-align: center; font-size: 34px; color: var(--ink); }
+
+  /* two columns */
+  .duo { display: flex; gap: 32px; margin-top: 8px; }
+  .duo .col { flex: 1; background: var(--panel); border-radius: 24px; padding: 40px 36px; }
+  .duo .num { font-size: 96px; font-weight: 700; line-height: 1.1; }
+  .duo .unit { font-size: 34px; color: var(--ink-2); margin-top: 8px; }
+  .duo .lab { font-size: 32px; color: var(--ink-3); margin-bottom: 16px; }
+
+  /* loser rows */
+  .rows { margin-top: 8px; }
+  .row { display: flex; gap: 36px; padding: 34px 0; border-bottom: 2px solid var(--rule); }
+  .row .who { flex: 0 0 220px; font-size: 44px; font-weight: 700; }
+  .row .what { flex: 1; font-size: 38px; line-height: 1.55; color: var(--ink-2); }
+
+  /* chain */
+  .chain { margin-top: 8px; display: flex; flex-direction: column; gap: 0; }
+  .step { background: var(--panel); border-radius: 20px; padding: 28px 40px; font-size: 42px; display: flex; justify-content: space-between; align-items: center; }
+  .step em { white-space: nowrap; font-style: normal; font-size: 30px; color: var(--ink-3); }
+  .arrow { text-align: center; font-size: 40px; color: var(--ink-3); line-height: 1.4; }
+  .pred { display: inline-block; font-size: 26px; border: 2px solid var(--ink-3); color: var(--ink-3); border-radius: 8px; padding: 2px 10px; margin-left: 12px; vertical-align: 6px; }
+  .compare { margin-top: 36px; border-left: 8px solid var(--dinein); padding: 8px 0 8px 32px; font-size: 34px; line-height: 1.6; color: var(--ink-2); }
+
+  /* obstacles */
+  .obs { counter-reset: n; list-style: none; margin-top: 8px; }
+  .obs li { counter-increment: n; position: relative; padding: 30px 0 30px 96px; border-bottom: 2px solid var(--rule); font-size: 40px; color: var(--ink); line-height: 1.5; }
+  .obs li::before { content: counter(n); position: absolute; left: 0; top: 30px; width: 64px; height: 64px; border-radius: 50%; background: var(--ink); color: var(--surface); font-size: 36px; text-align: center; line-height: 64px; }
+  .obs li small { display: block; font-size: 32px; color: var(--ink-2); margin-top: 6px; }
+
+  /* takeaway */
+  .quote { font-size: 76px; line-height: 1.42; font-weight: 700; margin: 96px 0 80px; color: var(--ink); }
+  .watch { background: var(--panel); border-radius: 24px; padding: 40px 48px; }
+  .watch h3 { font-size: 36px; color: var(--ink-3); margin-bottom: 20px; font-weight: 400; }
+  .watch li { list-style: none; font-size: 38px; color: var(--ink); line-height: 1.9; }
+  .watch li span { color: var(--ink-3); margin-right: 20px; }
+</style>
+</head>
+<body>
+
+<!-- 1 封面 -->
+<section class="card cover">
+  <div class="top"><span class="tag">新闻拆解 · 以小见大</span><span>1/8</span></div>
+  <h1>同一份便当<br>在店里吃<br>比带走贵</h1>
+  <div class="big">9%<small>（税后）</small></div>
+  <p class="kicker">日本明年这件小事，<br>藏着一个国家的账本</p>
+  <div class="foot"><span class="src">依据：日本政府 2026-08-05 阁议决定 · 多家媒体与机构试算</span><span>@你的账号</span></div>
+</section>
+
+<!-- 2 发生了什么 -->
+<section class="card">
+  <div class="top"><span class="tag">先看事实</span><span>2/8</span></div>
+  <h2>发生了什么</h2>
+  <ul class="facts">
+    <li><span class="k">什么</span><span class="v">超市、便利店买的食品、外带：<br>消费税 <b class="hl-b">8% → 1%</b></span></li>
+    <li><span class="k">不变</span><span class="v">堂食（外食）和酒类：仍是 <b class="hl-o">10%</b></span></li>
+    <li><span class="k">多久</span><span class="v">2027年4月起，限时 <b>2年</b><br>到2029年3月底恢复</span></li>
+    <li><span class="k">进度</span><span class="v">2026-08-05 内阁已决定；<br>10-05 起临时国会审议，会期到 12-12</span></li>
+  </ul>
+  <div class="foot"><span class="src">来源：日本政府阁议决定；共同社、时事通信等报道；国税厅事业者 Q&amp;A</span><span>@你的账号</span></div>
+</section>
+
+<!-- 3 一份便当的账（小） -->
+<section class="card">
+  <div class="top"><span class="tag">小切口</span><span>3/8</span></div>
+  <h2>一份便当的税差：<br>2个点 → <span class="hl-o">9个点</span></h2>
+  <div class="chart">
+    <div class="legend"><span><i style="background:var(--dinein)"></i>店里吃（堂食）</span><span><i style="background:var(--takeout)"></i>带走 / 超市</span></div>
+    <div class="plot">
+      <div class="group">
+        <div class="bar" style="height:90%;background:var(--dinein)"><span>10%</span></div>
+        <div class="bar" style="height:72%;background:var(--takeout)"><span>8%</span></div>
+      </div>
+      <div class="group">
+        <div class="bar" style="height:90%;background:var(--dinein)"><span>10%</span></div>
+        <div class="bar" style="height:9%;background:var(--takeout)"><span>1%</span></div>
+      </div>
+    </div>
+    <div class="xl"><div>现在</div><div>2027年4月起</div></div>
+    <div class="gap-note"><div>税后差约 <b>2%</b></div><div>税后差约 <b class="hl-o">9%</b></div></div>
+  </div>
+  <p class="kicker">算法：同样税前1000日元，堂食付1100、外带付1010，堂食贵约9%。</p>
+  <div class="foot"><span class="src">来源：阁议决定税率；税后差为按税率计算</span><span>@你的账号</span></div>
+</section>
+
+<!-- 4 谁得利 -->
+<section class="card">
+  <div class="top"><span class="tag">谁得利</span><span>4/8</span></div>
+  <h2>家庭：一家四口<br>一年约省 6 万日元</h2>
+  <div class="duo">
+    <div class="col"><div class="lab">年收 250–300 万日元</div><div class="num">4.8<small style="font-size:44px">万</small></div><div class="unit">日元 / 年</div></div>
+    <div class="col"><div class="lab">年收 1500 万日元以上</div><div class="num">8.2<small style="font-size:44px">万</small></div><div class="unit">日元 / 年</div></div>
+  </div>
+  <p class="kicker">按金额，<b>收入越高省得越多</b>；<br>按占收入比例，<b>低收入家庭受益更大</b>。<br>另：1% 与 0% 方案，一家四口一年只差约 4000 日元。</p>
+  <div class="foot"><span class="src">来源：第一生命经济研究所试算（媒体转引）；分收入数据为媒体转引</span><span>@你的账号</span></div>
+</section>
+
+<!-- 5 谁吃亏 -->
+<section class="card">
+  <div class="top"><span class="tag">谁吃亏</span><span>5/8</span></div>
+  <h2>看不见的成本</h2>
+  <div class="rows">
+    <div class="row"><div class="who">餐馆</div><div class="what">客人转向外带和超市熟食；进货税降到1%，能抵扣的少了，<b>实际要交的税反而可能增加</b></div></div>
+    <div class="row"><div class="who">小商户</div><div class="what">2027年降税、2029年恢复，收银和会计系统<b>要改两次</b>，每次约需5–6个月</div></div>
+    <div class="row"><div class="who">国家</div><div class="what">每年少收约 <b>4.4–5 万亿日元</b>，财源到现在还没具体落实</div></div>
+  </div>
+  <p class="kicker">家庭省下的钱，有一部分<br>是从<b>餐馆</b>和<b>国家账本</b>里挪出来的。</p>
+  <div class="foot"><span class="src">来源：税理士解说；事业者改修指南；大和总研等机构减收估算</span><span>@你的账号</span></div>
+</section>
+
+<!-- 6 国家账本（大） -->
+<section class="card">
+  <div class="top"><span class="tag">放大看</span><span>6/8</span></div>
+  <h2>从便当到国债：一条链</h2>
+  <div class="chain">
+    <div class="step">少收税 <em>每年 4.4–5 万亿日元</em></div>
+    <div class="arrow">↓</div>
+    <div class="step">约一半可能靠发债补 <em>Oxford Economics 假设</em></div>
+    <div class="arrow">↓</div>
+    <div class="step"><span>10年国债利率 → 3%<span class="pred">预测</span></span><em>到 2026 年底</em></div>
+    <div class="arrow">↓</div>
+    <div class="step">日元承压 → 日银或加息 <em>野村：主情景12月</em></div>
+  </div>
+  <div class="compare">历史对照：2022年英国特拉斯政府宣布约450亿英镑无财源减税，30年国债利率4个交易日从3.6%升到5.1%，央行紧急购债，首相上任44天后辞职。<br><b>日本国债多由国内持有，情况不同，类比只说明机制。</b></div>
+  <div class="foot"><span class="src">来源：Oxford Economics；野村证券；CNBC（2022）</span><span>@你的账号</span></div>
+</section>
+
+<!-- 7 卡在哪 -->
+<section class="card">
+  <div class="top"><span class="tag">卡在哪</span><span>7/8</span></div>
+  <h2>能不能过，还不一定</h2>
+  <ol class="obs">
+    <li>参议院差 4 席<small>执政联盟在参院未过半，必须有在野党配合</small></li>
+    <li>在野党已统一立场<small>10-02 两院在野党约定：减税要充分审议；反对只削比例代表议席</small></li>
+    <li>钱从哪来没说清<small>财源方案尚未具体化，经济学界普遍有疑虑</small></li>
+    <li>时间很紧<small>系统改修要5–6个月，法案拖到年底就赶不上2027年4月</small></li>
+  </ol>
+  <div class="foot"><span class="src">来源：北海道新闻、共同社、产经新闻；事业者改修指南</span><span>@你的账号</span></div>
+</section>
+
+<!-- 8 以小见大 -->
+<section class="card">
+  <div class="top"><span class="tag">以小见大</span><span>8/8</span></div>
+  <p class="quote">减税的实惠<br>在收银台上看得见；<br>代价藏在利率、汇率<br>和未来的税里。</p>
+  <div class="watch">
+    <h3>接下来盯这三件事</h3>
+    <ul>
+      <li><span>12-12 前</span>参院能否通过</li>
+      <li><span>12月</span>日银是否加息</li>
+      <li><span>年底</span>10年国债利率是否到3%</li>
+    </ul>
+  </div>
+  <div class="foot"><span class="src">本系列数字均来自公开报道与机构试算，预测已标注“预测”。</span><span>@你的账号</span></div>
+</section>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 ---
 name: news-factcheck
-description: 新闻追根溯源与事实核查，并把结果沉淀进 Obsidian 事实清单。用户发来新闻截图、公众号/推文/文章链接或标题，说“查一下”“溯源”“这是真的吗”“帮我判断”“拆解这篇文章”，或对某个数字、融资、ARR、估值、“XX必死/XX已死”类断言表示怀疑时，都应使用本技能——即使用户没说“事实核查”。Fact-check and source-trace a news item or viral claim, red-team its argument, and record verdicts as reusable fact cards in an Obsidian vault.
+description: 新闻追根溯源与事实核查，并把结果沉淀进 Obsidian 事实清单；可继续做影响/阻碍扩展分析，并产出“以小见大”的小红书图文与视频号脚本。用户发来新闻截图、公众号/推文/文章链接或标题，说“查一下”“溯源”“这是真的吗”“帮我判断”“拆解这篇文章”，或对某个数字、融资、ARR、估值、“XX必死/XX已死”类断言表示怀疑时，或要求把新闻做成小红书/视频号内容时，都应使用本技能——即使用户没说“事实核查”。Fact-check and source-trace a news item or viral claim, red-team its argument, and record verdicts as reusable fact cards in an Obsidian vault.
 ---
 
 # 新闻溯源与事实核查
@@ -72,6 +72,9 @@ description: 新闻追根溯源与事实核查，并把结果沉淀进 Obsidian 
 
 ## 扩展分析
 用户要求“扩展 / 影响 / 阻碍 / 相关新闻”时，读 `references/extension.md`，在已有核查基础上写扩展笔记。
+
+## 发布模式
+用户要求做成小红书、视频号等发布内容时，读 `references/publish.md`：只用有卡片的说法，按“以小见大”结构产出卡片图、文案、视频脚本和事实对照表。
 
 ## 模式
 - 用户说“快速看一下”：3–5 次搜索，只做命题拆分、溯源链和结论，仍然要落卡片。
