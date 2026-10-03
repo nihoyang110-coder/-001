@@ -6,6 +6,7 @@
   factdb.py next-id              下一个可用编号
   factdb.py rebuild              按卡片重新生成 事实清单.md 的静态表
   factdb.py due                  列出 review_by 已到期的预测卡
+  factdb.py import <暂存目录>     批量模式：把 TMP-xx 卡片正式编号、改写链接并移入 Facts/ 与 Notes/
 可选 --vault <FactCheck 目录>；默认从当前目录向上查找 FactCheck/事实清单.md。
 """
 import argparse, datetime, pathlib, re, sys
@@ -95,15 +96,47 @@ def cmd_due(vault):
             print(f"{c['id']} | 到期 {rb} | {c.get('claim','')}")
 
 
+def cmd_import(vault, dirs):
+    nums = [int(c["id"][2:]) for c in cards(vault) if re.fullmatch(r"F-\d+", c["id"])]
+    nxt = (max(nums) if nums else 0) + 1
+    for d in map(pathlib.Path, dirs):
+        tmps = sorted(d.glob("TMP-*.md"))
+        mapping = {}
+        for t in tmps:
+            mapping[t.stem] = f"F-{nxt:04d}"
+            nxt += 1
+        pat = re.compile(r"\bTMP-\d+\b")
+        files = [f for f in d.glob("*.md")]
+        for f in files:
+            txt = pat.sub(lambda m: mapping.get(m.group(0), m.group(0)), f.read_text(encoding="utf-8"))
+            if f.stem in mapping:
+                (vault / "Facts" / f"{mapping[f.stem]}.md").write_text(txt, encoding="utf-8")
+                f.unlink()
+            else:
+                f.write_text(txt, encoding="utf-8")
+        for f in d.glob("*.md"):
+            dest = vault / "Notes" / f.name
+            f.rename(dest)
+            print(f"笔记 → {dest.name}")
+        for k, v in mapping.items():
+            print(f"  {d.name}: {k} → {v}")
+        try:
+            d.rmdir()
+        except OSError:
+            print(f"  （{d} 还有其他文件，未删除）")
+    cmd_rebuild(vault)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["search", "next-id", "rebuild", "due"])
+    ap.add_argument("cmd", choices=["search", "next-id", "rebuild", "due", "import"])
     ap.add_argument("terms", nargs="*")
     ap.add_argument("--vault")
     a = ap.parse_args()
     v = find_vault(a.vault)
     {"search": lambda: cmd_search(v, a.terms), "next-id": lambda: cmd_next(v),
-     "rebuild": lambda: cmd_rebuild(v), "due": lambda: cmd_due(v)}[a.cmd]()
+     "rebuild": lambda: cmd_rebuild(v), "due": lambda: cmd_due(v),
+     "import": lambda: cmd_import(v, a.terms)}[a.cmd]()
 
 
 if __name__ == "__main__":
