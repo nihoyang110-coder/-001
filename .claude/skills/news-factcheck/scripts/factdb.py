@@ -105,7 +105,7 @@ def cmd_import(vault, dirs):
         for t in tmps:
             mapping[t.stem] = f"F-{nxt:04d}"
             nxt += 1
-        pat = re.compile(r"\bTMP-\d+\b")
+        pat = re.compile(r"(?<![A-Za-z0-9])TMP-\d+(?!\d)")
         files = [f for f in d.glob("*.md")]
         for f in files:
             txt = pat.sub(lambda m: mapping.get(m.group(0), m.group(0)), f.read_text(encoding="utf-8"))
