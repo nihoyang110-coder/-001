@@ -1,0 +1,76 @@
+# 新闻溯源需要放行的域名（云端环境 → Network access → Custom → Allowed domains）
+# 最省事：直接选 Full（完全开放），这份清单就不需要了。
+# 选 Custom 时，保留默认的包管理器域名，再把下面整段贴进去。
+# 按“过去两轮核查里被拦截过的次数”整理，*.xxx 表示含子域名。
+
+# 通用 / 存档
+*.wikipedia.org
+web.archive.org
+archive.ph
+
+# 美国主流媒体与通讯社
+apnews.com
+*.reuters.com
+*.npr.org
+*.pbs.org
+*.nytimes.com
+*.washingtonpost.com
+*.cnbc.com
+*.bloomberg.com
+*.cnn.com
+*.nbcnews.com
+thehill.com
+*.politico.com
+*.axios.com
+techcrunch.com
+*.theguardian.com
+*.bbc.com
+*.bbc.co.uk
+*.aljazeera.com
+*.inquirer.com
+whyy.org
+*.marijuanamoment.net
+
+# 美国政府 / 机构
+*.congress.gov
+*.govinfo.gov
+*.supremecourt.gov
+*.scotusblog.com
+*.whitehouse.gov
+*.eia.gov
+*.iea.org
+*.sec.gov
+*.factcheck.org
+
+# 日本媒体
+*.nhk.or.jp
+news.web.nhk
+*.nikkei.com
+*.japantimes.co.jp
+*.asahi.com
+mainichi.jp
+*.yomiuri.co.jp
+*.jiji.com
+*.kyodonews.net
+*.nippon.com
+news.yahoo.co.jp
+japantoday.com
+newsonjapan.com
+*.tokyo-np.co.jp
+weathernews.jp
+tenki.jp
+
+# 日本政府
+*.kantei.go.jp
+*.mofa.go.jp
+*.mof.go.jp
+*.mlit.go.jp
+*.jma.go.jp
+*.meti.go.jp
+*.soumu.go.jp
+
+# 财经 / 科技 / 公告
+*.prnewswire.com
+*.businesswire.com
+prtimes.jp
+sacra.com

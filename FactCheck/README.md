@@ -27,3 +27,8 @@
 - Claude 技能：`.claude/skills/news-factcheck/`（在本仓库开 Claude Code 会话，发截图即自动触发）
 - 脚本：`python3 .claude/skills/news-factcheck/scripts/factdb.py search|next-id|rebuild|due`
   - `due`：列出到期该回看的预测卡
+
+## 网络
+- 云端环境默认“受信任网络”会拦截几乎所有新闻站，结论只能依据搜索摘要。
+- 解决：环境设置 → Network access 改为 Full，或 Custom 并贴入 `网络白名单.txt`。
+- 自检：`bash .claude/skills/news-factcheck/scripts/check_network.sh`

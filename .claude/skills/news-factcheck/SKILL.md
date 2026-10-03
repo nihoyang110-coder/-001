@@ -13,7 +13,9 @@ description: 新闻追根溯源与事实核查，并把结果沉淀进 Obsidian 
 - 找不到：用 `assets/` 里的模板新建 `FactCheck/`（README、事实清单、Templates、Facts、Notes）。
 - 没有文件系统（如纯聊天环境）：照常完成核查，最后把新闻笔记和事实卡片以 markdown 代码块输出，方便用户粘贴进 Obsidian。
 
-动手前先运行 `python scripts/factdb.py search <关键词>`（在 vault 父目录下执行，或用 `--vault` 指定路径），看看清单里是否已有相关卡片。已有的结论是本次核查的起点，不要从零重查已证实的东西，而要检查它是否过时。
+动手前先运行 `bash scripts/check_network.sh` 看哪些新闻源能直接打开：可达很少时，整篇都要按“只依据搜索摘要”处理并降置信度，不要逐个去试被拦的网页浪费次数。
+
+再运行 `python scripts/factdb.py search <关键词>`（在 vault 父目录下执行，或用 `--vault` 指定路径），看看清单里是否已有相关卡片。已有的结论是本次核查的起点，不要从零重查已证实的东西，而要检查它是否过时。
 
 ## 1. 读截图，拆成原子命题
 从截图/链接提取：标题、发布者、发布时间、是“原创”还是编译转述。
@@ -67,6 +69,9 @@ description: 新闻追根溯源与事实核查，并把结果沉淀进 Obsidian 
 - 新闻笔记 `YYYY-MM-DD-关键词.md` 也放在同一目录
 - 想修改已有卡片时，不要直接改，写进同目录的 `updates.md`（卡片号 + 要改什么 + 依据），由汇总者处理
 全部完成后由汇总者运行 `python scripts/factdb.py import FactCheck/_staging/*/`，统一编号并重建清单。
+
+## 扩展分析
+用户要求“扩展 / 影响 / 阻碍 / 相关新闻”时，读 `references/extension.md`，在已有核查基础上写扩展笔记。
 
 ## 模式
 - 用户说“快速看一下”：3–5 次搜索，只做命题拆分、溯源链和结论，仍然要落卡片。
