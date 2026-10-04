@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>I</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --paper:#FFF1E5; --wheat:#F2DFCE; --ink:#33302E; --ink2:#66605C; --ink3:#999189; --claret:#990F3D; --oxford:#0F5499; --teal:#0D7680; --rule:#CCC1B7; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#999; font-family:"NSans",sans-serif; color:var(--ink); }
+  .card { width:1080px; height:1440px; margin:0 auto 40px; background:var(--paper); padding:0 72px 44px; display:flex; flex-direction:column; }
+  .mast { border-top:10px solid var(--ink); display:flex; justify-content:space-between; align-items:center; padding:22px 0 18px; border-bottom:1px solid var(--rule); font-size:24px; color:var(--ink2); }
+  .mast b { font-family:"NSerif"; font-weight:900; font-size:30px; color:var(--ink); letter-spacing:2px; }
+  .kick { font-weight:700; font-size:26px; color:var(--claret); margin:40px 0 14px; letter-spacing:1px; }
+  h1 { font-family:"NSerif"; font-weight:900; font-size:96px; line-height:1.15; }
+  h2 { font-family:"NSerif"; font-weight:900; font-size:66px; line-height:1.22; }
+  .stand { font-family:"NSerif"; font-size:36px; line-height:1.6; color:var(--ink2); margin-top:24px; }
+  .chart { margin-top:34px; }
+  .ct { font-weight:700; font-size:30px; }
+  .cs { font-size:24px; color:var(--ink2); margin-top:4px; }
+  .src { font-size:20px; color:var(--ink2); margin-top:10px; }
+  .foot { margin-top:auto; border-top:1px solid var(--rule); padding-top:14px; display:flex; justify-content:space-between; gap:24px; font-size:20px; color:var(--ink2); line-height:1.5; }
+  .foot b { color:var(--ink); white-space:nowrap; }
+  .tbl { width:100%; border-collapse:collapse; margin-top:30px; }
+  .tbl td { border-top:1px solid var(--rule); padding:40px 0; vertical-align:top; }
+  .tbl tr:first-child td { border-top:2px solid var(--ink); }
+  .tbl .k { width:130px; font-size:24px; color:var(--ink2); font-weight:700; padding-top:30px; }
+  .tbl .v { font-size:36px; line-height:1.45; }
+  .tbl .v b { display:block; font-family:"NSerif"; font-size:66px; font-weight:900; margin-top:2px; }
+  .lab { font-weight:700; }
+  .big { font-family:"NSerif"; font-weight:900; font-size:220px; line-height:1; color:var(--claret); }
+  .step { display:grid; grid-template-columns:90px 1fr; border-top:1px solid var(--rule); padding:36px 0; align-items:baseline; }
+  .step .i { font-family:"NSerif"; font-weight:900; font-size:56px; color:var(--claret); }
+  .step .t { font-weight:700; font-size:46px; } .step .d { font-size:28px; color:var(--ink2); margin-top:4px; }
+  .pred { font-size:20px; font-weight:700; background:var(--claret); color:var(--paper); padding:2px 10px; margin-left:12px; vertical-align:8px; }
+  .aside { background:var(--wheat); padding:24px 30px; font-size:26px; line-height:1.7; color:var(--ink); margin-top:20px; border-left:6px solid var(--claret); }
+  .q { font-family:"NSerif"; font-weight:900; font-size:84px; line-height:1.45; margin-top:90px; }
+</style></head><body>
+<script src="content.js"></script>
+<script>
+const C = window.CONTENT, T = 8;
+const card = (i, tag, inner, src) => `<section class="card"><div class="mast"><b>新闻拆解</b><span>国际 · 日本经济</span><span>${i}/${T}</span></div><div class="kick">${tag}</div>${inner}<div class="foot"><span>${src}</span><b>${C.handle}</b></div></section>`;
+// slope chart: tax rates now -> 2027
+const slope = (w, h) => {
+  const y = v => 60 + (10 - v) / 10 * (h - 140), x0 = 170, x1 = w - 170;
+  const line = (a, b, c, lab) => `<line x1="${x0}" y1="${y(a)}" x2="${x1}" y2="${y(b)}" stroke="${c}" stroke-width="7"/><circle cx="${x0}" cy="${y(a)}" r="14" fill="${c}"/><circle cx="${x1}" cy="${y(b)}" r="14" fill="${c}"/>
+    <text x="${x0 - 28}" y="${y(a) + 14}" text-anchor="end" font-size="40" font-weight="700" fill="${c}">${a}%</text><text x="${x1 + 28}" y="${y(b) + 14}" font-size="40" font-weight="700" fill="${c}">${b}%</text>`;
+  const grid = [0, 2, 4, 6, 8, 10].map(v => `<line x1="40" x2="${w - 40}" y1="${y(v)}" y2="${y(v)}" stroke="#E6D9CE" stroke-width="2"/>`).join('');
+  return `<svg width="${w}" height="${h}" font-family="NSans">${grid}
+    <line x1="${x0}" x2="${x0}" y1="40" y2="${h - 70}" stroke="#33302E" stroke-width="2"/><line x1="${x1}" x2="${x1}" y1="40" y2="${h - 70}" stroke="#33302E" stroke-width="2"/>
+    ${line(10, 10, '#990F3D')}${line(8, 1, '#0F5499')}
+    <text x="${(x0 + x1) / 2}" y="${y(10) - 22}" text-anchor="middle" font-size="30" font-weight="700" fill="#990F3D">店里吃（堂食）</text>
+    <text x="${(x0 + x1) / 2 - 60}" y="${y(4.5) + 95}" text-anchor="middle" font-size="30" font-weight="700" fill="#0F5499">带走 / 超市</text>
+    <text x="${x0}" y="${h - 22}" text-anchor="middle" font-size="28" fill="#66605C">现在</text><text x="${x1}" y="${h - 22}" text-anchor="middle" font-size="28" fill="#66605C">2027年4月起</text></svg>`;
+};
+const hbar = (rows, max, unit) => rows.map(r => `<div style="margin:30px 0"><div style="font-size:28px;color:var(--ink2)">${r.l}</div><div style="display:flex;align-items:center;gap:22px;margin-top:10px"><div style="height:84px;width:${r.v / max * 600}px;background:${r.c}"></div><div style="font-family:NSerif;font-weight:900;font-size:64px;white-space:nowrap">${r.v}<span style="font-size:28px;font-family:NSans;font-weight:400;color:var(--ink2)"> ${unit}</span></div></div></div>`).join('');
+let h = '';
+h += card(1, C.cover.tag, `<h1>${C.cover.lines[0]}<br>${C.cover.lines[1]}，比带走贵 <span style="color:var(--claret)">9%</span></h1><p class="stand">${C.cover.sub}。2027年4月起，日本超市食品消费税降到 1%，堂食仍是 10%。</p>
+  <div class="chart"><div class="ct">税率差距拉大</div><div class="cs">日本消费税率（%）</div>${slope(936, 560)}<div class="src">来源：日本政府 2026-08-05 阁议决定</div></div>`, C.cover.src);
+h += card(2, C.facts.tag, `<h2>${C.facts.title}</h2><table class="tbl">${C.facts.rows.map(r => `<tr><td class="k">${r.k}</td><td class="v">${r.v}<b style="${r.k === '什么' ? 'color:var(--oxford)' : ''}">${r.hi}</b></td></tr>`).join('')}</table>`, C.facts.src);
+h += card(3, C.chart.tag, `<h2>${C.chart.title}<br><span style="color:var(--claret)">${C.chart.titleHi}</span></h2>
+  <div class="chart"><div class="ct">同样税前 1000 日元，付多少？</div><div class="cs">含税价格（日元）</div>
+  ${hbar([{ l: '现在 · 店里吃', v: 1100, c: '#990F3D' }, { l: '现在 · 带走', v: 1080, c: '#0F5499' }, { l: '2027年起 · 店里吃', v: 1100, c: '#990F3D' }, { l: '2027年起 · 带走', v: 1010, c: '#0F5499' }], 1100, '日元')}
+  <div class="src">按税率计算：税后差由约 2% 扩大到约 9%</div></div>`, C.chart.src);
+h += card(4, C.gain.tag, `<h2>${C.gain.title}<br><span style="color:var(--teal)">${C.gain.titleHi}</span></h2>
+  <div class="chart"><div class="ct">谁省得多？</div><div class="cs">按家庭年收入，减税后每年少付（万日元）</div>${hbar([{ l: C.gain.stats[0].label, v: 4.8, c: '#0D7680' }, { l: C.gain.stats[1].label, v: 8.2, c: '#0F5499' }], 8.2, '万日元/年')}<div class="src">来源：第一生命经济研究所试算（媒体转引）</div></div>
+  <div class="aside">${C.gain.points.join('；')}。</div>`, C.gain.src);
+h += card(5, C.loss.tag, `<h2>${C.loss.title}</h2><table class="tbl">${C.loss.rows.map(r => `<tr><td class="k" style="width:170px;font-family:NSerif;font-size:46px;color:var(--ink);padding-top:22px">${r.who}</td><td class="v">${r.what}</td></tr>`).join('')}</table><div class="aside" style="font-family:NSerif;font-weight:700;font-size:36px">${C.loss.kicker}</div>`, C.loss.src);
+h += card(6, C.chain.tag, `<h2>${C.chain.title}</h2><div style="margin-top:30px">${C.chain.steps.map((s, i) => `<div class="step"><div class="i">${i + 1}</div><div><div class="t">${s.t}${s.pred ? '<span class="pred">预测</span>' : ''}</div><div class="d">${s.d}</div></div></div>`).join('')}</div><div class="aside">${C.chain.compare}</div>`, C.chain.src);
+h += card(7, C.block.tag, `<h2>${C.block.title}</h2>
+  <div style="display:flex;align-items:center;gap:40px;margin:36px 0 10px"><div class="big">4</div><div><div style="font-size:30px;font-weight:700">参议院差 4 席过半</div><div style="display:flex;gap:16px;margin-top:16px">${'<span style="width:56px;height:56px;border-radius:50%;border:5px solid var(--claret)"></span>'.repeat(4)}</div><div class="cs" style="margin-top:12px">空心圆 = 执政联盟还缺的席位</div></div></div>
+  ${C.block.items.slice(1).map((it, i) => `<div class="step"><div class="i">${i + 2}</div><div><div class="t">${it.t}</div><div class="d" style="font-size:26px">${it.d}</div></div></div>`).join('')}`, C.block.src);
+h += card(8, C.end.tag, `<div class="q">${C.end.quote[0]}<br>${C.end.quote[1]}<br><span style="color:var(--claret)">${C.end.quote[2]}<br>${C.end.quote[3]}</span></div>
+  <table class="tbl" style="margin-top:60px">${C.end.watch.map(w => `<tr><td class="k">${w[0]}</td><td class="v" style="font-weight:700">${w[1]}</td></tr>`).join('')}</table>`, C.end.src);
+document.body.insertAdjacentHTML('beforeend', h);
+</script>
+</body></html>

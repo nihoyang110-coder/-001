@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>G</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --paper:#f3ede0; --ink:#1b1a17; --ink2:#5b554b; --shu:#c53d2b; --grid:rgba(197,61,43,.22); --rule:rgba(27,26,23,.25); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#8a8173; font-family:"NSerif",serif; color:var(--ink); }
+  .card { width:1080px; height:1440px; margin:0 auto 40px; background:var(--paper); position:relative; overflow:hidden; display:flex;
+    background-image:radial-gradient(rgba(27,26,23,.05) 1px, transparent 1.2px); background-size:5px 5px; }
+  /* vertical title band on the right, like a manuscript column */
+  .band { width:250px; border-left:2px solid var(--ink); padding:70px 0 60px; display:flex; flex-direction:column; align-items:center; position:relative; }
+  .band .ttl { writing-mode:vertical-rl; font-weight:900; font-size:84px; letter-spacing:10px; line-height:1.15; }
+  .band .tag { writing-mode:vertical-rl; font-family:"NSans"; font-weight:700; font-size:24px; letter-spacing:8px; color:var(--shu); margin-bottom:30px; }
+  .band .pg { margin-top:auto; font-size:26px; color:var(--ink2); writing-mode:vertical-rl; letter-spacing:6px; }
+  .main { flex:1; padding:80px 64px 46px 70px; display:flex; flex-direction:column; }
+  .seal { width:120px; height:120px; border:6px solid var(--shu); color:var(--shu); font-weight:900; font-size:40px; display:grid; grid-template-columns:1fr 1fr; place-items:center; line-height:1; transform:rotate(-4deg); border-radius:8px; padding:8px; opacity:.9; }
+  .content { flex:1; display:flex; flex-direction:column; justify-content:space-around; }
+  .foot { margin-top:auto; border-top:1px solid var(--rule); padding-top:16px; display:flex; justify-content:space-between; gap:24px; font-family:"NSans"; font-size:20px; color:var(--ink2); line-height:1.5; }
+  .foot b { color:var(--shu); white-space:nowrap; font-weight:700; }
+  .lead { font-size:34px; line-height:1.8; color:var(--ink2); }
+  .shu { color:var(--shu); }
+  .item { display:grid; grid-template-columns:96px 1fr; gap:22px; padding:38px 0; border-bottom:1px solid var(--rule); }
+  .item .k { font-family:"NSans"; font-weight:700; font-size:24px; letter-spacing:6px; color:var(--shu); padding-top:10px; }
+  .item .v { font-size:38px; line-height:1.55; }
+  .item .v b { display:block; font-size:66px; font-weight:900; margin-top:4px; }
+  /* cover: manuscript grid */
+  .genko { display:grid; grid-template-rows:repeat(3, 160px); grid-auto-flow:column; grid-auto-columns:160px; border-top:2px solid var(--shu); border-right:2px solid var(--shu); align-self:flex-end; direction:rtl; }
+  .genko span { border-left:2px solid var(--grid); border-bottom:2px solid var(--grid); display:grid; place-items:center; font-weight:900; font-size:118px; direction:ltr; }
+  .big9 { font-weight:900; font-size:330px; line-height:.85; color:var(--shu); letter-spacing:-8px; }
+  .big9 small { font-size:40px; color:var(--ink2); letter-spacing:4px; margin-left:16px; font-weight:400; }
+  /* chart */
+  .plot { display:flex; gap:80px; align-items:flex-end; height:560px; border-bottom:3px solid var(--ink); padding:0 24px; margin-top:60px; }
+  .grp { flex:1; display:flex; gap:10px; align-items:flex-end; height:100%; }
+  .bar { flex:1; position:relative; }
+  .bar span { position:absolute; top:-58px; left:0; right:0; text-align:center; font-weight:900; font-size:46px; }
+  .xl { display:flex; gap:80px; padding:16px 24px 0; } .xl div { flex:1; text-align:center; font-size:28px; color:var(--ink2); } .xl div b { display:block; font-size:36px; color:var(--ink); }
+  .legend { font-family:"NSans"; font-size:24px; color:var(--ink2); display:flex; gap:32px; margin-top:30px; }
+  .legend i { display:inline-block; width:22px; height:22px; margin-right:8px; vertical-align:-3px; }
+  .stat { border-top:3px solid var(--ink); padding:22px 0 30px; display:flex; align-items:baseline; gap:30px; }
+  .stat .n { font-weight:900; font-size:210px; line-height:1; }
+  .stat .l { font-family:"NSans"; font-size:26px; color:var(--ink2); }
+  .stat .l b { display:block; font-family:"NSerif"; font-size:34px; color:var(--ink); }
+  .step { display:grid; grid-template-columns:80px 1fr; gap:20px; padding:32px 0; border-bottom:1px solid var(--rule); align-items:baseline; }
+  .step .i { font-weight:900; font-size:60px; color:var(--shu); }
+  .step .t { font-weight:900; font-size:48px; } .step .d { font-family:"NSans"; font-size:27px; color:var(--ink2); margin-top:4px; }
+  .pred { font-family:"NSans"; font-size:20px; border:2px solid var(--shu); color:var(--shu); padding:0 8px; margin-left:10px; vertical-align:8px; }
+  .note { margin-top:28px; border-left:6px solid var(--shu); padding:6px 0 6px 24px; font-size:26px; line-height:1.75; color:var(--ink2); }
+  .quote { font-weight:900; font-size:72px; line-height:1.55; margin-top:30px; }
+  .w { display:grid; grid-template-columns:180px 1fr; padding:18px 0; border-top:1px solid var(--rule); font-size:36px; }
+  .w span { font-family:"NSans"; font-size:26px; color:var(--shu); font-weight:700; padding-top:8px; }
+</style></head><body>
+<script src="content.js"></script>
+<script>
+const C = window.CONTENT, T = 8;
+const card = (i, tag, title, src, inner) => `<section class="card"><div class="main"><div class="content">${inner}</div><div class="foot"><span>${src}</span><b>${C.handle}</b></div></div><div class="band"><div class="tag">${tag}</div><div class="ttl">${title}</div><div class="pg">${i}／${T}</div></div></section>`;
+let h = '';
+h += card(1, C.cover.tag, '同一份便当', C.cover.src, `<div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="seal"><span>核</span><span>查</span><span>拆</span><span>解</span></div><div class="genko">${'在店里吃比带走贵'.split('').concat(['']).map(c => `<span>${c}</span>`).join('')}</div></div>
+  <div class="big9" style="margin-top:20px">9%<small>税后</small></div>
+  <p class="lead" style="margin-top:30px;font-size:38px;color:var(--ink)">${C.cover.sub.replace('每年约 5 万亿日元', '<span class="shu">每年约 5 万亿日元</span>').replace('财政窟窿', '<span style="white-space:nowrap">财政窟窿</span>')}</p>`);
+h += card(2, C.facts.tag, C.facts.title, C.facts.src, C.facts.rows.map(r => `<div class="item"><div class="k">${r.k}</div><div class="v">${r.v}<b class="${r.k === '什么' ? 'shu' : ''}">${r.hi}</b></div></div>`).join(''));
+const g = C.chart.groups;
+h += card(3, C.chart.tag, '税差', C.chart.src, `<div style="font-weight:900;font-size:78px;line-height:1.2">2个点<br>→ <span class="shu">9个点</span></div>
+  <div class="legend"><span><i style="background:var(--shu)"></i>${C.chart.legend.dine}</span><span><i style="background:var(--ink)"></i>${C.chart.legend.take}</span></div>
+  <div class="plot">${g.map(x => `<div class="grp"><div class="bar" style="height:${x.dine*48}px;background:var(--shu)"><span>${x.dine}%</span></div><div class="bar" style="height:${Math.max(x.take*48,14)}px;background:var(--ink)"><span>${x.take}%</span></div></div>`).join('')}</div>
+  <div class="xl">${g.map((x, i) => `<div>${x.label}<b class="${i ? 'shu' : ''}">${x.gap}</b></div>`).join('')}</div>
+  <p class="lead" style="margin-top:30px;font-size:28px">${C.chart.note}</p>`);
+h += card(4, C.gain.tag, '一家四口', C.gain.src, `<div style="font-weight:900;font-size:66px;line-height:1.3;margin-bottom:40px">一年约省<br><span class="shu">6 万日元</span></div>
+  ${C.gain.stats.map((s, i) => `<div class="stat"><div class="n ${i ? 'shu' : ''}">${s.n}</div><div class="l">${s.unit}<b>${s.label}</b></div></div>`).join('')}
+  <div style="border-top:3px solid var(--ink)">${C.gain.points.map(p => `<p class="lead" style="font-size:30px;padding:12px 0;border-bottom:1px solid var(--rule)">・${p}</p>`).join('')}</div>`);
+h += card(5, C.loss.tag, C.loss.title, C.loss.src, C.loss.rows.map(r => `<div class="item" style="grid-template-columns:170px 1fr"><div class="v" style="font-weight:900;font-size:50px">${r.who}</div><div class="v" style="font-size:32px;color:var(--ink2)">${r.what}</div></div>`).join('') + `<p style="margin-top:44px;font-weight:900;font-size:48px;line-height:1.5">${C.loss.kicker.replace('餐馆和国家账本', '<span class="shu">餐馆和国家账本</span>')}</p>`);
+h += card(6, C.chain.tag, C.chain.title, C.chain.src, C.chain.steps.map((s, i) => `<div class="step"><div class="i">${'一二三四'[i]}</div><div><div class="t">${s.t}${s.pred ? '<span class="pred">预测</span>' : ''}</div><div class="d">${s.d}</div></div></div>`).join('') + `<div class="note">${C.chain.compare}</div>`);
+h += card(7, C.block.tag, '还不一定', C.block.src, `<div style="font-weight:900;font-size:60px;margin-bottom:20px">能不能过？</div>` + C.block.items.map((it, i) => `<div class="step"><div class="i">${'一二三四'[i]}</div><div><div class="t">${it.t}</div><div class="d" style="font-size:28px">${it.d}</div></div></div>`).join(''));
+h += card(8, C.end.tag, '以小见大', C.end.src, `<div class="seal" style="align-self:flex-end"><span>以</span><span>小</span><span>见</span><span>大</span></div>
+  <div class="quote">${C.end.quote[0]}<br>${C.end.quote[1]}<br><span class="shu">${C.end.quote[2]}<br>${C.end.quote[3]}</span></div>
+  <div style="margin-top:50px"><div style="font-family:NSans;font-size:24px;letter-spacing:6px;color:var(--ink2);margin-bottom:10px">${C.end.watchTitle}</div>${C.end.watch.map(w => `<div class="w"><span>${w[0]}</span>${w[1]}</div>`).join('')}</div>`);
+document.body.insertAdjacentHTML('beforeend', h);
+</script>
+</body></html>

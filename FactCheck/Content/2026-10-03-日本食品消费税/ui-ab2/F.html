@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>F</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --bg:#f2f2f4; --tile:#ffffff; --dark:#1d1d1f; --ink:#1d1d1f; --ink2:#6e6e73; --o:#ff6a2b; --b:#0071e3; --soft-o:#fff1ea; --soft-b:#eaf3fe; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#999; font-family:"NSans",sans-serif; color:var(--ink); }
+  .card { width:1080px; height:1440px; margin:0 auto 40px; background:var(--bg); padding:48px 48px 36px; display:flex; flex-direction:column; gap:20px; }
+  .grid { flex:1; display:grid; gap:20px; grid-template-columns:repeat(6,1fr); }
+  .t { background:var(--tile); border-radius:44px; padding:40px; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+  .t.dark { background:var(--dark); color:#f5f5f7; }
+  .t.o { background:var(--o); color:#fff; }
+  .t.b { background:var(--b); color:#fff; }
+  .t.so { background:var(--soft-o); } .t.sb { background:var(--soft-b); }
+  .ey { font-size:24px; font-weight:700; color:var(--ink2); letter-spacing:1px; margin-bottom:10px; }
+  .dark .ey, .o .ey, .b .ey { color:rgba(255,255,255,.7); }
+  .ic { position:absolute; width:190px; height:190px; right:26px; bottom:22px; }
+  .ic.s { width:120px; height:120px; right:24px; top:24px; bottom:auto; }
+  .h { font-weight:900; font-size:76px; line-height:1.15; letter-spacing:-1px; }
+  .h2 { font-weight:900; font-size:52px; line-height:1.2; }
+  .n { font-weight:900; letter-spacing:-4px; line-height:.95; }
+  .p { font-size:30px; line-height:1.5; color:var(--ink2); }
+  .dark .p, .o .p, .b .p { color:rgba(255,255,255,.85); }
+  .bot { margin-top:auto; }
+  .foot { display:flex; justify-content:space-between; gap:30px; font-size:20px; color:#86868b; line-height:1.45; padding:0 8px; }
+  .foot b { color:var(--ink); white-space:nowrap; font-size:22px; }
+  .pg { position:absolute; top:34px; right:40px; font-size:22px; font-weight:700; color:var(--ink2); }
+  .dark .pg { color:rgba(255,255,255,.55); }
+  .chip { display:inline-block; font-size:22px; font-weight:800; padding:6px 16px; border-radius:20px; background:var(--o); color:#fff; vertical-align:10px; margin-left:10px; }
+  .bars { display:flex; gap:56px; align-items:flex-end; height:330px; margin-top:auto; padding:0 20px; border-bottom:3px solid var(--ink); }
+  .g { flex:1; display:flex; gap:8px; align-items:flex-end; height:100%; }
+  .bar { flex:1; border-radius:18px 18px 4px 4px; position:relative; }
+  .bar span { position:absolute; top:-50px; left:0; right:0; text-align:center; font-weight:900; font-size:38px; }
+  .xl { display:flex; gap:56px; padding:12px 20px 0; } .xl div { flex:1; text-align:center; font-size:24px; color:var(--ink2); }
+</style></head><body>
+<script src="content.js"></script>
+<script>
+const C = window.CONTENT, T = 8, I = n => `icons/${n}_3d.png`;
+const card = (src, grid, rows) => `<section class="card"><div class="grid" style="grid-template-rows:${rows}">${grid}</div><div class="foot"><span>${src}</span><b>${C.handle}</b></div></section>`;
+const tile = (cls, span, inner, extra = '') => `<div class="t ${cls}" style="grid-column:${span[0]};grid-row:${span[1]};${extra}">${inner}</div>`;
+let h = '';
+// 1 cover
+h += card(C.cover.src, [
+  tile('', ['1 / 7', '1 / 3'], `<div class="pg">1/${T}</div><div class="ey">${C.cover.tag}</div><div class="h" style="font-size:96px">${C.cover.lines.join('<br>')}</div><img class="ic" style="width:330px;height:330px;right:20px;bottom:10px" src="${I('bento_box')}">`),
+  tile('o', ['1 / 4', '3 / 4'], `<div class="ey">税后</div><div class="n" style="font-size:250px">9%</div>`),
+  tile('', ['4 / 7', '3 / 4'], `<img class="ic s" src="${I('takeout_box')}"><div class="ey">带走</div><div class="h2">1%</div><div class="ey" style="margin-top:22px">店里吃</div><div class="h2" style="color:var(--o)">10%</div>`),
+  tile('dark', ['1 / 7', '4 / 5'], `<div class="h2" style="font-size:44px;line-height:1.4">${C.cover.sub.replace('每年约 5 万亿日元', '<span style="color:var(--o)">每年约 5 万亿日元</span>').replace('财政窟窿', '<span style="white-space:nowrap">财政窟窿</span>')}</div>`)
+].join(''), '1fr 1fr 1.15fr .62fr');
+// 2 facts
+const fi = ['shopping_cart', 'fork_and_knife_with_plate', 'hourglass_not_done', 'classical_building'];
+h += card(C.facts.src, [
+  tile('', ['1 / 7', '1 / 2'], `<div class="pg">2/${T}</div><div class="ey">${C.facts.tag}</div><div class="h">${C.facts.title}</div>`),
+  ...C.facts.rows.map((r, i) => tile(i === 0 ? 'so' : '', [i % 2 ? '4 / 7' : '1 / 4', `${2 + Math.floor(i / 2)} / ${3 + Math.floor(i / 2)}`], `<img class="ic s" src="${I(fi[i])}"><div class="ey">${r.k}</div><div class="p" style="margin-top:auto;max-width:340px">${r.v}</div><div class="h2" style="margin-top:10px;color:${i === 0 ? 'var(--o)' : 'var(--ink)'};font-size:46px">${r.hi}</div>`))
+].join(''), '.55fr 1fr 1fr');
+// 3 chart
+const g = C.chart.groups;
+h += card(C.chart.src, [
+  tile('', ['1 / 7', '1 / 2'], `<div class="pg">3/${T}</div><div class="ey">${C.chart.tag}</div><div class="h">${C.chart.title}<br><span style="color:var(--o)">${C.chart.titleHi}</span></div>`),
+  tile('', ['1 / 7', '2 / 3'], `<div style="display:flex;gap:30px;font-size:24px;color:var(--ink2)"><span><i style="display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--o);margin-right:8px;vertical-align:-3px"></i>${C.chart.legend.dine}</span><span><i style="display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--b);margin-right:8px;vertical-align:-3px"></i>${C.chart.legend.take}</span></div>
+    <div class="bars">${g.map(x => `<div class="g"><div class="bar" style="height:${x.dine*28}px;background:var(--o)"><span>${x.dine}%</span></div><div class="bar" style="height:${Math.max(x.take*28,12)}px;background:var(--b)"><span>${x.take}%</span></div></div>`).join('')}</div>
+    <div class="xl">${g.map(x => `<div>${x.label}</div>`).join('')}</div>`),
+  tile('sb', ['1 / 4', '3 / 4'], `<div class="ey">现在 · 税后差</div><div class="n" style="font-size:150px;color:var(--b)">2%</div>`),
+  tile('o', ['4 / 7', '3 / 4'], `<div class="ey">2027年4月起 · 税后差</div><div class="n" style="font-size:150px">9%</div>`),
+  tile('dark', ['1 / 7', '4 / 5'], `<div class="p" style="font-size:30px;color:#f5f5f7">${C.chart.note}</div>`)
+].join(''), '.75fr 1.7fr .9fr .42fr');
+// 4 gain
+const s = C.gain.stats;
+h += card(C.gain.src, [
+  tile('', ['1 / 7', '1 / 2'], `<div class="pg">4/${T}</div><div class="ey">${C.gain.tag}</div><div class="h">${C.gain.title}<br><span style="color:var(--o)">${C.gain.titleHi}</span></div><img class="ic" style="width:220px;height:220px" src="${I('house')}">`),
+  tile('', ['1 / 4', '2 / 3'], `<div class="ey">${s[0].label}</div><div class="n bot" style="font-size:170px">${s[0].n}</div><div class="p">${s[0].unit}</div>`),
+  tile('b', ['4 / 7', '2 / 3'], `<div class="ey">${s[1].label}</div><div class="n bot" style="font-size:170px">${s[1].n}</div><div class="p">${s[1].unit}</div>`),
+  tile('', ['1 / 7', '3 / 4'], C.gain.points.map((p, i) => `<div style="display:flex;gap:18px;align-items:center;padding:14px 0;${i ? 'border-top:2px solid #f0f0f2' : ''}"><span style="flex:0 0 46px;height:46px;border-radius:50%;background:${i === 2 ? 'var(--o)' : 'var(--b)'};color:#fff;font-weight:900;font-size:24px;display:flex;align-items:center;justify-content:center">${i+1}</span><span style="font-size:32px">${p}</span></div>`).join(''))
+].join(''), '1fr 1.15fr 1fr');
+// 5 loss
+const li = ['fork_and_knife_with_plate', 'convenience_store', 'bank'];
+h += card(C.loss.src, [
+  tile('', ['1 / 7', '1 / 2'], `<div class="pg">5/${T}</div><div class="ey">${C.loss.tag}</div><div class="h">${C.loss.title}</div>`),
+  ...C.loss.rows.map((r, i) => tile(i === 2 ? 'so' : '', [i === 2 ? '1 / 7' : (i ? '4 / 7' : '1 / 4'), i === 2 ? '3 / 4' : '2 / 3'], `<img class="ic s" src="${I(li[i])}"><div class="h2">${r.who}</div><div class="p bot" style="font-size:29px;${i === 2 ? 'max-width:700px' : ''}">${r.what}</div>`)),
+  tile('dark', ['1 / 7', '4 / 5'], `<div class="h2" style="font-size:40px;line-height:1.45">${C.loss.kicker}</div>`)
+].join(''), '.55fr 1.25fr .8fr .55fr');
+// 6 chain
+const ci = ['yen_banknote', 'bank', 'chart_increasing', 'balance_scale'];
+h += card(C.chain.src, [
+  tile('', ['1 / 7', '1 / 2'], `<div class="pg">6/${T}</div><div class="ey">${C.chain.tag}</div><div class="h">${C.chain.title}</div>`),
+  ...C.chain.steps.map((st, i) => tile(i === 2 ? 'o' : '', [i % 2 ? '4 / 7' : '1 / 4', `${2 + Math.floor(i / 2)} / ${3 + Math.floor(i / 2)}`], `<img class="ic s" style="width:100px;height:100px" src="${I(ci[i])}"><div class="n" style="font-size:72px;color:${i === 2 ? '#fff' : 'var(--o)'}">0${i+1}</div><div class="h2 bot" style="font-size:36px">${st.t}${st.pred ? '<span class="chip" style="background:#fff;color:var(--o)">预测</span>' : ''}</div><div class="p" style="font-size:24px;margin-top:8px">${st.d}</div>`)),
+  tile('dark', ['1 / 7', '4 / 5'], `<div class="p" style="font-size:25px;line-height:1.65">${C.chain.compare}</div>`)
+].join(''), '.5fr 1fr 1fr .62fr');
+// 7 block
+const bi = ['classical_building', 'balance_scale', 'yen_banknote', 'hourglass_not_done'];
+h += card(C.block.src, [
+  tile('', ['1 / 4', '1 / 2'], `<div class="pg" style="right:auto;left:40px;top:auto;bottom:30px">7/${T}</div><div class="ey">${C.block.tag}</div><div class="h" style="font-size:56px">能不能过，<br>还不一定</div>`),
+  tile('o', ['4 / 7', '1 / 2'], `<div class="ey">参议院</div><div class="n" style="font-size:150px;margin-top:auto">差4席</div>`),
+  ...C.block.items.map((it, i) => tile(i === 0 ? 'so' : '', [i % 2 ? '4 / 7' : '1 / 4', `${2 + Math.floor(i / 2)} / ${3 + Math.floor(i / 2)}`], `<img class="ic s" style="width:100px;height:100px" src="${I(bi[i])}"><div class="h2 bot" style="font-size:42px">${it.t}</div><div class="p" style="font-size:25px;margin-top:10px">${it.d}</div>`))
+].join(''), '1fr 1.1fr 1.1fr');
+// 8 end
+h += card(C.end.src, [
+  tile('dark', ['1 / 7', '1 / 2'], `<div class="pg">8/${T}</div><div class="ey">${C.end.tag}</div><div class="h bot" style="font-size:78px;line-height:1.3">${C.end.quote[0]}<br>${C.end.quote[1]}<br><span style="color:var(--o)">${C.end.quote[2]}<br>${C.end.quote[3]}</span></div>`),
+  ...C.end.watch.map((w, i) => tile(i === 0 ? 'so' : (i === 1 ? 'sb' : ''), [`${1 + i * 2} / ${3 + i * 2}`, '2 / 3'], `<img class="ic s" style="width:84px;height:84px" src="${I(['classical_building', 'bank', 'chart_increasing'][i])}"><div class="ey bot">${w[0]}</div><div class="h2" style="font-size:36px">${w[1]}</div>`))
+].join(''), '2.3fr 1fr');
+document.body.insertAdjacentHTML('beforeend', h);
+</script>
+</body></html>

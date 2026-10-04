@@ -13,6 +13,8 @@ const { chromium } = require('playwright');
   const page = await browser.newPage({ viewport: { width: 1200, height: 1600 }, deviceScaleFactor: 1 });
   await page.goto('file://' + path.resolve(html));
   await page.evaluate(() => document.fonts.ready);
+  // 异步渲染的页面（如 AntV 信息图）可设 window.__ready=false，渲染完成后置 true
+  await page.waitForFunction(() => window.__ready !== false, null, { timeout: 30000 });
   const cards = await page.$$('section.card');
   for (let i = 0; i < cards.length; i++) {
     const f = path.join(out, `${String(i + 1).padStart(2, '0')}.png`);
