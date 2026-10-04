@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>D</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --bg:#f8f5ef; --ink:#2b2620; --ink2:#5a5247; --acc:#7a1f1f; --line:#b9ad99; --soft:#f1ece2; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#aaa; font-family:"NSerif",serif; color:var(--ink); }
+  .card { width:1080px; height:1440px; margin:0 auto 40px; background:var(--bg); padding:56px 64px 44px; display:flex; flex-direction:column; position:relative; overflow:hidden;
+    background-image:radial-gradient(rgba(43,38,32,.035) 1px, transparent 1px); background-size:6px 6px; }
+  .mast { text-align:center; border-bottom:6px double var(--ink); padding-bottom:16px; }
+  .mast .name { font-weight:900; font-size:64px; letter-spacing:12px; }
+  .mast .sub { display:flex; justify-content:space-between; font-size:22px; color:var(--ink2); border-top:1px solid var(--ink); margin-top:14px; padding-top:10px; letter-spacing:2px; }
+  .mini { display:flex; justify-content:space-between; font-size:22px; color:var(--ink2); border-bottom:3px double var(--line); padding-bottom:12px; letter-spacing:2px; }
+  .kick { font-family:"NSans"; font-weight:800; font-size:26px; color:var(--acc); letter-spacing:6px; margin:40px 0 16px; }
+  h1 { font-weight:900; font-size:104px; line-height:1.16; }
+  h2 { font-weight:900; font-size:74px; line-height:1.22; margin-bottom:30px; }
+  .acc { color:var(--acc); }
+  .dek { font-size:40px; line-height:1.6; color:var(--ink2); font-style:italic; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px 0; margin-top:34px; }
+  .foot { margin-top:auto; border-top:3px double var(--line); padding-top:16px; display:flex; justify-content:space-between; gap:30px; font-size:21px; color:var(--ink2); line-height:1.5; }
+  .foot b { font-weight:700; color:var(--ink); white-space:nowrap; }
+  .lead { display:grid; grid-template-columns:1fr 380px; gap:44px; margin-top:10px; align-items:end; }
+  .bignum { font-weight:900; font-size:290px; line-height:.85; color:var(--acc); }
+  .bignum small { display:block; font-size:30px; color:var(--ink2); font-weight:400; margin-top:16px; letter-spacing:2px; }
+  .col { font-size:30px; line-height:1.75; text-align:justify; color:var(--ink); border-left:1px solid var(--line); padding-left:30px; }
+  .col::first-letter { float:left; font-size:96px; line-height:.9; font-weight:900; color:var(--acc); margin:6px 12px 0 0; }
+  .fact { display:grid; grid-template-columns:110px 1fr; gap:24px; border-top:3px double var(--line); padding:26px 0; }
+  .fact .k { font-family:"NSans"; font-weight:800; font-size:26px; color:var(--acc); letter-spacing:4px; padding-top:10px; }
+  .fact .v { font-size:36px; line-height:1.5; }
+  .fact .v b { display:block; font-size:58px; font-weight:900; }
+  .fig { border:1px solid var(--ink); padding:30px 34px; background:var(--soft); }
+  .fig .cap { font-family:"NSans"; font-weight:800; font-size:24px; letter-spacing:4px; border-bottom:1px solid var(--ink); padding-bottom:10px; margin-bottom:60px; display:flex; justify-content:space-between; }
+  .legend i { display:inline-block; width:22px; height:22px; margin:0 8px 0 24px; vertical-align:-3px; }
+  .plot { display:flex; gap:90px; align-items:flex-end; height:400px; border-bottom:2px solid var(--ink); padding:0 30px; }
+  .grp { flex:1; display:flex; gap:6px; align-items:flex-end; height:100%; }
+  .b { flex:1; position:relative; }
+  .b span { position:absolute; top:-56px; left:0; right:0; text-align:center; font-weight:900; font-size:44px; }
+  .xl { display:flex; gap:90px; padding:16px 30px 0; }
+  .xl div { flex:1; text-align:center; font-size:28px; color:var(--ink2); font-style:italic; }
+  .xl div b { display:block; font-style:normal; font-size:36px; color:var(--ink); }
+  .figcap { font-size:26px; color:var(--ink2); font-style:italic; margin-top:18px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; border-top:6px double var(--ink); border-bottom:1px solid var(--ink); }
+  .two > div { padding:30px 30px 26px; }
+  .two > div + div { border-left:1px solid var(--ink); background:var(--soft); }
+  .two .l { font-family:"NSans"; font-weight:700; font-size:24px; letter-spacing:2px; color:var(--ink2); }
+  .two .n { font-weight:900; font-size:150px; line-height:1.05; }
+  .two .u { font-size:26px; font-style:italic; color:var(--ink2); }
+  .pts { columns:2; column-gap:44px; column-rule:1px solid var(--line); margin-top:30px; font-size:30px; line-height:1.7; }
+  .pts p { break-inside:avoid; margin-bottom:16px; }
+  .pts p::before { content:"■ "; color:var(--acc); font-size:20px; vertical-align:4px; }
+  .who { display:grid; grid-template-columns:200px 1fr; gap:24px; border-top:3px double var(--line); padding:28px 0; }
+  .who .w { font-weight:900; font-size:52px; }
+  .who .t { font-size:32px; line-height:1.65; }
+  .pull { border-top:6px double var(--ink); border-bottom:6px double var(--ink); padding:26px 0; margin-top:26px; font-weight:900; font-size:44px; line-height:1.45; text-align:center; }
+  .pull::before, .pull::after { content:"“"; color:var(--acc); }
+  .pull::after { content:"”"; }
+  .step { display:grid; grid-template-columns:70px 1fr auto; align-items:baseline; gap:18px; border-top:3px double var(--line); padding:22px 0; }
+  .step .i { font-weight:900; font-size:52px; color:var(--acc); }
+  .step .t { font-weight:900; font-size:42px; }
+  .step .d { font-size:24px; font-style:italic; color:var(--ink2); white-space:nowrap; }
+  .pred { font-family:"NSans"; font-size:20px; font-weight:800; border:2px solid var(--acc); color:var(--acc); padding:0 8px; margin-left:12px; vertical-align:8px; }
+  .box { border:1px solid var(--ink); background:var(--soft); padding:22px 28px; margin-top:20px; font-size:26px; line-height:1.7; }
+  .box b { font-family:"NSans"; font-weight:800; letter-spacing:4px; color:var(--acc); display:block; font-size:22px; margin-bottom:4px; }
+  .obs { display:grid; grid-template-columns:80px 1fr; border-top:3px double var(--line); padding:26px 0; }
+  .obs .n { font-weight:900; font-size:64px; color:var(--acc); line-height:1; }
+  .obs .t { font-weight:900; font-size:44px; }
+  .obs .d { font-size:29px; color:var(--ink2); line-height:1.6; margin-top:4px; }
+  .q { font-weight:900; font-size:80px; line-height:1.42; text-align:center; margin:56px 0 46px; }
+  .q .acc { border-bottom:4px solid var(--acc); }
+  .agenda { border-top:6px double var(--ink); }
+  .agenda .h { font-family:"NSans"; font-weight:800; font-size:24px; letter-spacing:6px; padding:16px 0; color:var(--acc); }
+  .agenda .w { display:grid; grid-template-columns:200px 1fr; border-top:1px solid var(--line); padding:16px 0; font-size:38px; font-weight:700; }
+  .agenda .w span { font-style:italic; font-weight:400; color:var(--ink2); }
+</style></head><body>
+<script src="content.js"></script>
+<script>
+const C = window.CONTENT, T = 8;
+const header = (i, tag) => i === 1
+  ? `<div class="mast"><div class="name">新闻拆解周报</div><div class="sub"><span>2026年10月4日 · 星期日</span><span>以小见大 · 国际版</span><span>第 ${i}/${T} 版</span></div></div>`
+  : `<div class="mini"><span>新闻拆解周报 · 国际版</span><span>${tag}</span><span>${i}/${T}</span></div>`;
+const card = (i, tag, src, inner) => `<section class="card">${header(i, tag)}${inner}<div class="foot"><span>${src}</span><b>${C.handle}</b></div></section>`;
+let h = '';
+h += card(1, C.cover.tag, C.cover.src, `<div class="kick">日本 · 消费税</div><h1>${C.cover.lines[0]}<br>${C.cover.lines[1]}<br><span class="acc">${C.cover.lines[2]}</span></h1>
+  <div class="lead"><div class="bignum">9%<small>（${C.cover.bigNote}，按税率计算）</small></div><div class="col">日本政府决定，2027年4月起两年内，超市与便利店食品、外带的消费税由8%降至1%，堂食仍为10%。一份便当的账，牵出一个国家的财政难题。</div></div>
+  <div class="dek">${C.cover.sub}</div>`);
+h += card(2, C.facts.tag, C.facts.src, `<div class="kick">先看事实</div><h2>${C.facts.title}</h2>${C.facts.rows.map(r => `<div class="fact"><div class="k">${r.k}</div><div class="v">${r.v}<b class="${r.k === '什么' ? 'acc' : ''}">${r.hi}</b></div></div>`).join('')}`);
+const g = C.chart.groups;
+h += card(3, C.chart.tag, C.chart.src, `<div class="kick">小切口</div><h2>${C.chart.title}<br><span class="acc">${C.chart.titleHi}</span></h2>
+  <div class="fig"><div class="cap"><span>图1 · 消费税率对比</span><span class="legend"><i style="background:var(--acc)"></i>${C.chart.legend.dine}<i style="background:var(--ink)"></i>${C.chart.legend.take}</span></div>
+  <div class="plot">${g.map(x => `<div class="grp"><div class="b" style="height:${x.dine*34}px;background:var(--acc)"><span>${x.dine}%</span></div><div class="b" style="height:${Math.max(x.take*34,12)}px;background:var(--ink)"><span>${x.take}%</span></div></div>`).join('')}</div>
+  <div class="xl">${g.map((x, i) => `<div>${x.label}<b class="${i ? 'acc' : ''}">${x.gap}</b></div>`).join('')}</div></div>
+  <div class="figcap">注：${C.chart.note}</div>`);
+h += card(4, C.gain.tag, C.gain.src, `<div class="kick">谁得利</div><h2>${C.gain.title}<br><span class="acc">${C.gain.titleHi}</span></h2>
+  <div class="two">${C.gain.stats.map(s => `<div><div class="l">${s.label}</div><div class="n">${s.n}</div><div class="u">${s.unit}</div></div>`).join('')}</div>
+  <div class="pts">${C.gain.points.map(p => `<p>${p}</p>`).join('')}</div>`);
+h += card(5, C.loss.tag, C.loss.src, `<div class="kick">谁吃亏</div><h2>${C.loss.title}</h2>${C.loss.rows.map(r => `<div class="who"><div class="w">${r.who}</div><div class="t">${r.what}</div></div>`).join('')}<div class="pull">${C.loss.kicker}</div>`);
+h += card(6, C.chain.tag, C.chain.src, `<div class="kick">放大看</div><h2>${C.chain.title}</h2>${C.chain.steps.map((s, i) => `<div class="step"><div class="i">${i+1}</div><div class="t">${s.t}${s.pred ? '<span class="pred">预测</span>' : ''}</div><div class="d">${s.d}</div></div>`).join('')}<div class="box"><b>历史对照</b>${C.chain.compare.replace('历史对照：', '')}</div>`);
+h += card(7, C.block.tag, C.block.src, `<div class="kick">卡在哪</div><h2>${C.block.title}</h2>${C.block.items.map((it, i) => `<div class="obs"><div class="n">${i+1}</div><div><div class="t">${it.t}</div><div class="d">${it.d}</div></div></div>`).join('')}`);
+h += card(8, C.end.tag, C.end.src, `<div class="kick" style="text-align:center">以小见大 · 社论</div><div class="q">${C.end.quote[0]}<br>${C.end.quote[1]}<br><span class="acc">${C.end.quote[2]}</span><br><span class="acc">${C.end.quote[3]}</span></div>
+  <div class="agenda"><div class="h">${C.end.watchTitle}</div>${C.end.watch.map(w => `<div class="w"><span>${w[0]}</span>${w[1]}</div>`).join('')}</div>`);
+document.body.insertAdjacentHTML('beforeend', h);
+</script>
+</body></html>

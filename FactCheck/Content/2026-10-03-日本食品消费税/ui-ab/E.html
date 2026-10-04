@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>E</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --g1:#4338ca; --g2:#2563eb; --ink:#0f172a; --ink2:#475569; --ink3:#94a3b8; --acc:#4338ca; --hot:#ea580c; --soft:#eef2ff; --rule:#e2e8f0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#ccc; font-family:"NSans",sans-serif; color:var(--ink); }
+  .card { width:1080px; height:1440px; margin:0 auto 40px; padding:72px 60px 40px; background:linear-gradient(135deg, var(--g1) 0%, rgba(37,99,235,.92) 50%, var(--g1) 100%); position:relative; overflow:hidden; display:flex; flex-direction:column; }
+  .card::before { content:""; position:absolute; width:900px; height:900px; border-radius:50%; background:rgba(255,255,255,.08); top:-420px; left:-300px; }
+  .card::after { content:""; position:absolute; width:700px; height:700px; border-radius:50%; background:rgba(255,255,255,.06); bottom:-300px; right:-260px; }
+  .head { position:relative; z-index:2; display:flex; align-items:center; gap:20px; color:#fff; margin-bottom:30px; }
+  .ava { width:72px; height:72px; border-radius:50%; background:#fff; color:var(--acc); font-weight:900; font-size:30px; display:flex; align-items:center; justify-content:center; }
+  .head .nm { font-weight:800; font-size:32px; } .head .dt { font-size:22px; opacity:.8; }
+  .head .pg { margin-left:auto; font-size:26px; font-weight:700; background:rgba(255,255,255,.18); padding:8px 22px; border-radius:30px; }
+  .paper { position:relative; z-index:2; background:#fff; border-radius:36px; box-shadow:0 30px 80px rgba(15,23,42,.35); padding:60px 58px; flex:1; display:flex; flex-direction:column; }
+  .chip { align-self:flex-start; background:var(--soft); color:var(--acc); font-weight:800; font-size:26px; padding:8px 22px; border-radius:30px; margin-bottom:28px; }
+  h1 { font-weight:900; font-size:92px; line-height:1.2; }
+  h2 { font-weight:900; font-size:66px; line-height:1.28; margin-bottom:34px; }
+  .acc { color:var(--acc); } .hot { color:var(--hot); }
+  .tail { position:relative; z-index:2; color:#fff; display:flex; justify-content:space-between; gap:30px; font-size:21px; line-height:1.5; padding-top:24px; opacity:.92; }
+  .tail b { white-space:nowrap; font-size:24px; }
+  .big { font-weight:900; font-size:280px; line-height:1; background:linear-gradient(135deg, var(--hot), #f59e0b); -webkit-background-clip:text; color:transparent; margin-top:10px; }
+  .big small { font-size:44px; color:var(--ink2); -webkit-text-fill-color:var(--ink2); font-weight:600; }
+  .quote { margin-top:auto; border-left:10px solid var(--acc); background:var(--soft); border-radius:0 20px 20px 0; padding:28px 32px; font-size:38px; font-weight:700; line-height:1.5; }
+  .row { display:grid; grid-template-columns:120px 1fr; gap:22px; padding:24px 0; border-bottom:2px solid var(--rule); }
+  .row .k { font-weight:800; font-size:28px; color:var(--ink3); padding-top:8px; }
+  .row .v { font-size:35px; line-height:1.45; }
+  .row .v b { display:block; font-size:54px; font-weight:900; color:var(--acc); }
+  .chart { background:var(--soft); border-radius:24px; padding:34px; }
+  .legend { display:flex; gap:32px; font-size:26px; color:var(--ink2); margin-bottom:66px; }
+  .legend i { display:inline-block; width:24px; height:24px; border-radius:50%; margin-right:10px; vertical-align:-4px; }
+  .plot { display:flex; gap:80px; align-items:flex-end; height:380px; border-bottom:3px solid var(--ink); padding:0 24px; }
+  .grp { flex:1; display:flex; gap:10px; align-items:flex-end; height:100%; }
+  .b { flex:1; border-radius:16px 16px 4px 4px; position:relative; }
+  .b span { position:absolute; top:-58px; left:0; right:0; text-align:center; font-weight:900; font-size:44px; }
+  .xl { display:flex; gap:80px; padding:16px 24px 0; }
+  .xl div { flex:1; text-align:center; font-size:28px; color:var(--ink2); }
+  .xl div b { display:block; font-size:36px; color:var(--ink); }
+  .stats { display:flex; gap:24px; }
+  .stat { flex:1; border-radius:24px; padding:32px; background:var(--soft); }
+  .stat.on { background:linear-gradient(135deg, var(--g1), var(--g2)); color:#fff; }
+  .stat .l { font-size:26px; font-weight:700; opacity:.85; }
+  .stat .n { font-weight:900; font-size:140px; line-height:1.08; }
+  .stat .u { font-size:26px; opacity:.85; }
+  .li { display:flex; gap:18px; font-size:33px; padding:14px 0; line-height:1.5; }
+  .li::before { content:""; flex:0 0 18px; height:18px; border-radius:50%; background:var(--acc); margin-top:16px; }
+  .who { display:flex; gap:26px; padding:26px 0; border-bottom:2px solid var(--rule); align-items:flex-start; }
+  .who .w { flex:0 0 170px; font-weight:900; font-size:46px; color:var(--acc); }
+  .who .t { font-size:33px; line-height:1.6; }
+  .step { display:flex; align-items:center; gap:24px; padding:18px 0; }
+  .step .i { flex:0 0 76px; height:76px; border-radius:22px; background:linear-gradient(135deg, var(--g1), var(--g2)); color:#fff; font-weight:900; font-size:38px; display:flex; align-items:center; justify-content:center; }
+  .step .t { font-weight:900; font-size:40px; } .step .d { font-size:25px; color:var(--ink3); margin-top:2px; }
+  .pred { font-size:20px; font-weight:800; color:#fff; background:var(--hot); border-radius:8px; padding:3px 10px; margin-left:12px; vertical-align:8px; }
+  .hist { margin-top:22px; background:#fff7ed; border-radius:20px; padding:24px 28px; font-size:26px; line-height:1.65; color:#7c2d12; }
+  .obs { display:flex; gap:24px; padding:24px 0; border-bottom:2px solid var(--rule); }
+  .obs .i { flex:0 0 64px; height:64px; border-radius:50%; border:4px solid var(--acc); color:var(--acc); font-weight:900; font-size:32px; display:flex; align-items:center; justify-content:center; }
+  .obs .t { font-weight:900; font-size:42px; } .obs .d { font-size:29px; color:var(--ink2); margin-top:4px; line-height:1.5; }
+  .q { font-weight:900; font-size:76px; line-height:1.42; margin:20px 0 40px; }
+  .watch { background:var(--soft); border-radius:24px; padding:32px 36px; }
+  .watch .h { font-weight:800; font-size:28px; color:var(--acc); margin-bottom:8px; }
+  .watch .w { display:flex; gap:24px; font-size:36px; font-weight:700; padding:10px 0; }
+  .watch .w span { flex:0 0 170px; color:var(--hot); }
+</style></head><body>
+<script src="content.js"></script>
+<script>
+const C = window.CONTENT, T = 8;
+const card = (i, tag, src, inner) => `<section class="card"><div class="head"><div class="ava">拆</div><div><div class="nm">新闻拆解 · 以小见大</div><div class="dt">2026-10-04 · 日本消费税</div></div><div class="pg">${i} / ${T}</div></div><div class="paper"><div class="chip">${tag}</div>${inner}</div><div class="tail"><span>${src}</span><b>${C.handle}</b></div></section>`;
+let h = '';
+h += card(1, '封面', C.cover.src, `<h1>${C.cover.lines[0]}<br>${C.cover.lines[1]}<br><span class="acc">${C.cover.lines[2]}</span></h1><div class="big">9%<small> ${C.cover.bigNote}</small></div><div class="quote">${C.cover.sub.replace('财政窟窿', '<span style="white-space:nowrap">财政窟窿</span>')}</div>`);
+h += card(2, C.facts.tag, C.facts.src, `<h2>${C.facts.title}</h2>${C.facts.rows.map(r => `<div class="row"><div class="k">${r.k}</div><div class="v">${r.v}<b>${r.hi}</b></div></div>`).join('')}`);
+const g = C.chart.groups;
+h += card(3, C.chart.tag, C.chart.src, `<h2>${C.chart.title}<br><span class="hot">${C.chart.titleHi}</span></h2>
+  <div class="chart"><div class="legend"><span><i style="background:var(--hot)"></i>${C.chart.legend.dine}</span><span><i style="background:var(--acc)"></i>${C.chart.legend.take}</span></div>
+  <div class="plot">${g.map(x => `<div class="grp"><div class="b" style="height:${x.dine*32}px;background:var(--hot)"><span>${x.dine}%</span></div><div class="b" style="height:${Math.max(x.take*32,12)}px;background:var(--acc)"><span>${x.take}%</span></div></div>`).join('')}</div>
+  <div class="xl">${g.map((x, i) => `<div>${x.label}<b class="${i ? 'hot' : ''}">${x.gap}</b></div>`).join('')}</div></div>
+  <div class="quote" style="font-size:30px;font-weight:500">${C.chart.note}</div>`);
+h += card(4, C.gain.tag, C.gain.src, `<h2>${C.gain.title}<br><span class="acc">${C.gain.titleHi}</span></h2>
+  <div class="stats">${C.gain.stats.map((s, i) => `<div class="stat ${i ? 'on' : ''}"><div class="l">${s.label}</div><div class="n">${s.n}</div><div class="u">${s.unit}</div></div>`).join('')}</div>
+  <div style="margin-top:26px">${C.gain.points.map(p => `<div class="li">${p}</div>`).join('')}</div>`);
+h += card(5, C.loss.tag, C.loss.src, `<h2>${C.loss.title}</h2>${C.loss.rows.map(r => `<div class="who"><div class="w">${r.who}</div><div class="t">${r.what}</div></div>`).join('')}<div class="quote">${C.loss.kicker}</div>`);
+h += card(6, C.chain.tag, C.chain.src, `<h2>${C.chain.title}</h2>${C.chain.steps.map((s, i) => `<div class="step"><div class="i">${i+1}</div><div><div class="t">${s.t}${s.pred ? '<span class="pred">预测</span>' : ''}</div><div class="d">${s.d}</div></div></div>`).join('')}<div class="hist">${C.chain.compare}</div>`);
+h += card(7, C.block.tag, C.block.src, `<h2>${C.block.title}</h2>${C.block.items.map((it, i) => `<div class="obs"><div class="i">${i+1}</div><div><div class="t">${it.t}</div><div class="d">${it.d}</div></div></div>`).join('')}`);
+h += card(8, C.end.tag, C.end.src, `<div class="q">${C.end.quote[0]}<br>${C.end.quote[1]}<br><span class="acc">${C.end.quote[2]}<br>${C.end.quote[3]}</span></div>
+  <div class="watch"><div class="h">${C.end.watchTitle}</div>${C.end.watch.map(w => `<div class="w"><span>${w[0]}</span>${w[1]}</div>`).join('')}</div>`);
+document.body.insertAdjacentHTML('beforeend', h);
+</script>
+</body></html>

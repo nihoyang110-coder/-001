@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>B</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --bg1:#FBF3DF; --bg2:#F3DFC0; --surface:#FFFCF3; --ink:#241C14; --strong:#100C08; --acc:#D86220; --acc2:#4F7FA6; --rule:rgba(36,28,20,.18); --hl:rgba(216,98,32,.22); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#bbb; font-family:"NSans",sans-serif; color:var(--ink); }
+  .card { width:1080px; height:1440px; background:linear-gradient(160deg,var(--bg1),var(--bg2)); padding:56px; margin:0 auto 40px; position:relative; overflow:hidden; }
+  .inner { background:var(--surface); border-radius:28px; height:100%; padding:64px 64px 40px; display:flex; flex-direction:column; position:relative; }
+  .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:44px; }
+  .tag { background:rgba(216,98,32,.14); color:var(--acc); font-weight:800; font-size:30px; padding:10px 26px; border-radius:40px; }
+  .pg { font-family:"Kai"; font-size:32px; color:#9a8b78; }
+  h1 { font-weight:900; font-size:96px; line-height:1.18; color:var(--strong); }
+  h1 .o, h2 .o { color:var(--acc); }
+  h2 { font-weight:900; font-size:72px; line-height:1.25; color:var(--strong); margin-bottom:40px; }
+  .mk { background:linear-gradient(transparent 58%, var(--hl) 58%, var(--hl) 92%, transparent 92%); padding:0 4px; }
+  .foot { margin-top:auto; padding-top:22px; border-top:2px dashed var(--rule); display:flex; justify-content:space-between; gap:30px; font-size:22px; color:#8f8170; line-height:1.5; }
+  .foot b { font-family:"Kai"; font-weight:400; font-size:26px; color:var(--acc); white-space:nowrap; }
+  p, li { font-size:38px; line-height:1.7; font-weight:500; }
+  .hand { font-family:"Kai"; color:var(--acc2); }
+  /* cover */
+  .big { font-weight:900; font-size:330px; line-height:.9; color:var(--acc); margin:30px 0 0 -10px; }
+  .big small { font-family:"Kai"; font-size:60px; color:var(--ink); font-weight:400; margin-left:12px; }
+  .sticky { margin-top:46px; background:#fff3c4; transform:rotate(-1.5deg); padding:34px 40px; font-size:42px; font-weight:700; line-height:1.5; box-shadow:0 10px 0 rgba(36,28,20,.06); position:relative; }
+  .sticky::before { content:""; position:absolute; top:-18px; left:60px; width:140px; height:36px; background:rgba(79,127,166,.35); transform:rotate(-4deg); }
+  /* facts */
+  .fact { display:flex; gap:28px; padding:26px 0; border-bottom:2px dashed var(--rule); align-items:baseline; }
+  .fact .k { flex:0 0 120px; font-family:"Kai"; font-size:36px; color:var(--acc2); }
+  .fact .v { font-size:38px; line-height:1.5; font-weight:500; }
+  .fact .v b { display:block; font-size:58px; color:var(--acc); font-weight:900; }
+  /* chart */
+  .chart { background:#fff7ea; border-radius:24px; padding:40px; }
+  .legend { display:flex; gap:36px; font-size:28px; margin-bottom:70px; }
+  .legend i { display:inline-block; width:28px; height:28px; border-radius:8px; margin-right:10px; vertical-align:-5px; }
+  .plot { display:flex; gap:90px; align-items:flex-end; height:430px; border-bottom:4px solid var(--ink); padding:0 30px; }
+  .grp { flex:1; display:flex; gap:10px; align-items:flex-end; height:100%; }
+  .bar { flex:1; border-radius:18px 18px 0 0; position:relative; }
+  .bar span { position:absolute; top:-62px; left:0; right:0; text-align:center; font-weight:900; font-size:48px; }
+  .xl { display:flex; gap:90px; padding:16px 30px 0; }
+  .xl div { flex:1; text-align:center; font-size:30px; }
+  .xl div b { display:block; font-size:38px; margin-top:6px; }
+  /* stats */
+  .stats { display:flex; gap:28px; }
+  .stat { flex:1; border-radius:24px; padding:36px; background:#fff7ea; }
+  .stat:nth-child(2) { background:var(--acc); color:#fff; }
+  .stat .l { font-size:28px; font-weight:700; }
+  .stat .n { font-weight:900; font-size:150px; line-height:1.05; }
+  .stat .u { font-family:"Kai"; font-size:32px; }
+  .list li { list-style:none; padding:14px 0 14px 56px; position:relative; font-size:36px; }
+  .list li::before { content:"✓"; position:absolute; left:0; top:12px; width:42px; height:42px; border-radius:50%; background:var(--acc); color:#fff; font-size:26px; text-align:center; line-height:42px; font-weight:900; }
+  /* rows */
+  .who { display:flex; gap:30px; padding:30px 0; border-bottom:2px dashed var(--rule); }
+  .who .w { flex:0 0 190px; font-weight:900; font-size:50px; }
+  .who .t { font-size:36px; line-height:1.6; }
+  /* chain */
+  .step { background:#fff7ea; border-radius:22px; padding:24px 34px; display:flex; justify-content:space-between; align-items:center; }
+  .step .t { font-weight:900; font-size:44px; }
+  .step .d { font-family:"Kai"; font-size:30px; color:var(--acc2); white-space:nowrap; }
+  .arrow { text-align:center; font-family:"Kai"; color:var(--acc); font-size:44px; line-height:1.2; }
+  .pred { font-family:"Kai"; font-size:28px; color:#fff; background:var(--acc2); border-radius:10px; padding:2px 12px; margin-left:12px; vertical-align:8px; }
+  .note { margin-top:30px; background:rgba(79,127,166,.10); border-left:8px solid var(--acc2); border-radius:0 18px 18px 0; padding:24px 30px; font-size:28px; line-height:1.65; }
+  /* block */
+  .obs { display:flex; gap:26px; padding:26px 0; border-bottom:2px dashed var(--rule); }
+  .obs .n { flex:0 0 72px; height:72px; border-radius:50%; background:var(--strong); color:#fff; font-weight:900; font-size:40px; text-align:center; line-height:72px; }
+  .obs .t { font-weight:900; font-size:44px; }
+  .obs .d { font-size:30px; color:#6b5d4d; margin-top:6px; line-height:1.5; }
+  /* end */
+  .q { font-weight:900; font-size:80px; line-height:1.4; color:var(--strong); margin:30px 0 50px; }
+  .watch { background:#fff7ea; border-radius:24px; padding:34px 40px; }
+  .watch .h { font-family:"Kai"; font-size:36px; color:var(--acc2); margin-bottom:12px; }
+  .watch .w { font-size:38px; font-weight:700; padding:10px 0; }
+  .watch .w span { color:var(--acc); margin-right:24px; }
+</style></head><body>
+<script src="content.js"></script>
+<script>
+const C = window.CONTENT, T = 8;
+const card = (i, tag, src, inner) => `<section class="card"><div class="inner"><div class="top"><span class="tag">${tag}</span><span class="pg">${i}/${T}</span></div>${inner}<div class="foot"><span>${src}</span><b>${C.handle}</b></div></div></section>`;
+let h = '';
+h += card(1, C.cover.tag, C.cover.src, `<h1>${C.cover.lines[0]}<br>${C.cover.lines[1]}<br><span class="o">${C.cover.lines[2]}</span></h1>
+  <div class="big">${C.cover.big}<small>（${C.cover.bigNote}）</small></div>
+  <div class="sticky">${C.cover.sub.replace('每年约 5 万亿日元', '<span class="mk">每年约 5 万亿日元</span>')}</div>`);
+h += card(2, C.facts.tag, C.facts.src, `<h2>${C.facts.title}<span class="o">？</span></h2>${C.facts.rows.map(r => `<div class="fact"><div class="k">${r.k}</div><div class="v">${r.v}<b>${r.hi}</b></div></div>`).join('')}`);
+const g = C.chart.groups;
+h += card(3, C.chart.tag, C.chart.src, `<h2>${C.chart.title}：<br><span class="mk">${C.chart.titleHi}</span></h2>
+  <div class="chart"><div class="legend"><span><i style="background:var(--acc)"></i>${C.chart.legend.dine}</span><span><i style="background:var(--acc2)"></i>${C.chart.legend.take}</span></div>
+  <div class="plot">${g.map(x => `<div class="grp"><div class="bar" style="height:${x.dine*38}px;background:var(--acc)"><span>${x.dine}%</span></div><div class="bar" style="height:${Math.max(x.take*38,14)}px;background:var(--acc2)"><span>${x.take}%</span></div></div>`).join('')}</div>
+  <div class="xl">${g.map((x, i) => `<div>${x.label}<b style="color:${i ? 'var(--acc)' : 'var(--ink)'}">${x.gap}</b></div>`).join('')}</div></div>
+  <p class="hand" style="margin-top:26px;font-size:34px">${C.chart.note}</p>`);
+h += card(4, C.gain.tag, C.gain.src, `<h2>${C.gain.title}<br><span class="o">${C.gain.titleHi}</span></h2>
+  <div class="stats">${C.gain.stats.map(s => `<div class="stat"><div class="l">${s.label}</div><div class="n">${s.n}</div><div class="u">${s.unit}</div></div>`).join('')}</div>
+  <ul class="list" style="margin-top:34px">${C.gain.points.map(p => `<li>${p}</li>`).join('')}</ul>`);
+h += card(5, C.loss.tag, C.loss.src, `<h2>${C.loss.title}</h2>${C.loss.rows.map(r => `<div class="who"><div class="w">${r.who}</div><div class="t">${r.what}</div></div>`).join('')}
+  <div class="sticky" style="margin-top:44px;font-size:38px">${C.loss.kicker}</div>`);
+h += card(6, C.chain.tag, C.chain.src, `<h2>${C.chain.title}<span class="o">，一条链</span></h2>
+  ${C.chain.steps.map((s, i) => `${i ? '<div class="arrow">↓</div>' : ''}<div class="step"><div class="t">${s.t}${s.pred ? '<span class="pred">预测</span>' : ''}</div><div class="d">${s.d}</div></div>`).join('')}
+  <div class="note">${C.chain.compare}</div>`);
+h += card(7, C.block.tag, C.block.src, `<h2>${C.block.title.replace('还不一定', '<span class="mk">还不一定</span>')}</h2>${C.block.items.map((it, i) => `<div class="obs"><div class="n">${i+1}</div><div><div class="t">${it.t}</div><div class="d">${it.d}</div></div></div>`).join('')}`);
+h += card(8, C.end.tag, C.end.src, `<div class="q">${C.end.quote[0]}<br>${C.end.quote[1]}<br><span class="mk">${C.end.quote[2]}</span><br><span class="mk">${C.end.quote[3]}</span></div>
+  <div class="watch"><div class="h">${C.end.watchTitle}</div>${C.end.watch.map(w => `<div class="w"><span>${w[0]}</span>${w[1]}</div>`).join('')}</div>`);
+document.body.insertAdjacentHTML('beforeend', h);
+</script>
+</body></html>
