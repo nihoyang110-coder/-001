@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>视频号封面</title>
+<!-- 视频号 9:16 封面（1080×1920），读 content.js 的 video 与 cover 字段。出图：node scripts/render_cards.cjs video-cover.html cards-video -->
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --bg:hsl(214,95%,93%); --y:#facc00; --r:#ff4d50; --g:#05e17a; --main:hsl(217,100%,66%); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#777; font-family:"NSans","WenQuanYi Zen Hei",sans-serif; }
+  .card { width:1080px; height:1920px; margin:0 auto; background:var(--bg); padding:120px 64px 110px; display:flex; flex-direction:column; gap:40px; position:relative; overflow:hidden;
+    background-image:linear-gradient(rgba(0,0,0,.06) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,.06) 2px, transparent 2px); background-size:60px 60px; }
+  .b { background:#fff; border:5px solid #000; border-radius:10px; box-shadow:8px 8px 0 0 #000; padding:40px 44px; position:relative; }
+  .pill { align-self:flex-start; border:5px solid #000; border-radius:10px; box-shadow:5px 5px 0 0 #000; background:var(--y); font-weight:900; font-size:40px; padding:10px 26px; }
+  .t { font-weight:900; font-size:128px; line-height:1.1; letter-spacing:-2px; }
+  .mark { display:inline-block; background:var(--r); color:#fff; border:5px solid #000; padding:4px 16px; margin-top:16px; line-height:1.1; white-space:nowrap; }
+  .sub { font-weight:900; font-size:76px; }
+  .sticker { width:280px; height:280px; position:absolute; right:30px; top:-200px; transform:rotate(10deg); filter:drop-shadow(8px 8px 0 #000); }
+  .handle { margin-top:auto; font-weight:900; font-size:40px; text-align:center; }
+</style></head><body>
+<script src="content.js"></script>
+<script>
+const C = window.CONTENT, V = C.video || {}, L = V.lines || C.cover.lines;
+document.body.insertAdjacentHTML('beforeend', `<section class="card">
+  <div class="pill">${V.tag || C.cover.tag}</div>
+  <div class="b" style="margin-top:160px">${C.cover.icon ? `<img class="sticker" src="icons/${C.cover.icon}_3d.png">` : ''}<div class="t">${L.slice(0, -1).join('<br>')}<br><span class="mark">${L[L.length - 1]}</span></div></div>
+  <div class="b" style="background:var(--y)"><div class="sub">${V.sub || C.cover.sub}</div></div>
+  ${(C.cover.pills || []).length ? `<div style="display:flex;gap:30px">${C.cover.pills.map(p => `<div class="b" style="flex:1;background:${{ r: 'var(--r)', g: 'var(--g)', y: 'var(--y)', b: 'var(--main)' }[p.color] || '#fff'};color:${p.color === 'r' || p.color === 'b' ? '#fff' : '#000'};display:flex;align-items:center;gap:20px">${p.icon ? `<img style="width:130px;height:130px" src="icons/${p.icon}_3d.png">` : ''}<div><div style="font-weight:800;font-size:36px">${p.label}</div><div style="font-weight:900;font-size:110px;line-height:1">${p.value}</div></div></div>`).join('')}</div>` : ''}
+  <div class="handle">${C.handle}</div></section>`);
+</script>
+</body></html>

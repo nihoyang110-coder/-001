@@ -31,8 +31,13 @@
 - 结尾写一行信息来源说明（小红书正文不放外链）
 
 ## 4. 产出文件（放在 `FactCheck/Content/YYYY-MM-DD-话题/`）
-- `cards.html` → 复制 `assets/card-template.html` 改文字；颜色：堂食/负面用橙 `#eb6834`，正面/对照用蓝 `#2a78d6`
-- `cards/01.png…`：`node scripts/render_cards.cjs cards.html cards`，脚本会提示溢出；渲染后**逐张看图**检查换行和留白
+- **默认模板：新粗野主义**（用户盲评两轮后选定，参考 ekmas/neobrutalism-components）。步骤：
+  1. `bash scripts/setup_fonts.sh <内容目录>`（下载开源字体，写 fonts.css；已缓存则秒过）
+  2. 复制 `assets/neobrutal/template.html` → `<内容目录>/cards.html`，`video-cover.html` 同目录，`assets/neobrutal/icons/` → `<内容目录>/icons/`
+  3. 按 `references/card-content-schema.md` 写 `<内容目录>/content.js`（只改这个文件）
+  4. `node scripts/render_cards.cjs cards.html cards` 出 8 张 3:4；`node scripts/render_cards.cjs video-cover.html cards-video` 出视频号 9:16 封面
+  5. 脚本会提示文字溢出；**渲染后逐张看图**检查断行（尤其“窟窿”这类词被拆开）、贴纸压字、高亮条压行
+- 旧的简洁模板 `assets/card-template.html` 保留备用
 - `小红书.md`：3 个标题（≤20 字，前半句放搜索词，按 platforms.md 第4节公式）、正文（≤1000 字，分点+少量 emoji）、话题标签、置顶评论
 - `视频号脚本.md`：封面字、分镜表（时间｜画面｜字幕｜口播），口播按 4 字/秒控制在 60–90 秒，前 4 秒直接给结论
 - `事实对照.md`：发布说法 → 卡片 → 状态，**标题和封面里的数字也要列**；发布前检查所有卡片编号都存在
