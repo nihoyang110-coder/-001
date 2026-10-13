@@ -23,7 +23,7 @@ document.body.insertAdjacentHTML('beforeend', `<section class="card">
   <div class="pill">${V.tag || C.cover.tag}</div>
   <div class="b" style="margin-top:160px">${C.cover.icon ? `<img class="sticker" src="icons/${C.cover.icon}_3d.png">` : ''}<div class="t">${L.slice(0, -1).join('<br>')}<br><span class="mark">${L[L.length - 1]}</span></div></div>
   <div class="b" style="background:var(--y)"><div class="sub">${V.sub || C.cover.sub}</div></div>
-  ${(C.cover.pills || []).length ? `<div style="display:flex;gap:30px">${C.cover.pills.map(p => `<div class="b" style="flex:1;background:${{ r: 'var(--r)', g: 'var(--g)', y: 'var(--y)', b: 'var(--main)' }[p.color] || '#fff'};color:${p.color === 'r' || p.color === 'b' ? '#fff' : '#000'};display:flex;align-items:center;gap:20px">${p.icon ? `<img style="width:130px;height:130px" src="icons/${p.icon}_3d.png">` : ''}<div><div style="font-weight:800;font-size:36px">${p.label}</div><div style="font-weight:900;font-size:110px;line-height:1">${p.value}</div></div></div>`).join('')}</div>` : ''}
+  ${(C.cover.pills || []).length ? `<div style="display:flex;gap:30px">${C.cover.pills.map(p => `<div class="b" style="flex:1;background:${{ r: 'var(--r)', g: 'var(--g)', y: 'var(--y)', b: 'var(--main)' }[p.color] || '#fff'};color:${p.color === 'r' || p.color === 'b' ? '#fff' : '#000'};display:flex;align-items:center;gap:20px">${p.icon ? `<img style="width:100px;height:100px;flex-shrink:0" src="icons/${p.icon}_3d.png">` : ''}<div><div style="font-weight:800;font-size:36px">${p.label}</div><div style="font-weight:900;font-size:110px;line-height:1;white-space:nowrap">${p.value}</div></div></div>`).join('')}</div>` : ''}
   <div class="handle">${C.handle}</div></section>`);
 </script>
 </body></html>
