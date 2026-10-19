@@ -25,7 +25,8 @@
 
 ## 工具 & 技能
 - Claude 技能：`.claude/skills/news-factcheck/`（在本仓库开 Claude Code 会话，发截图即自动触发）
-- 脚本：`python3 .claude/skills/news-factcheck/scripts/factdb.py search|next-id|rebuild|due`
+- 脚本：`python3 .claude/skills/news-factcheck/scripts/factdb.py search|next-id|rebuild|due|supersede|entities`（search 会按别名扩展；supersede 用于新事实推翻旧卡）
+- 实体页：`Entities/`；同义词：`别名表.md`；记忆系统改动见 `变更记录.md`
   - `due`：列出到期该回看的预测卡
 
 ## 网络

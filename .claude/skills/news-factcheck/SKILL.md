@@ -15,7 +15,7 @@ description: 新闻追根溯源与事实核查，并把结果沉淀进 Obsidian 
 
 动手前先运行 `bash scripts/check_network.sh` 看哪些新闻源能直接打开：可达很少时，整篇都要按“只依据搜索摘要”处理并降置信度，不要逐个去试被拦的网页浪费次数。
 
-再运行 `python scripts/factdb.py search <关键词>`（在 vault 父目录下执行，或用 `--vault` 指定路径），看看清单里是否已有相关卡片。已有的结论是本次核查的起点，不要从零重查已证实的东西，而要检查它是否过时。
+再运行 `python scripts/factdb.py search <关键词>`（在 vault 父目录下执行，或用 `--vault` 指定路径），看看清单里是否已有相关卡片（会按别名表自动扩展同义词；涉及常见公司时先读 `FactCheck/Entities/` 的实体页）。已有的结论是本次核查的起点，不要从零重查已证实的东西，而要检查它是否过时。
 
 ## 1. 读截图，拆成原子命题
 从截图/链接提取：标题、发布者、发布时间、是“原创”还是编译转述。
@@ -51,11 +51,13 @@ description: 新闻追根溯源与事实核查，并把结果沉淀进 Obsidian 
 ## 6. 落入事实清单（最重要的一步）
 每个原子命题对应一张事实卡片，格式见 `references/vault-format.md`。
 - 用 `python scripts/factdb.py search` 查重：已有卡片就**更新**它（改 status / confidence / last_checked，在“更新记录”追加一行，news 列表加上本篇），不要建重复卡。
-- 没有就用 `python scripts/factdb.py next-id` 拿下一个编号新建。
+- **新事实推翻旧卡**（数字变了、事件反转）时不要改写旧卡：新建卡片，再运行 `python scripts/factdb.py supersede 旧ID 新ID 原因`，旧卡自动标“已过时”并指向新卡。
+- 没有就用 `python scripts/factdb.py next-id` 拿下一个编号新建。每张事实/数字卡填 `as_of`（事实成立或数据截至的时间，不是核查日）。
+- 只给“会再遇到、能复用”的命题建卡；用户说“没用”的，卡片加 `value: 无用`。
 - 数字类卡片写清口径和时间点（“2026-09 自称年化运行率”而不是“ARR 10亿”），因为数字会变。
 - 预测类卡片填 `review_by`，到期回看。
 - 和其他新闻的卡片有因果或同源关系时（例如同一场危机引出两条新闻），在两张卡片里都加 `## 关联` 互相链接——事实清单的价值就在于把分散的新闻连起来。
-- 全部写完后运行 `python scripts/factdb.py rebuild` 重新生成 `事实清单.md` 的静态表格。
+- 全部写完后运行 `python scripts/factdb.py rebuild` 重新生成 `事实清单.md` 的静态表格；涉及有实体页的公司时，把新事实补进实体页“关键事实/时间线”，并运行 `python scripts/factdb.py entities`。规则详见 `references/vault-format.md` 末节。
 
 新闻笔记写到 `FactCheck/Notes/YYYY-MM-DD-关键词.md`，结构见 `assets/新闻溯源模板.md`；笔记里引用卡片用 `[[F-xxxx]]`，不在笔记里重复卡片内容。
 
