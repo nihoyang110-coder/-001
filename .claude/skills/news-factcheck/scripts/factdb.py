@@ -58,7 +58,8 @@ def cmd_search(vault, terms):
         hay = " ".join([c.get("claim", ""), c.get("subject", ""), c.get("tags", ""), c["_body"]]).lower()
         if all(t in hay for t in terms):
             hits += 1
-            print(f"{c['id']} | {c.get('status','')} | {c.get('confidence','')} | {c.get('claim','')}")
+            flag = f" [{c['value']}]" if c.get("value") else ""
+            print(f"{c['id']} | {c.get('status','')} | {c.get('confidence','')}{flag} | {c.get('claim','')}")
     if not hits:
         print("（无匹配卡片）")
 
