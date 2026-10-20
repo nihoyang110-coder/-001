@@ -4,7 +4,7 @@ source: 视频号截图（三次方AIRX）「CAD行业迎来Claude时刻：专�
 claim: 一个专攻 CAD/BIM 的大模型快 99 倍、干翻几乎所有前沿模型，是 CAD 行业的“Claude 时刻”
 verdict: 产品真实（Skyfall SKY-001，2026-10-19 发布，研究预览）；“快 99 倍”是公司自述区间内的数字，精度与 GPT-6 Astra 几乎持平；与 Claude 无关
 confidence: 中（发布报道均为搜索摘要，未读到官方原文）
-facts: [F-0219, F-0220, F-0221, F-0222, F-0223]
+facts: [F-0219, F-0220, F-0221, F-0222, F-0223, F-0224]
 tags: [factcheck, CAD, BIM, Skyfall, 世界模型]
 ---
 # “CAD 行业迎来 Claude 时刻”：Skyfall SKY-001
@@ -47,3 +47,16 @@ tags: [factcheck, CAD, BIM, Skyfall, 世界模型]
 ## 5. 局限
 - 未读到 Skyfall 官方公告和技术报告，数字来自转述
 - 99 倍出处未找到；未见第三方评测
+
+## 6. 追问：有开源版吗？（2026-10-20）
+SKY-001 未见开源或开放权重（[[F-0224]]）。开源替代：
+| 类型 | 项目 | 做什么 | 注意 |
+|---|---|---|---|
+| 训练好的开源模型 | Text-to-CadQuery（arXiv 2505.06507） | 文字 → CadQuery 代码（可生成 3D 零件） | 论文自报 69.3% 完全匹配；权重是否公开未核实 |
+| 训练好的开源模型 | CAD-Coder | 图片 → CadQuery 代码 | 仓库有推理和训练脚本 |
+| 开源应用（调用通用大模型） | CADAM | 网页版文字生成 OpenSCAD 模型 | 需接大模型 API |
+| 开源应用（调用通用大模型） | CADCraft | 仿 AutoCAD 的 2D 绘图，内置 MCP | pre-alpha（[[F-0185]]） |
+| 开源应用（调用通用大模型） | FreeCAD + 社区 MCP | 让 Claude 等在 FreeCAD 里建模 | 需开图形界面（[[F-0191]]） |
+| BIM | MCP4IFC / ifc-bonsai-mcp | 让大模型读写 IFC 建筑模型（Blender Bonsai） | 研究原型 |
+
+用户要求“保持关注”：已加入 [[关注清单]]，每周回看任务检查是否开源、有无第三方评测、是否商用。
