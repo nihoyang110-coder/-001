@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 把 HTML 里每个 <section class="card">（1080×1440）截成 PNG，用于小红书/视频号素材。
+// 把 HTML 里每个 <section class="card">（3:4 1080×1440、9:16 1080×1920、16:9 1280×720）截成 PNG，用于小红书/视频号/YouTube 素材。
 // 用法：node render_cards.cjs <cards.html> <输出目录>
 const path = require('path');
 const fs = require('fs');
@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
   if (!html || !out) { console.error('用法: node render_cards.cjs <cards.html> <输出目录>'); process.exit(1); }
   fs.mkdirSync(out, { recursive: true });
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1200, height: 1600 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: 1400, height: 1600 }, deviceScaleFactor: 1 });
   await page.goto('file://' + path.resolve(html));
   await page.evaluate(() => document.fonts.ready);
   // 异步渲染的页面（如 AntV 信息图）可设 window.__ready=false，渲染完成后置 true

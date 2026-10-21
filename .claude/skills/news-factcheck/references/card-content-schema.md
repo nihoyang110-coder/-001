@@ -1,12 +1,13 @@
 # 卡片内容文件 content.js（新粗野主义模板）
 
-一条新闻一个 `content.js`，模板 `assets/neobrutal/template.html`（8 张 3:4）和 `video-cover.html`（视频号 9:16 封面）都只读它。
+一条新闻一个 `content.js`，模板 `assets/neobrutal/template.html`（8 张 3:4）、`video-cover.html`（视频号 9:16 封面）和 `youtube-thumb.html`（YouTube 16:9 缩略图）都只读它。
 示例：`FactCheck/Content/2026-10-03-日本食品消费税/content.js`。每个数字都要能在该话题的 `事实对照.md` 里找到卡片。
 
 ```js
 window.CONTENT = {
   handle: '@账号名',
   video: { lines: ['第一行', '第二行', '高亮行'], sub: '黄条副标题', tag: '左上角标签' },   // 视频号封面，可省略
+  youtube: { lines: ['Line 1', 'line 2', 'highlight'], big: '$1.25B', bigNote: 'per month', tag: 'NEWS, CHECKED', icon },  // YouTube 缩略图，英文；省略的字段退回 cover
   cover: {                                   // 第1张：封面
     tag, lines: ['行1','行2','最后一行会高亮'], big: '9%', bigNote: '税后',
     sub: '蓝条一句话', src: '底部来源',
@@ -36,3 +37,4 @@ magnifying_glass_tilted_left
 - 标题行每行 ≤6 个字（封面 100px 大字），超过会难看；高亮行同理
 - `rows`/`items` 的 `d`/`v` 一句话，≤30 字
 - 柱状图 `dine`/`take` 是数值；同一图里最大值占满高度
+- `youtube.lines` 每行 ≤12 个英文字符，总共 ≤4 个词最好；`big` ≤6 个字符

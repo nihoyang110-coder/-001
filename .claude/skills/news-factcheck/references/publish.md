@@ -1,9 +1,9 @@
-# 发布模式：以小见大的新闻分析（小红书 + 视频号）
+# 发布模式：以小见大的新闻分析（小红书 + 视频号 + YouTube）
 
 > 先读 `platforms.md`（平台差异、传播学依据、标题公式、限流红线、热点工作流）。下面是执行步骤。
 > 核心原则：**角度可以选，事实不能弯**。用户想要“抓人”“突出压力”时，从事实清单里挑真实的压力事实来讲，用“代价/窟窿/难题”框架；不用“崩溃/完蛋”，不夸大数字——这既是合规红线，也是账号“有出处”的定位。
 
-用户说“做成小红书/视频号/发布内容/以小见大”时使用。前提：该新闻已完成核查和扩展分析——发布内容只能用事实清单里有卡片的说法。
+用户说“做成小红书/视频号/YouTube/发布内容/以小见大/一稿多版”时使用。默认三个平台都出；用户只点名某个平台时只出那一版（事实对照表总要出）。前提：该新闻已完成核查和扩展分析——发布内容只能用事实清单里有卡片的说法。
 
 ## 1. 先找“小”
 从扩展分析里挑一个**普通人摸得到的具体物件或场景**，它能一路连到大问题。好的“小切口”：
@@ -28,18 +28,23 @@
 - “存疑”的卡片不发
 - 历史类比必须注明差异，不暗示结果必然相同
 - 不给投资建议；不点评个人；政治话题只讲事实和各方立场
-- 结尾写一行信息来源说明（小红书正文不放外链）
+- 结尾写一行信息来源说明（小红书正文不放外链；YouTube 描述里列 Sources，可放原始链接）
+- 英文版同样逐句对照：英文说法也写进 `事实对照.md`，状态不确定的用 reportedly / the company says / forecast
 
 ## 4. 产出文件（放在 `FactCheck/Content/YYYY-MM-DD-话题/`）
 - **默认模板：新粗野主义**（用户盲评两轮后选定，参考 ekmas/neobrutalism-components）。步骤：
   1. `bash scripts/setup_fonts.sh <内容目录>`（下载开源字体，写 fonts.css；已缓存则秒过）
   2. 复制 `assets/neobrutal/template.html` → `<内容目录>/cards.html`，`video-cover.html` 同目录，`assets/neobrutal/icons/` → `<内容目录>/icons/`
   3. 按 `references/card-content-schema.md` 写 `<内容目录>/content.js`（只改这个文件）
-  4. `node scripts/render_cards.cjs cards.html cards` 出 8 张 3:4；`node scripts/render_cards.cjs video-cover.html cards-video` 出视频号 9:16 封面
+  4. `node scripts/render_cards.cjs cards.html cards` 出 8 张 3:4；`node scripts/render_cards.cjs video-cover.html cards-video` 出视频号 9:16 封面；复制 `assets/neobrutal/youtube-thumb.html`，`node scripts/render_cards.cjs youtube-thumb.html cards-youtube` 出 YouTube 16:9 缩略图（英文字在 content.js 的 `youtube` 字段）
   5. 脚本会提示文字溢出；**渲染后逐张看图**检查断行（尤其“窟窿”这类词被拆开）、贴纸压字、高亮条压行
 - 旧的简洁模板 `assets/card-template.html` 保留备用
 - `小红书.md`：3 个标题（≤20 字，前半句放搜索词，按 platforms.md 第4节公式）、正文（≤1000 字，分点+少量 emoji）、话题标签、置顶评论
 - `视频号脚本.md`：封面字、分镜表（时间｜画面｜字幕｜口播），口播按 4 字/秒控制在 60–90 秒，前 4 秒直接给结论
 - `事实对照.md`：发布说法 → 卡片 → 状态，**标题和封面里的数字也要列**；发布前检查所有卡片编号都存在
-- 视频号：必选标签（个人观点 / AI生成）、结尾来源页；小红书：发布前检查清单（platforms.md 第5节）
-- 发布后建 `复盘.md` 记录收藏率/评论/完播/转发
+- `YouTube.md`：按 `assets/YouTube模板.md` 写：3 个英文标题、缩略图字、描述（结论 + 章节 + Sources + AI 辅助说明）、标签、长视频脚本（6–10 分钟）、Shorts 脚本（≤60 秒）、上传设置、发布前检查
+  - 英文版是改写不是逐字翻译：补背景、换掉中文梗
+  - 画面不能只是图卡翻页配 AI 配音（不能变现，[[F-0238]]）：至少加真人出镜、真人配音、录屏讲解或手写批注之一
+- 视频号：必选标签（个人观点 / AI生成）、结尾来源页；小红书：发布前检查清单（platforms.md 第5节）；YouTube：合规清单（platforms.md 第5.1节：AI 披露 [[F-0239]]、来源说明、标题党 [[F-0241]]）
+- 发布后建 `复盘.md` 记录收藏率/评论/完播/转发；YouTube 记点击率、平均观看时长、搜索来源占比
+- 不做自动点赞、关注、回评；评论只出“建议回复”，由人发
