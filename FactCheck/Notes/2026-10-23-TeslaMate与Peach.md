@@ -3,7 +3,7 @@ date: 2026-10-23
 source: 两条短视频截图：①GeekTech「封神级开源神器 Peach 蜜桃，再也不愁找不到片源」；②青青-wang「这个开源项目有点香，让你拿捏特斯拉（TeslaMate）」
 verdict: ①成人片源工具，不跟进；②TeslaMate 真实、成熟、有用，但要自己部署且注意安全
 confidence: ①中（仅截图）②高（仓库直读）
-facts: [F-0239, F-0240, F-0241, F-0242, F-0243]
+facts: [F-0239, F-0240, F-0241, F-0242, F-0243, F-0244]
 tags: [factcheck, 开源软件, 特斯拉, 网络安全]
 ---
 # TeslaMate 与 Peach
@@ -31,3 +31,6 @@ tags: [factcheck, 开源软件, 特斯拉, 网络安全]
 
 ## 局限
 - 未实际部署；中国区 Fleet API 开通情况未核实；Peach 仅凭截图判断
+
+## 追问：怎么搭、车上要不要改（2026-10-23）
+见 `Research/TeslaMate搭建指南.md`；官方允许的接入途径见 [[F-0244]]。
