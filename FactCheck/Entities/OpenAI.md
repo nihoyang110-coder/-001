@@ -55,4 +55,9 @@ ChatGPT 的开发商；产品线覆盖聊天（ChatGPT）、编程（Codex）、
 | [[F-0207]] | 公司自述 | 2026-10-19 | OpenAI 支持的 AI 辅助动画长片《Critterz》计划预算不到 3000 万美元、制作 9 个月（大厂动画长片通常 1–2 亿美元、约 3 年），目标 2026 年 5 月戛纳首映；约 30 名贡献者按定制模式分享利润；仍使用人类配音、原画和剧本 |
 | [[F-0217]] | 已证实 [无用] | 2026-03 | OpenAI Codex 于 2026-03 推出插件系统（把技能、应用和 MCP 服务器打包安装）；首批官方插件约 12 个，据报道包括 Box、Cloudflare、Figma、GitHub、Gmail、Google Drive、Hugging Face、Linear、Notion、Sentry、Slack、Vercel |
 | [[F-0218]] | 部分属实 [无用] | 2026-10-19 | “8 个技能包让 Codex 自动干活”：GitHub、Figma、Sentry、Vercel、Linear 有官方 Codex 插件；Supabase 有插件但是否在官方名单说法不一；Context7（文档查询）和 Playwright（浏览器操作）主要以 MCP 服务器形式接入，Playwright 也在 OpenAI 精选技能里；各项功能描述大体正确 |
+| [[F-0220]] | 公司自述 | 2026-10-19 | Skyfall 自称：SKY-001 在 CAD/BIM 任务上比 GPT-6 Astra 等前沿模型快 51–125 倍、便宜 150–210 倍；其设计任务平均 IoU（形状重合度）79.7%、每例 3.9 秒、约 0.5 美分，GPT-6 Astra 为 79.1%、199 秒、75 美分 |
+| [[F-0228]] | 已证实 | 2026-10-20 | GitHub EL4CTEO/blender-skills（视频里的“22 个 Blender Skill”）：MIT 许可，首次提交 2026-10-14，要求 Blender 5.2+；22 个技能覆盖场景设置、硬表面建模、雕刻、重拓扑与 UV、PBR 材质、烘焙、几何节点、绑定、表情、动画、游戏优化、导出（Roblox/Unity/Unreal/Godot/网页/USD）、渲染、灯光、模拟、天气、插件开发、批处理、资产质检等；可装进 Claude Code、Codex、Gemini CLI、Copilot、Cursor 等 |
+| [[F-0230]] | 部分属实 | 2026-10-20 | “Codex 变身专业 3D 建模师”是夸大：这类技能包提供的是流程说明和现成脚本，让 AI 少犯 Blender 操作错误；成品质量仍取决于所用的大模型，作者给的只是“用/不用技能”的自选对比，没有独立评测 |
+| [[F-0231]] | 已证实 | 2026-09 | 社区项目 MCP for Blender（原名 blender-mcp，作者 Siddharth Ahuja，MIT）：约 2.9 万星（2026-09-20），让 Claude、Codex、Cursor 等通过 MCP 读取场景、执行 Python、搜索导入 Poly Haven/Sketchfab 素材、调用 3D 生成服务；2026 年披露两个漏洞：execute_blender_code 不做沙箱即执行代码（CVE-2026-10688）、Poly Haven 下载路径穿越可写任意文件（CVE-2026-66004，1.6.5 修复） |
+| [[F-0256]] | 已证实 | 2026-01-12 | MIT《The Missing Semester of Your CS Education》2026 年 1 月改版：保留 4 讲修订、新增 5 讲，其中一讲是 Agentic Coding（智能体编程，讲 Claude Code、Codex CLI、opencode、MCP、AGENTS.md、子智能体、沙箱），并单列 AI 使用礼仪 |
 <!-- cards:end -->

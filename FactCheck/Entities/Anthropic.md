@@ -51,4 +51,11 @@ Claude 系列模型的开发商；产品包括 Claude 聊天、Claude Code（编
 | [[F-0191]] | 已证实 | 2026-10-16 | FreeCAD 没有官方 MCP；社区有多个 MCP 插件（如 neka-nat/freecad-mcp、theosib/FreeCAD-MCP-Server、spkane/freecad-mcp），可让 Claude 等通过自然语言建模，但通常需要打开 FreeCAD 图形界面并安装插件 |
 | [[F-0211]] | 已证实 | 2026-10 | tv-vibehack（10-19 改名 cleanyourtv）由 Gathin23 于 2026-10-17 发布：他用 Claude Code 通过 Wi-Fi ADB 连上父母的小米电视 4A（国际版，Android TV 10），停用 25 个小米预装包，并写了一个仿 Apple TV 主屏的启动器；MIT 开源，不 root、不卸载（只用 pm disable-user），可一键恢复；到 10-20 已有 202 次提交、37 位贡献者、30 多个机型清单 |
 | [[F-0214]] | 已证实 | 2026-10-19 | 这不是首创：2026 年 9 月初，开发者 Mert Cobanov 已公开用 Claude Code 通过 ADB 清理一台 4 年旧 Android TV 的提示词，做法同样是只停用不卸载，并安装第三方启动器 FLauncher |
+| [[F-0221]] | 已证实 | 2026-10-20 | “CAD 行业迎来 Claude 时刻”的说法：SKY-001 由 Skyfall AI 开发，与 Anthropic 和 Claude 无关；“Claude 时刻”是借 Claude Code 在编程领域的影响做比喻。“干翻几乎所有前沿模型”只基于公司自家测试，暂无独立评测 |
+| [[F-0228]] | 已证实 | 2026-10-20 | GitHub EL4CTEO/blender-skills（视频里的“22 个 Blender Skill”）：MIT 许可，首次提交 2026-10-14，要求 Blender 5.2+；22 个技能覆盖场景设置、硬表面建模、雕刻、重拓扑与 UV、PBR 材质、烘焙、几何节点、绑定、表情、动画、游戏优化、导出（Roblox/Unity/Unreal/Godot/网页/USD）、渲染、灯光、模拟、天气、插件开发、批处理、资产质检等；可装进 Claude Code、Codex、Gemini CLI、Copilot、Cursor 等 |
+| [[F-0231]] | 已证实 | 2026-09 | 社区项目 MCP for Blender（原名 blender-mcp，作者 Siddharth Ahuja，MIT）：约 2.9 万星（2026-09-20），让 Claude、Codex、Cursor 等通过 MCP 读取场景、执行 Python、搜索导入 Poly Haven/Sketchfab 素材、调用 3D 生成服务；2026 年披露两个漏洞：execute_blender_code 不做沙箱即执行代码（CVE-2026-10688）、Poly Haven 下载路径穿越可写任意文件（CVE-2026-66004，1.6.5 修复） |
+| [[F-0232]] | 已证实 | 2026-04 | Blender 官方实验室（Blender Lab）MCP 服务器 v1.0.0 于 2026-04-27 发布，GPL-3.0+，需要 Blender 5.1+，定位“刻意做小”、偏分析调试和脚本；Anthropic 的 Claude Blender 连接器使用它；Blender 基金会主席称 Blender 目前没有、也不计划内置生成式 AI |
+| [[F-0254]] | 已证实 | 2026-10-26 | CS146S 2026 秋季版前 5 周作业：①用 mitmproxy 抓包拆解一次真实 Claude Code 会话的请求；②给第三方 API 写 MCP 服务器，评分看“模型能否选对工具、调对参数、出错后恢复”，并要求 OAuth；③写一个技能（Skill），评分 流程 15/技能 60/测试 25，要求 3 个应触发和 1 个“不该触发”的测试；④给陌生开源仓库写 AGENTS.md 或 CLAUDE.md；⑤用 Factory 的 Droid 给 3 个开源仓库跑“智能体就绪度”报告并比较 |
+| [[F-0256]] | 已证实 | 2026-01-12 | MIT《The Missing Semester of Your CS Education》2026 年 1 月改版：保留 4 讲修订、新增 5 讲，其中一讲是 Agentic Coding（智能体编程，讲 Claude Code、Codex CLI、opencode、MCP、AGENTS.md、子智能体、沙箱），并单列 AI 使用礼仪 |
+| [[F-0257]] | 公司自述 | 2026-03-02 | Anthropic Academy 提供免费课程（据报道 2026-03-02 上线、13 门、托管在 Skilljar、邮箱注册、有结课证书），包括 Claude Code in Action、Introduction to Model Context Protocol、Building with the Claude API |
 <!-- cards:end -->
