@@ -77,6 +77,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .order{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
 .chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .chip.area{border-color:transparent;background:var(--accent-soft);color:var(--accent)}
+.chip.cur-ok{color:var(--ok);border-color:var(--ok)} .chip.cur-part{color:var(--warn);border-color:var(--warn)} .chip.cur-gone{color:var(--bad);border-color:var(--bad)}
+.item.gone{opacity:.72}
+.curnote{font-size:13px;padding:6px 10px;border-radius:6px;background:var(--bg)}
 .chip.s-block{color:var(--bad);border-color:var(--bad)}
 .chip.pick{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
@@ -202,6 +205,7 @@ const merged = D.dedupe.length, gapTop = D.gaps.filter(g => g.score > 0);
 $("#stats").innerHTML = [
   [cat.length, "条资源（链接去重后）"], [T.length, "个主题，每题只学首选"],
   [new Set(T.flatMap(g => g.alts)).size, "条重叠资源不用学"],
+  [cat.filter(c => c.currency === "已淘汰").length + " / " + cat.filter(c => c.currency === "部分过时").length, "条已淘汰 / 部分过时"],
   [cat.filter(c => c.rubric_zh).length, "条带作业或评分表"],
   [gapTop.length, "个能力有差距"],
   [`${items.filter(i => i.status === "已达标").length}/${items.length}`, "个学习单元已达标"]
@@ -256,6 +260,7 @@ $("#topics").innerHTML = T.map(g => `<article class="topic"><h3>${esc(g.name)}</
   ${g.pick.length ? `<div class="row"><b>首选</b><span>${g.pick.map(lk).join("；")}</span></div>` : ""}
   ${g.also.length ? `<div class="row"><b>补充</b><span>${g.also.map(lk).join("；")}</span></div>` : ""}
   ${g.alts.length ? `<div class="row"><b>不用学</b><span>${g.alts.length} 条重叠资源</span></div>` : ""}
+  ${(g.retired||[]).length ? `<div class="row"><b>已淘汰</b><span>${g.retired.map(lk).join("；")}</span></div>` : ""}
   <p>${esc(g.why)}</p></article>`).join("");
 
 // 热力图：能力 × 资源类型
@@ -280,24 +285,26 @@ const seg = (el, opts, key, multi) => {
   if (!multi) el.querySelector("button").setAttribute("aria-pressed", "true");
 };
 seg($("#kindseg"), [{v:"全部",l:"全部"}, ...kinds.map(k => ({v:k,l:k}))], "kind");
-seg($("#optseg"), [{v:"free",l:"免费"}, {v:"rubric",l:"有评分表"}], null, true);
+seg($("#optseg"), [{v:"free",l:"免费"}, {v:"rubric",l:"有评分表"}, {v:"showGone",l:"显示已淘汰"}], null, true);
 $("#q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); renderCat(); });
 const used = new Set(items.map(i => i.source));
 function renderCat(){
   let list = cat.filter(c =>
     (!state.area || (c.areas||[]).includes(state.area)) &&
     (state.kind === "全部" || c.kind === state.kind) &&
-    (!state.free || c.cost === "免费") && (!state.rubric || c.rubric_zh) &&
+    (!state.free || c.cost === "免费") && (!state.rubric || c.rubric_zh) && (state.showGone || c.currency !== "已淘汰") &&
     (!state.q || JSON.stringify([c.title,c.title_zh,c.provider,c.summary_zh,c.units]).toLowerCase().includes(state.q)));
   const rk = c => ({首选:3,补充:2}[role[c.id]] || (role[c.id] ? 0 : 1));
   list.sort((a,b) => (used.has(b.id) - used.has(a.id)) || (rk(b) - rk(a)) || ((b.published||"") > (a.published||"") ? 1 : -1));
   $("#catcount").textContent = `显示 ${list.length} / ${cat.length} 条` + (state.area ? `（只看 ${state.area} ${areaName[state.area]}）` : "");
-  $("#cat").innerHTML = list.length ? list.map(c => `<article class="item">
+  $("#cat").innerHTML = list.length ? list.map(c => `<article class="item ${c.currency === "已淘汰" ? "gone" : ""}">
     <div class="item-top"><span class="mono note">${c.id}</span><h4><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title_zh || c.title)}</a></h4>
+      ${c.currency ? `<span class="chip ${{适用:"cur-ok",部分过时:"cur-part",已淘汰:"cur-gone"}[c.currency]}">${esc(c.currency)}</span>` : ""}
       ${role[c.id] ? `<span class="chip ${role[c.id] === "首选" ? "pick" : ""}">${role[c.id]}</span>` : ""}${used.has(c.id) ? `<span class="chip s-doing">在学习队列</span>` : ""}</div>
     <div class="sub">${esc(c.provider)} · ${esc(c.kind)} · ${esc(c.edition || "")}${c.published ? " · " + esc(c.published) : ""} · ${esc(c.cost)} · <span class="conf-${esc(c.confidence)}">可信度${esc(c.confidence)}</span></div>
     <p>${esc(c.summary_zh)}</p>
     <p class="for">对我们：${esc(c.why_for_us_zh)}</p>
+    ${c.currency && c.currency !== "适用" ? `<div class="curnote"><b>${esc(c.currency)}</b>（${esc(c.checked)} 核实）：${esc(c.outdated_parts || c.currency_note)}${c.superseded_by ? "；取代者：" + esc(c.superseded_by) : ""}</div>` : ""}
     <div>${(c.areas||[]).map(a => `<span class="chip area">${a} ${esc(areaName[a]||"")}</span>`).join(" ")} ${(c.cards||[]).map(id => `<span class="chip">${id}</span>`).join(" ")}</div>
     <details><summary>单元、评分与证据</summary>
       ${c.rubric_zh ? `<p><b>评分</b>：${esc(c.rubric_zh)}</p>` : ""}

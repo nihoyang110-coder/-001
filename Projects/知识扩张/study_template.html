@@ -1,0 +1,327 @@
+<title>知识扩张学习室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 版式：课本式单栏。目录页是一排主题卡；进入主题后按“资料 → 视频 → 测验 → 作业 → 成绩”五步走，顶部步骤条可跳转 */
+:root{
+  --bg:#EEF1F4; --paper:#FFFFFF; --ink:#16233A; --muted:#5B6678; --line:#D5DBE3;
+  --accent:#0E6E68; --accent-soft:#D3ECE9; --target:#B4580E; --target-soft:#F6E3D2;
+  --ok:#2F7D32; --ok-soft:#DCEFDD; --warn:#A86A00; --bad:#B3261E; --bad-soft:#F7DEDC;
+  --f-display:"Noto Serif SC","Songti SC","SimSun",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1520; --paper:#171F2C; --ink:#E5EAF1; --muted:#9AA5B5; --line:#2A3445;
+  --accent:#4FC7BA; --accent-soft:#163A3A; --target:#F0A35E; --target-soft:#3A2A1B;
+  --ok:#7BC47F; --ok-soft:#1D3320; --warn:#E5B451; --bad:#F28B82; --bad-soft:#3A1F1D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1520; --paper:#171F2C; --ink:#E5EAF1; --muted:#9AA5B5; --line:#2A3445;
+  --accent:#4FC7BA; --accent-soft:#163A3A; --target:#F0A35E; --target-soft:#3A2A1B;
+  --ok:#7BC47F; --ok-soft:#1D3320; --warn:#E5B451; --bad:#F28B82; --bad-soft:#3A1F1D; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+.wrap{max-width:760px;margin:0 auto;display:grid;gap:24px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.3}
+h1{font-size:clamp(26px,6vw,36px);font-weight:900}
+h2{font-size:21px} h3{font-size:17px}
+p{margin:0}
+a{color:var(--accent)}
+.muted{color:var(--muted)} .small{font-size:14px} .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted)}
+button,textarea,input{font:inherit}
+:focus-visible{outline:2px solid var(--target);outline-offset:2px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn[disabled]{opacity:.5;cursor:default}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;min-width:0}
+.chip{display:inline-flex;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.ok{color:var(--ok);border-color:var(--ok)} .chip.warn{color:var(--warn);border-color:var(--warn)} .chip.area{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+
+/* 目录 */
+.lessons{display:grid;gap:12px}
+.lcard{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 14px;align-items:center;text-decoration:none;color:inherit}
+.lcard .num{font-family:var(--f-mono);font-size:13px;color:var(--muted);grid-row:span 2}
+.lcard h3{font-size:17px}
+.lcard .sc{grid-row:span 2;text-align:right;font-family:var(--f-mono);font-size:13px}
+.howto{font-size:15px}
+.howto ol{margin:4px 0 0;padding-left:1.4em;display:grid;gap:2px}
+
+/* 主题页 */
+.steps{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding-block:8px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.steps a{flex:0 0 auto;text-decoration:none;font-size:14px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:var(--paper)}
+.steps a.done{border-color:var(--ok);color:var(--ok)}
+.back{font-size:14px;text-decoration:none}
+section.step{display:grid;gap:12px;scroll-margin-top:56px}
+.step-h{display:flex;align-items:baseline;gap:10px}
+.step-h .n{font-family:var(--f-mono);color:var(--target);font-weight:600}
+.prose{display:grid;gap:10px}
+.prose ul{margin:0;padding-left:1.3em;display:grid;gap:4px}
+.prose code{font-family:var(--f-mono);font-size:.9em;background:var(--bg);padding:0 4px;border-radius:4px;overflow-wrap:anywhere}
+.keypts{background:var(--accent-soft);border-radius:10px;padding:12px 14px}
+.keypts ul{margin:4px 0 0;padding-left:1.3em}
+.outdated{border-left:4px solid var(--bad);background:var(--bad-soft);border-radius:8px;padding:12px 14px;display:grid;gap:8px}
+.od{display:grid;gap:2px;font-size:15px}
+.od .old{text-decoration:line-through;color:var(--muted)}
+.video{display:grid;gap:4px}
+.video .meta{font-size:13px;color:var(--muted)}
+.src{font-size:14px}
+.src li{overflow-wrap:anywhere}
+
+/* 测验 */
+.q{display:grid;gap:8px}
+.q .qt{font-weight:500}
+.opt{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.opt input{margin-top:5px}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)} .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.explain{font-size:14px;color:var(--muted)}
+textarea{width:100%;min-height:120px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical}
+.rub{font-size:14px;color:var(--muted)}
+.rub li{margin:0}
+.result{border-radius:8px;padding:10px 12px;background:var(--bg);font-size:15px;display:grid;gap:6px}
+.result .big{font-family:var(--f-mono);font-size:22px;font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.status{font-size:14px;color:var(--muted)}
+
+/* 成绩 */
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.score{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:2px}
+.score b{font-family:var(--f-mono);font-size:26px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.pass{color:var(--ok)} .fail{color:var(--bad)}
+@media (prefers-reduced-motion:no-preference){.opt{transition:background .15s}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+const D = /*__DATA__*/null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// 简单排版：段落、"- "列表、`代码`、**加粗**
+const fmt = t => String(t||"").split(/\n{2,}/).map(b => {
+  const lines = b.split("\n");
+  const inl = s => esc(s).replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+  if (lines.every(l => /^\s*- /.test(l))) return "<ul>" + lines.map(l => "<li>" + inl(l.replace(/^\s*- /,"")) + "</li>").join("") + "</ul>";
+  return "<p>" + lines.map(inl).join("<br>") + "</p>";
+}).join("");
+const PASS = 80;
+const L = D.lessons;
+let db = null, sample = null, sampleChecked = false, current = null, persistFn = null;
+document.addEventListener("input", () => persistFn && persistFn());
+const prog = {};          // 每个主题的进度（来自 db）
+const draftKey = id => "kx-draft-" + id;
+const loadDraft = id => { try { return JSON.parse(localStorage.getItem(draftKey(id)) || "{}"); } catch { return {}; } };
+const saveDraft = (id, d) => { try { localStorage.setItem(draftKey(id), JSON.stringify(d)); } catch {} };
+
+function understanding(p, l){
+  if (!p?.mcq || !p?.short) return null;
+  const shortMax = l.quiz.short.reduce((s,q) => s + q.rubric.reduce((a,r) => a + r.pts, 0), 0);
+  const shortGot = Object.values(p.short).reduce((s,r) => s + (r?.score || 0), 0);
+  if (Object.keys(p.short).length < l.quiz.short.length) return null;
+  return Math.round(0.4 * (p.mcq.score / p.mcq.total * 100) + 0.6 * (shortGot / shortMax * 100));
+}
+const assignScore = p => p?.assignment?.final ?? p?.assignment?.result?.score ?? null;
+
+function renderIndex(){
+  document.title = "知识扩张学习室";
+  $("#app").innerHTML = `
+  <header style="display:grid;gap:6px"><div class="eyebrow">更新于 ${esc(D.generated)} · ${L.length} 个主题</div>
+    <h1>知识扩张学习室</h1>
+    <p class="muted">只收已核实仍然适用的内容。每个主题五步：读资料、看视频、做测验、交作业、看成绩。理解分和作业分都到 ${PASS} 分，这个主题算学会。</p></header>
+  <div class="card howto"><b>怎么评分</b><ol>
+    <li>理解分 = 选择题 40% + 简答题 60%。选择题当场判分；简答题由 Claude 按每题的评分要点打分</li>
+    <li>作业分：按作业评分表打分。页面里先由 Claude 预评，最终分由主会话复核后写入</li>
+    <li>两项都 ≥ ${PASS} 分即达标，地图上对应能力升 1 级</li></ol></div>
+  <div class="lessons">${L.map((l,i) => { const p = prog[l.id], u = understanding(p,l), a = assignScore(p);
+    const done = u != null && a != null && u >= PASS && a >= PASS;
+    return `<a class="card lcard" href="#${l.id.toLowerCase()}"><span class="num">${String(i+1).padStart(2,"0")}</span>
+      <h3>${esc(l.title)}</h3>
+      <span class="sc">${done ? '<span class="chip ok">已学会</span>' : (u != null || a != null) ? '<span class="chip warn">进行中</span>' : '<span class="chip">未开始</span>'}<br>
+        <span class="muted">理解 ${u ?? "–"} · 作业 ${a ?? "–"}</span></span>
+      <span class="small muted">${esc(l.summary)}</span></a>`; }).join("")}</div>
+  <p class="small muted">资料来源与时效核实见知识扩张地图。页面需要在 claude.ai 中打开，评分和进度保存才能用。</p>`;
+  window.scrollTo(0,0);
+}
+
+function renderLesson(l){
+  document.title = l.title + " · 学习室";
+  const d = loadDraft(l.id), p = prog[l.id] || {};
+  const stepDone = [true, true, !!p.mcq && Object.keys(p.short||{}).length >= l.quiz.short.length, !!p.assignment, false];
+  $("#app").innerHTML = `
+  <a class="back" href="#">← 全部主题</a>
+  <header style="display:grid;gap:6px"><div class="eyebrow">${esc(l.id)} · ${(l.areas||[]).join(" ")}</div><h1>${esc(l.title)}</h1>
+    <p class="muted">${esc(l.why)}</p></header>
+  <nav class="steps" aria-label="学习步骤">${["读资料","看视频","做测验","交作业","看成绩"].map((s,i) =>
+    `<a href="#${l.id.toLowerCase()}" data-step="s${i+1}" class="${stepDone[i] && i>=2 ? "done" : ""}">${i+1} ${s}</a>`).join("")}</nav>
+
+  <section class="step" id="s1"><div class="step-h"><span class="n">1</span><h2>读资料</h2></div>
+    ${l.outdated?.length ? `<div class="outdated"><b>已经过时的说法（别再这么学）</b>${l.outdated.map(o =>
+      `<div class="od"><span class="old">${esc(o.claim)}</span><span>现在：${esc(o.now)}</span>${o.evidence ? `<span class="small muted">依据：${esc(o.evidence)}</span>` : ""}</div>`).join("")}</div>` : ""}
+    ${l.material.map(m => `<div class="card prose"><h3>${esc(m.h)}</h3>${fmt(m.body)}</div>`).join("")}
+    <div class="keypts"><b>要点</b><ul>${l.key_points.map(k => `<li>${esc(k)}</li>`).join("")}</ul></div>
+    <details class="card src"><summary>原始资料（${l.sources.length}）</summary><ul>${l.sources.map(s =>
+      `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>${s.note ? " — " + esc(s.note) : ""}</li>`).join("")}</ul></details>
+  </section>
+
+  <section class="step" id="s2"><div class="step-h"><span class="n">2</span><h2>看视频</h2></div>
+    ${l.videos?.length ? l.videos.map(v => `<div class="card video"><h3><a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.title)}</a></h3>
+      <span class="meta">${esc(v.channel)}${v.minutes ? " · 约 " + v.minutes + " 分钟" : ""}${v.lang ? " · " + esc(v.lang) : ""}</span>
+      <p>${esc(v.why)}</p>${v.watch_for ? `<p class="small"><b>重点看：</b>${esc(v.watch_for)}</p>` : ""}
+      ${v.caveat ? `<p class="small muted">${esc(v.caveat)}</p>` : ""}</div>`).join("") : `<p class="muted">这个主题暂时没找到合适的公开视频，资料部分已覆盖。</p>`}
+  </section>
+
+  <section class="step" id="s3"><div class="step-h"><span class="n">3</span><h2>做测验</h2></div>
+    <div class="card"><h3>选择题（${l.quiz.mcq.length} 题，占理解分 40%）</h3>
+      ${l.quiz.mcq.map((q,i) => `<div class="q" data-q="${i}"><div class="qt">${i+1}. ${esc(q.q)}</div>
+        ${q.options.map((o,j) => `<label class="opt" id="o${i}_${j}"><input type="radio" name="m${i}" value="${j}" ${p.mcq?.answers?.[i] === j || (!p.mcq && d.mcq?.[i] === j) ? "checked" : ""}><span>${esc(o)}</span></label>`).join("")}
+        <div class="explain" id="e${i}" hidden></div></div>`).join("")}
+      <div class="row"><button class="btn" id="mcqBtn">交卷</button><span class="status" id="mcqStatus"></span></div></div>
+    ${l.quiz.short.map((q,i) => `<div class="card" data-s="${i}"><h3>简答 ${i+1}</h3><p>${esc(q.q)}</p>
+      <details class="rub"><summary>评分要点（共 ${q.rubric.reduce((a,r)=>a+r.pts,0)} 分）</summary><ul>${q.rubric.map(r => `<li>${esc(r.point)}（${r.pts} 分）</li>`).join("")}</ul></details>
+      <textarea id="sa${i}" placeholder="用自己的话回答，几句话即可">${esc(p.short?.[i]?.answer ?? d.short?.[i] ?? "")}</textarea>
+      <div class="row"><button class="btn" data-grade="short" data-i="${i}">提交给 Claude 评分</button><span class="status" id="ss${i}"></span></div>
+      <div id="sr${i}"></div></div>`).join("")}
+  </section>
+
+  <section class="step" id="s4"><div class="step-h"><span class="n">4</span><h2>交作业</h2></div>
+    <div class="card prose"><h3>${esc(l.assignment.title)}</h3>${fmt(l.assignment.task)}
+      <p class="small"><b>交什么：</b>${esc(l.assignment.deliverable)}</p>
+      <details class="rub" open><summary>评分表（满分 100，${PASS} 分达标）</summary><ul>${l.assignment.rubric.map(r => `<li><b>${esc(r.part)}</b> ${r.points} 分：${esc(r.criteria)}</li>`).join("")}</ul></details>
+      ${l.assignment.practice ? `<p class="small muted">配套实践：${esc(l.assignment.practice)}</p>` : ""}
+      <textarea id="asg" style="min-height:180px" placeholder="在这里写作业">${esc(p.assignment?.answer ?? d.assignment ?? "")}</textarea>
+      <div class="row"><button class="btn" data-grade="assignment">提交并请 Claude 预评</button><span class="status" id="as"></span></div>
+      <div id="ar"></div></div>
+  </section>
+
+  <section class="step" id="s5"><div class="step-h"><span class="n">5</span><h2>看成绩</h2></div><div id="scoreBox"></div></section>`;
+
+  // 草稿：每次输入只存在本机
+  current = l;
+  const persist = () => saveDraft(l.id, {
+    mcq: l.quiz.mcq.map((_,i) => { const c = document.querySelector(`input[name=m${i}]:checked`); return c ? +c.value : null; }),
+    short: l.quiz.short.map((_,i) => $("#sa"+i).value), assignment: $("#asg").value });
+  persistFn = persist;
+  document.querySelectorAll(".steps a").forEach(a => a.addEventListener("click", e => { e.preventDefault(); document.getElementById(a.dataset.step).scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); }));
+  $("#mcqBtn").onclick = () => submitMcq(l);
+  document.querySelectorAll("[data-grade]").forEach(b => b.onclick = () => grade(l, b.dataset.grade, +b.dataset.i));
+  if (p.mcq) showMcq(l, p.mcq.answers);
+  l.quiz.short.forEach((_,i) => p.short?.[i]?.score != null && showResult("#sr"+i, p.short[i]));
+  if (p.assignment?.result) showResult("#ar", p.assignment.result, p.assignment.final);
+  renderScores(l);
+  if (!sample && sampleChecked) noteNoSample();
+  window.scrollTo(0,0);
+}
+
+function showMcq(l, answers){
+  let right = 0;
+  l.quiz.mcq.forEach((q,i) => {
+    q.options.forEach((_,j) => { const el = $(`#o${i}_${j}`); el.classList.toggle("right", j === q.answer); el.classList.toggle("wrong", answers[i] === j && j !== q.answer); });
+    if (answers[i] === q.answer) right++;
+    const e = $("#e"+i); e.hidden = false; e.textContent = (answers[i] === q.answer ? "答对了。" : "正确答案是第 " + (q.answer+1) + " 项。") + q.explain;
+  });
+  $("#mcqStatus").textContent = `${right} / ${l.quiz.mcq.length} 题正确`;
+  return right;
+}
+
+async function submitMcq(l){
+  const answers = l.quiz.mcq.map((_,i) => { const c = document.querySelector(`input[name=m${i}]:checked`); return c ? +c.value : null; });
+  if (answers.includes(null)) { $("#mcqStatus").textContent = "还有题没选"; return; }
+  const score = showMcq(l, answers);
+  await save(l, { mcq: { answers, score, total: l.quiz.mcq.length, at: new Date().toISOString() } });
+}
+
+function showResult(sel, r, final){
+  $(sel).innerHTML = `<div class="result"><div><span class="big">${r.score}</span> / ${r.max}${final != null ? ` · 复核后 <b>${final}</b>` : ""}</div>
+    ${(r.points||[]).map(x => `<div class="small">${esc(x.point)}：${x.got} 分 — ${esc(x.comment)}</div>`).join("")}
+    ${r.feedback ? `<div>${esc(r.feedback)}</div>` : ""}</div>`;
+}
+
+function noteNoSample(){
+  document.querySelectorAll("[data-grade]").forEach(b => b.textContent = "保存答案（之后由 Claude 评分）");
+}
+
+async function grade(l, kind, i){
+  const isA = kind === "assignment";
+  const q = isA ? { q: l.assignment.task, rubric: l.assignment.rubric.map(r => ({point: r.part + "：" + r.criteria, pts: r.points})), ref: l.assignment.reference || "" }
+                : { q: l.quiz.short[i].q, rubric: l.quiz.short[i].rubric, ref: l.quiz.short[i].ref_answer };
+  const ans = (isA ? $("#asg") : $("#sa"+i)).value.trim();
+  const st = isA ? $("#as") : $("#ss"+i), out = isA ? "#ar" : "#sr"+i;
+  if (ans.length < 10) { st.textContent = "先写几句再提交"; return; }
+  const max = q.rubric.reduce((a,r) => a + r.pts, 0);
+  if (!sample) {
+    await save(l, isA ? { assignment: { answer: ans, at: new Date().toISOString() } } : { short: { [i]: { answer: ans, score: null, at: new Date().toISOString() } } });
+    st.textContent = db ? "已保存，等 Claude 评分" : "已存到本机草稿";
+    return;
+  }
+  const btns = document.querySelectorAll("[data-grade]"); btns.forEach(b => b.disabled = true);
+  st.textContent = "Claude 正在评分…";
+  const prompt = `你是严格但友善的阅卷老师，学生是在学“${l.title}”的中文自学者。按评分要点给分，每个要点只能给 0 到该要点满分之间的整数，答到意思即可给分，没答到就不给。参考答案只用来判断，不要求措辞一致。
+题目：${q.q}
+评分要点：${q.rubric.map((r,k) => `${k+1}. ${r.point}（满分 ${r.pts}）`).join("；")}
+参考答案：${q.ref || "无"}
+学生答案：${ans}
+只回复 JSON：{"points":[{"point":"要点简称","got":整数,"comment":"一句中文点评"}],"feedback":"两三句中文总评：哪里好，还缺什么"}`;
+  try {
+    const r = await sample.json(prompt, { cache: false });
+    const pts = Array.isArray(r?.points) ? r.points.slice(0, q.rubric.length).map((x,k) => ({ point: String(x.point || q.rubric[k].point).slice(0,40), got: Math.max(0, Math.min(q.rubric[k].pts, Math.round(+x.got || 0))), comment: String(x.comment || "") })) : [];
+    const res = { score: pts.reduce((a,x) => a + x.got, 0), max, points: pts, feedback: String(r?.feedback || "") };
+    showResult(out, res);
+    st.textContent = "";
+    await save(l, isA ? { assignment: { answer: ans, result: res, at: new Date().toISOString() } } : { short: { [i]: { answer: ans, ...res, at: new Date().toISOString() } } });
+  } catch (e) {
+    const m = { not_granted: "没有允许页面调用 Claude，答案已保存，之后由 Claude 评分", sampling_disabled: "这个账号不能在页面里调用 Claude，答案已保存", rate_limited: "调用太频繁，过一会儿再试", invalid_json: "评分结果没解析出来，再点一次试试", session_expired: "登录已过期，请重新登录" }[e?.code] || "评分没成功，稍后再试";
+    st.textContent = m;
+    if (e?.code === "not_granted" || e?.code === "sampling_disabled") { sample = null; noteNoSample(); await save(l, isA ? { assignment: { answer: ans } } : { short: { [i]: { answer: ans, score: null } } }); }
+  } finally { btns.forEach(b => b.disabled = false); }
+}
+
+async function save(l, patch){
+  const cur = prog[l.id] || {};
+  const next = { ...cur, ...patch, short: { ...(cur.short||{}), ...(patch.short||{}) }, lesson: l.id, updated: new Date().toISOString() };
+  if (!patch.short && !cur.short) delete next.short;
+  prog[l.id] = next;
+  renderScores(l);
+  if (!db) return;
+  try { await db.doc("progress/" + l.id).set(next); }
+  catch (e) { const s = $("#mcqStatus"); if (s) s.textContent = "进度没保存成功（" + (e?.code || "未知") + "），本机草稿还在"; }
+}
+
+function renderScores(l){
+  const box = $("#scoreBox"); if (!box) return;
+  const p = prog[l.id], u = understanding(p, l), a = assignScore(p);
+  const cell = (name, v, note) => `<div class="score"><span class="small muted">${name}</span><b class="${v == null ? "" : v >= PASS ? "pass" : "fail"}">${v ?? "–"}</b>
+    <div class="bar"><i style="width:${v ?? 0}%"></i></div><span class="small muted">${note}</span></div>`;
+  const pass = u != null && a != null && u >= PASS && a >= PASS;
+  box.innerHTML = `<div class="scores">${cell("理解分", u, "选择 40% + 简答 60%")}${cell("作业分", a, p?.assignment?.final != null ? "已复核" : "Claude 预评，待复核")}</div>
+    <div class="card"><b>${pass ? "两项都达标：这个主题算学会了" : `还差：${u == null ? "测验没做完；" : u < PASS ? "理解分未到 " + PASS + "；" : ""}${a == null ? "作业没交；" : a < PASS ? "作业分未到 " + PASS + "；" : ""}`}</b>
+    <span class="small muted">达标后，地图上的 ${(l.areas||[]).join("、")} 升 1 级（由主会话记录）。可以反复作答，以最后一次为准。</span></div>`;
+}
+
+function route(){
+  const id = (location.hash || "").slice(1).toUpperCase();
+  const l = L.find(x => x.id === id);
+  if (l) renderLesson(l); else { current = null; persistFn = null; renderIndex(); }
+}
+window.addEventListener("hashchange", route);
+route();
+
+(async () => {
+  try {
+    db = await window.claude?.use?.("db") ?? null;
+    let first = true;
+    if (db) db.collection("progress").onSnapshot(snap => {
+      snap.docs.forEach(d => { prog[d.id] = d.data(); });
+      // 第一次拿到存档时重画一遍，之后只更新成绩，避免打断正在写的答案
+      if (first || !current) { first = false; route(); } else renderScores(current);
+    }, () => {});
+  } catch {}
+  try { sample = await window.claude?.use?.("sample") ?? null; } catch {}
+  sampleChecked = true;
+  if (!sample && location.hash) noteNoSample();
+})();
+</script>

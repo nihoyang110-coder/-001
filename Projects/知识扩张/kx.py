@@ -7,6 +7,8 @@
   python3 kx.py gap                  按“(目标级-当前级)×权重”列出能力差距
   python3 kx.py level C4 3 "依据"    学完达标后给能力升级（写进 capabilities.json 的 history）
   python3 kx.py build                生成 知识扩张.html（数据嵌入页面）
+  python3 kx.py currency cur/*.json  写入时效复核结果，已淘汰的移出学习主题
+  python3 kx.py study                把 lessons/*.json 生成 学习室.html
 
 去重规则：同一主链接（规范化后）、同一 id_hint、同一 GitHub 仓库，
 或同一机构且标题相似度 ≥ 0.88，视为同一条；合并时取并集，保留置信度更高的那条的文字。
@@ -181,6 +183,54 @@ def cmd_build():
     print(f"已生成 {out.name}：{len(data['catalog'])} 条资源，{len(data['plan'].get('items', []))} 个学习单元")
 
 
+def cmd_currency(files):
+    """把时效复核结果（[{id,currency,note_zh,outdated_parts_zh,superseded_by,evidence,last_updated}]）写进目录；
+    已淘汰的条目从 topics.json 的 pick/also/alts 移到该主题的 retired。"""
+    cat = load(CAT, [])
+    by = {c["id"]: c for c in cat}
+    n = {"适用": 0, "部分过时": 0, "已淘汰": 0}
+    for f in files:
+        for r in json.loads(pathlib.Path(f).read_text(encoding="utf-8")):
+            c = by.get(r.get("id"))
+            if not c or r.get("currency") not in n:
+                print("跳过", r.get("id"), r.get("currency"))
+                continue
+            c.update({"currency": r["currency"], "currency_note": r.get("note_zh"),
+                      "outdated_parts": r.get("outdated_parts_zh"), "superseded_by": r.get("superseded_by"),
+                      "currency_evidence": r.get("evidence"), "last_updated": r.get("last_updated"), "checked": TODAY})
+            n[r["currency"]] += 1
+    save(CAT, cat)
+    tp = HERE / "topics.json"
+    t = load(tp, {"groups": []})
+    gone = {c["id"] for c in cat if c.get("currency") == "已淘汰"}
+    for g in t["groups"]:
+        moved = [k for k in g["pick"] + g["also"] + g["alts"] if k in gone]
+        if moved:
+            g["retired"] = sorted(set(g.get("retired", [])) | set(moved))
+            for k in ("pick", "also", "alts"):
+                g[k] = [x for x in g[k] if x not in gone]
+            if not g["pick"]:
+                print(f"注意：主题 {g['id']} {g['name']} 的首选全部被淘汰，需要重新选")
+    save(tp, t)
+    print("时效复核：" + "，".join(f"{k} {v}" for k, v in n.items()) + f"；已淘汰的 {len(gone)} 条移出学习主题")
+
+
+def cmd_study():
+    """把 lessons/*.json 嵌进 study_template.html，生成 学习室.html。"""
+    ls = [json.loads(f.read_text(encoding="utf-8")) for f in sorted((HERE / "lessons").glob("*.json"))]
+    ls.sort(key=lambda x: x.get("order", 99))
+    for l in ls:
+        for k in ("id", "title", "material", "key_points", "quiz", "assignment", "sources"):
+            assert k in l, f"{l.get('id')} 缺少 {k}"
+        assert sum(r["points"] for r in l["assignment"]["rubric"]) == 100, f"{l['id']} 作业评分表不是 100 分"
+        for q in l["quiz"]["mcq"]:
+            assert 0 <= q["answer"] < len(q["options"]), f"{l['id']} 选择题答案越界：{q['q'][:20]}"
+    blob = json.dumps({"generated": TODAY, "lessons": ls}, ensure_ascii=False).replace("</", "<\\/")
+    tpl = (HERE / "study_template.html").read_text(encoding="utf-8")
+    (HERE / "学习室.html").write_text(tpl.replace("/*__DATA__*/null", blob), encoding="utf-8")
+    print(f"已生成 学习室.html：{len(ls)} 个主题")
+
+
 if __name__ == "__main__":
     cmd, *rest = sys.argv[1:] or ["gap"]
-    {"merge": lambda: cmd_merge(rest), "relink": cmd_relink, "gap": cmd_gap, "level": lambda: cmd_level(rest), "build": cmd_build}[cmd]()
+    {"merge": lambda: cmd_merge(rest), "relink": cmd_relink, "gap": cmd_gap, "level": lambda: cmd_level(rest), "build": cmd_build, "study": cmd_study, "currency": lambda: cmd_currency(rest)}[cmd]()
