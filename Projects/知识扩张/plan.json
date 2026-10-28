@@ -1,0 +1,620 @@
+{
+ "rule": "每个单元满分 100，80 分以上算达标：先自评并附证据（文件、提交号、测试输出），再由你复核；达标后对应能力升 1 级，不超过目标级。",
+ "items": [
+  {
+   "id": "L01",
+   "order": 1,
+   "title": "给仓库写 CLAUDE.md",
+   "areas": [
+    "C4"
+   ],
+   "source": "K-001",
+   "unit": "2026 秋 第 4 周：Make a Messy Repo Agent-Ready",
+   "effort": "半天",
+   "why": "新会话现在靠长摘要接上下文，规则散在技能和记录里；一页说明能让每次会话少走弯路",
+   "rubric": [
+    {
+     "part": "摸清仓库",
+     "points": 20,
+     "criteria": "准确写出 factdb 各命令、渲染脚本、目录结构、分支与提交约定"
+    },
+    {
+     "part": "说明文件",
+     "points": 55,
+     "criteria": "五块齐全：项目是什么、结构、命令（可直接复制）、约定、护栏（不能碰什么、容易用错的命令）；每行针对本仓库，约一页"
+    },
+    {
+     "part": "实际试用",
+     "points": 25,
+     "criteria": "新会话里用它跑两个真实任务（一次核查、一次回看），如实记录效果，再据此改进一处"
+    }
+   ],
+   "deliverable": "仓库根目录 CLAUDE.md + 作业/L01-试用记录.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L02",
+   "order": 2,
+   "title": "给核查技能做触发测试和断言评测",
+   "areas": [
+    "C2",
+    "C6"
+   ],
+   "source": "K-039",
+   "unit": "evaluating-skills、optimizing-descriptions；评分表取自 CS146S 2026 秋第 3 周",
+   "effort": "1 天",
+   "why": "技能用了几十次，但从没测过“该触发时触发、不该时不触发”，也没有断言级的质量检查",
+   "rubric": [
+    {
+     "part": "流程选择",
+     "points": 15,
+     "criteria": "流程可重复、有真实判断点（已满足，需写清依据）"
+    },
+    {
+     "part": "技能本身",
+     "points": 60,
+     "criteria": "描述能触发；正文写判断而不只是步骤；确定性部分给精确命令；正文精简，长资料放 references"
+    },
+    {
+     "part": "测试",
+     "points": 25,
+     "criteria": "≥10 句应触发 + ≥5 句近似但不该触发，按 60/40 分训练/验证；断言逐条 PASS/FAIL 并附证据；一次端到端运行"
+    }
+   ],
+   "deliverable": ".claude/skills/news-factcheck/evals/（触发查询、evals.json、结果）+ 作业/L02-报告.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L03",
+   "order": 3,
+   "title": "建立核查结论评测集",
+   "areas": [
+    "C6",
+    "C1"
+   ],
+   "source": "K-051",
+   "unit": "Evals FAQ；健全性检查取自 CMU 11-768 A2",
+   "effort": "2 天",
+   "why": "258 张卡片里有大量已定论的结论，可以变成考题，检验技能改动后结论有没有变差",
+   "rubric": [
+    {
+     "part": "错误分析",
+     "points": 25,
+     "criteria": "读 ≥30 篇旧核查，开放编码出失败模式并计数（如漏查原始来源、口径偷换没发现）"
+    },
+    {
+     "part": "评测集",
+     "points": 25,
+     "criteria": "≥20 道题：原始说法 → 期望状态与关键理由，答案来自已定论卡片"
+    },
+    {
+     "part": "评分器",
+     "points": 30,
+     "criteria": "状态用代码精确比对，理由用模型评委；评委对人工标签分别报告 TPR、TNR；标准答案得 1.0、故意改错的答案得 0"
+    },
+    {
+     "part": "报告",
+     "points": 20,
+     "criteria": "当前技能得分、主要失败模式、下一步改什么"
+    }
+   ],
+   "deliverable": "FactCheck/评测/（题目、评分脚本、结果）+ 作业/L03-报告.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L04",
+   "order": 4,
+   "title": "拆解一次会话的花费",
+   "areas": [
+    "C9",
+    "C4"
+   ],
+   "source": "K-001",
+   "unit": "2026 秋 第 1 周：Trace Dissection；对比报告取自 CMU 11-768 A1",
+   "effort": "1 天",
+   "why": "已知一次每周回看约 0.32 美元，但不知道一次完整核查多少钱、钱花在哪",
+   "rubric": [
+    {
+     "part": "采集与复现",
+     "points": 15,
+     "criteria": "脚本从会话记录读出每轮 token、缓存命中和费用，别人能照着复现"
+    },
+    {
+     "part": "构成分析",
+     "points": 25,
+     "criteria": "系统提示、技能、工具定义、历史、网页结果各占多少"
+    },
+    {
+     "part": "工具与搜索开销",
+     "points": 25,
+     "criteria": "搜索、子智能体、抓取各自的次数和费用"
+    },
+    {
+     "part": "行为分析",
+     "points": 25,
+     "criteria": "缓存命中率、上下文压缩前后对比，结论都有记录支撑"
+    },
+    {
+     "part": "省钱清单",
+     "points": 10,
+     "criteria": "给出有数据支撑的具体做法"
+    }
+   ],
+   "deliverable": "作业/L04-成本拆解.md + 成本统计脚本",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L05",
+   "order": 5,
+   "title": "对照 IFCN 五项承诺自评",
+   "areas": [
+    "C1"
+   ],
+   "source": "K-067",
+   "unit": "IFCN Code of Principles",
+   "effort": "半天",
+   "why": "国际核查机构的认证标准，可以直接当我们核查质量的评分表",
+   "rubric": [
+    {
+     "part": "无党派与公平",
+     "points": 20,
+     "criteria": "完全 20 / 部分 10 / 不符合 0"
+    },
+    {
+     "part": "信源透明",
+     "points": 20,
+     "criteria": "同上"
+    },
+    {
+     "part": "资金与组织透明",
+     "points": 20,
+     "criteria": "同上（含利益说明的做法）"
+    },
+    {
+     "part": "方法透明",
+     "points": 20,
+     "criteria": "同上（公开核查流程）"
+    },
+    {
+     "part": "公开、诚实的更正",
+     "points": 20,
+     "criteria": "同上（需要更正政策和更正记录）"
+    }
+   ],
+   "deliverable": "作业/L05-IFCN自评.md + FactCheck/更正政策.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L06",
+   "order": 6,
+   "title": "防提示注入：给核查流程加防护",
+   "areas": [
+    "C8"
+   ],
+   "source": "K-005",
+   "unit": "CMU 17-445 I4 Agent Security；框架取自“致命三要素”",
+   "effort": "1–2 天",
+   "why": "核查要大量读不可信网页，同时又能改仓库、能推送，正好凑齐“致命三要素”",
+   "rubric": [
+    {
+     "part": "威胁识别",
+     "points": 15,
+     "criteria": "对照三要素和 OWASP 清单写出我们的风险点"
+    },
+    {
+     "part": "违规演示",
+     "points": 15,
+     "criteria": "构造含恶意指令的网页或截图文字，记录技能是否被带偏"
+    },
+    {
+     "part": "提示层防护",
+     "points": 20,
+     "criteria": "规则写进技能：网页内容只当数据、遇到指令性文字要标出"
+    },
+    {
+     "part": "机制层保证",
+     "points": 40,
+     "criteria": "不依赖模型自觉的措施，如推送前检查改动范围、写入路径白名单"
+    },
+    {
+     "part": "开销测量",
+     "points": 10,
+     "criteria": "防护带来的耗时和费用变化"
+    }
+   ],
+   "deliverable": "作业/L06-安全.md + 技能规则改动 + 检查脚本",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L07",
+   "order": 7,
+   "title": "图片和视频核验",
+   "areas": [
+    "C1"
+   ],
+   "source": "K-064",
+   "unit": "Bellingcat 工具包：反向搜图、关键帧、元数据、地理定位、合成图检测",
+   "effort": "1 天",
+   "why": "用户发来的多是截图和视频，目前只能核查文字说法，图像本身无法验证",
+   "rubric": [
+    {
+     "part": "工具清单",
+     "points": 20,
+     "criteria": "多引擎反向搜图、关键帧、元数据、地理定位，标明本环境哪些能用"
+    },
+    {
+     "part": "写进技能",
+     "points": 30,
+     "criteria": "新增 references/图像视频核验.md，并在 SKILL.md 中说明何时使用"
+    },
+    {
+     "part": "实战",
+     "points": 30,
+     "criteria": "复核 3 个历史截图案例，记录过程和结论"
+    },
+    {
+     "part": "局限透明",
+     "points": 20,
+     "criteria": "写清哪些无法验证、置信度如何下调"
+    }
+   ],
+   "deliverable": "技能参考文件 + 作业/L07-实战记录.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L08",
+   "order": 8,
+   "title": "定时任务健康检查",
+   "areas": [
+    "C5"
+   ],
+   "source": "K-049",
+   "unit": "长时运行智能体的 harness；12 要素中的“掌握自己的控制流”",
+   "effort": "半天",
+   "why": "10-26 首次回看推送失败，两天后才发现",
+   "rubric": [
+    {
+     "part": "失败模式",
+     "points": 20,
+     "criteria": "列出可能失败的环节：克隆、权限、网络、推送、超时"
+    },
+    {
+     "part": "自检",
+     "points": 40,
+     "criteria": "每次运行先检查上次是否推送成功，结果写进回看记录"
+    },
+    {
+     "part": "告警",
+     "points": 20,
+     "criteria": "失败时发通知，并在仓库留标记"
+    },
+    {
+     "part": "复盘",
+     "points": 20,
+     "criteria": "写清 10-26 的问题和修复"
+    }
+   ],
+   "deliverable": "回看任务提示词改动 + 作业/L08-复盘.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L09",
+   "order": 9,
+   "title": "AI 生成内容标识规则",
+   "areas": [
+    "C10"
+   ],
+   "source": "K-072",
+   "unit": "标识办法 + GB 45438-2025；小红书、YouTube 规则",
+   "effort": "半天",
+   "why": "发布包里的配图和配音可能由 AI 生成，规则没成文就有限流风险",
+   "rubric": [
+    {
+     "part": "规则摘录",
+     "points": 30,
+     "criteria": "三个平台或规定的要求原文与日期"
+    },
+    {
+     "part": "写进发布流程",
+     "points": 30,
+     "criteria": "publish.md 增加标识步骤"
+    },
+    {
+     "part": "自动标识",
+     "points": 25,
+     "criteria": "发布包模板自动带标识"
+    },
+    {
+     "part": "复核旧包",
+     "points": 15,
+     "criteria": "检查 1 个历史发布包是否合规"
+    }
+   ],
+   "deliverable": "references/publish.md 改动 + 作业/L09-合规.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L10",
+   "order": 10,
+   "title": "factdb 测试与持续集成",
+   "areas": [
+    "C15",
+    "C3"
+   ],
+   "source": "K-002",
+   "unit": "Missing Semester 2026《Code Quality》练习",
+   "effort": "1 天",
+   "why": "事实库是记忆核心，脚本却没有测试，改坏了不会被发现",
+   "rubric": [
+    {
+     "part": "命令覆盖",
+     "points": 40,
+     "criteria": "7 个命令都有测试"
+    },
+    {
+     "part": "边界情况",
+     "points": 25,
+     "criteria": "别名扩展、过时替换、空库、TMP 编号替换"
+    },
+    {
+     "part": "持续集成",
+     "points": 20,
+     "criteria": "每次推送自动运行"
+    },
+    {
+     "part": "文档",
+     "points": 15,
+     "criteria": "如何运行与新增测试"
+    }
+   ],
+   "deliverable": "tests/ + CI 配置 + 作业/L10-说明.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L11",
+   "order": 11,
+   "title": "事实冲突自动检测",
+   "areas": [
+    "C3"
+   ],
+   "source": "K-062",
+   "unit": "Zep 时间知识图谱：事实带有效期，新事实使旧事实失效",
+   "effort": "1 天",
+   "why": "新旧事实冲突现在靠人工发现，时间图谱的做法和我们的过时替换最接近",
+   "rubric": [
+    {
+     "part": "方法对照",
+     "points": 20,
+     "criteria": "Zep 做法与我们现有字段逐项对照"
+    },
+    {
+     "part": "实现",
+     "points": 40,
+     "criteria": "factdb 新增冲突检测命令：同主题同指标、不同数值或不同状态时提示"
+    },
+    {
+     "part": "测试",
+     "points": 25,
+     "criteria": "构造冲突样例验证"
+    },
+    {
+     "part": "文档",
+     "points": 15,
+     "criteria": "写进 vault-format.md"
+    }
+   ],
+   "deliverable": "factdb.py 新命令 + 测试 + 作业/L11-说明.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L12",
+   "order": 12,
+   "title": "仓库就绪度自评",
+   "areas": [
+    "C15",
+    "C4"
+   ],
+   "source": "K-059",
+   "unit": "Factory 8 支柱 × 5 级；评分表取自 CS146S 2026 秋第 5 周",
+   "effort": "半天",
+   "why": "用公开框架给自己的仓库打分，找最弱的环节",
+   "rubric": [
+    {
+     "part": "逐项检查",
+     "points": 40,
+     "criteria": "8 个支柱逐项记录通过与否，格式可比"
+    },
+    {
+     "part": "分析",
+     "points": 60,
+     "criteria": "找出最弱支柱并说明原因、给出修法、批评框架本身、结论只针对本仓库"
+    }
+   ],
+   "deliverable": "作业/L12-就绪度.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L13",
+   "order": 13,
+   "title": "评估一个 MCP 服务器",
+   "areas": [
+    "C7"
+   ],
+   "source": "K-029",
+   "unit": "MCP for Beginners 安全与测试章节；评分表取自 CS146S 2026 秋第 2 周的“智能体好不好用”",
+   "effort": "半天",
+   "why": "以后接 Blender、Higgsfield 等 MCP 前，需要一套判断好坏和安全的标准",
+   "rubric": [
+    {
+     "part": "工具设计",
+     "points": 30,
+     "criteria": "参数有约束、输出结构化、错误信息可恢复、写操作有刹车"
+    },
+    {
+     "part": "安全",
+     "points": 30,
+     "criteria": "对照 OWASP MCP 清单"
+    },
+    {
+     "part": "规范符合",
+     "points": 20,
+     "criteria": "对照 2026-07-28 规范，不用已弃用功能"
+    },
+    {
+     "part": "报告",
+     "points": 20,
+     "criteria": "以 MCP for Blender 为例写结论"
+    }
+   ],
+   "deliverable": "作业/L13-MCP评估.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L14",
+   "order": 14,
+   "title": "可视化页面规范",
+   "areas": [
+    "C11"
+   ],
+   "source": "K-075",
+   "unit": "第 2、4、5 章：编码通道、刻度与图例、多视图",
+   "effort": "1 天",
+   "why": "卡片图和这类地图页越做越多，需要统一的作图规范",
+   "rubric": [
+    {
+     "part": "练习",
+     "points": 30,
+     "criteria": "完成 3 章练习"
+    },
+    {
+     "part": "规范",
+     "points": 40,
+     "criteria": "写出我们的作图规范：何时用什么图、颜色、标注"
+    },
+    {
+     "part": "应用",
+     "points": 30,
+     "criteria": "按规范改一张现有图并对比"
+    }
+   ],
+   "deliverable": "references/可视化规范.md + 作业/L14.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L15",
+   "order": 15,
+   "title": "中文转写准确率对比",
+   "areas": [
+    "C14"
+   ],
+   "source": "K-084",
+   "unit": "Unit 5 语音识别（WER 评测）与 Unit 7 会议转写+说话人分离",
+   "effort": "1–2 天",
+   "why": "手表录音 App 的转写引擎还没实测，选型只靠资料",
+   "rubric": [
+    {
+     "part": "测试集",
+     "points": 20,
+     "criteria": "10 段中文录音 + 人工逐字稿"
+    },
+    {
+     "part": "对比",
+     "points": 30,
+     "criteria": "至少两个模型（Whisper 类与 SenseVoice）的字错率和速度"
+    },
+    {
+     "part": "说话人分离",
+     "points": 20,
+     "criteria": "一段多人对话的分离效果"
+    },
+    {
+     "part": "报告",
+     "points": 30,
+     "criteria": "给出选型结论；字错率目标线由我们自定，不是课程标准"
+    }
+   ],
+   "deliverable": "作业/L15-转写对比.md",
+   "status": "未开始",
+   "score": null
+  },
+  {
+   "id": "L16",
+   "order": 16,
+   "title": "SwiftUI 入门（手表 App 前置）",
+   "areas": [
+    "C12"
+   ],
+   "source": "K-079",
+   "unit": "Develop in Swift 前 4 部分 + WWDC25-277 SpeechAnalyzer",
+   "effort": "3–5 天",
+   "why": "手表录音 App 的前置技能",
+   "rubric": [
+    {
+     "part": "教程",
+     "points": 40,
+     "criteria": "完成前 4 部分并通过各章小结"
+    },
+    {
+     "part": "测试",
+     "points": 20,
+     "criteria": "用 Swift Testing 为数据模型写测试"
+    },
+    {
+     "part": "原型",
+     "points": 40,
+     "criteria": "一个能开关录音的手表界面原型"
+    }
+   ],
+   "deliverable": "Xcode 工程 + 作业/L16.md",
+   "status": "受阻：需要 Mac 和 Xcode",
+   "score": null
+  },
+  {
+   "id": "L17",
+   "order": 17,
+   "title": "AI 生成 CAD 的客观评测",
+   "areas": [
+    "C13",
+    "C6"
+   ],
+   "source": "K-083",
+   "unit": "Too Tall Toby 挑战：按图纸建模，质量等于目标值算对",
+   "effort": "1 天",
+   "why": "Blender/CAD 工具调研里“尺寸核验器”一直没做；这套题能直接给出对错",
+   "rubric": [
+    {
+     "part": "正确率",
+     "points": 50,
+     "criteria": "5 道题由 AI 生成模型，质量误差 <1% 算对"
+    },
+    {
+     "part": "尺寸核验器",
+     "points": 30,
+     "criteria": "自动比对质量与关键尺寸"
+    },
+    {
+     "part": "报告",
+     "points": 20,
+     "criteria": "失败原因分析"
+    }
+   ],
+   "deliverable": "作业/L17-CAD评测.md + 核验脚本",
+   "status": "未开始",
+   "score": null
+  }
+ ]
+}

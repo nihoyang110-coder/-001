@@ -77,6 +77,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .order{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
 .chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .chip.area{border-color:transparent;background:var(--accent-soft);color:var(--accent)}
+.chip.s-block{color:var(--bad);border-color:var(--bad)}
+.chip.pick{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
+.topic{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:6px;align-content:start;min-width:0}
+.topic h3{margin:0;font-size:15px}
+.topic .row{font-size:13px;display:grid;grid-template-columns:3.2em minmax(0,1fr);gap:6px}
+.topic .row b{color:var(--muted);font-weight:500}
+.topic .row a{overflow-wrap:anywhere}
+.topic p{margin:0;font-size:13px;color:var(--muted)}
 .chip.s-todo{color:var(--muted)} .chip.s-doing{color:var(--warn);border-color:var(--warn)} .chip.s-done{color:var(--ok);border-color:var(--ok)}
 .lesson .meta{font-size:13px;color:var(--muted)}
 .lesson .why{margin:0;font-size:14px}
@@ -146,6 +155,11 @@ table.heat thead th{font-weight:500;color:var(--muted);font-size:12px}
     <div class="queue" id="queue"></div>
   </section>
 
+  <section aria-labelledby="h-tp">
+    <div class="sec-head"><h2 id="h-tp">同主题去重</h2><span class="note" id="tprule"></span></div>
+    <div class="topics" id="topics"></div>
+  </section>
+
   <section aria-labelledby="h-heat">
     <div class="sec-head"><h2 id="h-heat">资源覆盖</h2><span class="note">每格是对口资源条数；颜色越深资源越多。差距大但资源少的方向，要靠自己摸索</span></div>
     <div class="heatwrap" id="heat"></div>
@@ -180,15 +194,17 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const areas = D.capabilities.areas, areaName = Object.fromEntries(areas.map(a => [a.id, a.name]));
 const cat = D.catalog, items = (D.plan.items || []).slice().sort((a,b) => a.order - b.order);
+const T = D.topics.groups || [], role = {};
 const state = {area:null, kind:"全部", free:false, rubric:false, q:""};
 
 $("#asof").textContent = "更新于 " + D.generated;
-const merged = D.dedupe.length, top = D.gaps.filter(g => g.score > 0);
+const merged = D.dedupe.length, gapTop = D.gaps.filter(g => g.score > 0);
 $("#stats").innerHTML = [
-  [cat.length, "条资源（已去重）"], [merged, "条重复已合并"],
+  [cat.length, "条资源（链接去重后）"], [T.length, "个主题，每题只学首选"],
+  [new Set(T.flatMap(g => g.alts)).size, "条重叠资源不用学"],
   [cat.filter(c => c.rubric_zh).length, "条带作业或评分表"],
-  [top.length, "个能力有差距"], [items.length, "个学习单元"],
-  [items.filter(i => i.status === "已达标").length, "个已达标"]
+  [gapTop.length, "个能力有差距"],
+  [`${items.filter(i => i.status === "已达标").length}/${items.length}`, "个学习单元已达标"]
 ].map(([n,l]) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
 
 // 差距图
@@ -215,7 +231,7 @@ document.querySelectorAll(".grow").forEach(b => b.addEventListener("click", () =
 
 // 学习队列
 $("#passrule").textContent = D.plan.rule || "";
-const stCls = s => s === "已达标" ? "s-done" : s === "进行中" ? "s-doing" : "s-todo";
+const stCls = s => s === "已达标" ? "s-done" : s === "进行中" ? "s-doing" : String(s).startsWith("受阻") ? "s-block" : "s-todo";
 const srcOf = id => cat.find(c => c.id === id);
 $("#queue").innerHTML = items.length ? items.map(i => {
   const s = srcOf(i.source);
@@ -230,6 +246,17 @@ $("#queue").innerHTML = items.length ? items.map(i => {
       <span><b>${esc(r.part)}</b>：${esc(r.criteria)}<span class="rbar" style="display:block;width:${r.points}%"></span></span></div>`).join("")}</div>
     <div class="deliv"><b>交付物</b>：${esc(i.deliverable)}</div></article>`;
 }).join("") : `<div class="empty">学习单元还没排好</div>`;
+
+// 同主题去重
+T.forEach(g => { g.pick.forEach(k => role[k] = "首选"); g.also.forEach(k => role[k] ??= "补充"); g.alts.forEach(k => role[k] ??= "备选"); });
+$("#tprule").textContent = D.topics.rule || "";
+const lk = k => { const c = cat.find(x => x.id === k); return c ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title_zh || c.title)}</a>` : k; };
+$("#topics").innerHTML = T.map(g => `<article class="topic"><h3>${esc(g.name)}</h3>
+  <div>${g.areas.map(a => `<span class="chip area">${a}</span>`).join(" ")}</div>
+  ${g.pick.length ? `<div class="row"><b>首选</b><span>${g.pick.map(lk).join("；")}</span></div>` : ""}
+  ${g.also.length ? `<div class="row"><b>补充</b><span>${g.also.map(lk).join("；")}</span></div>` : ""}
+  ${g.alts.length ? `<div class="row"><b>不用学</b><span>${g.alts.length} 条重叠资源</span></div>` : ""}
+  <p>${esc(g.why)}</p></article>`).join("");
 
 // 热力图：能力 × 资源类型
 const kinds = [...new Set(cat.map(c => c.kind))];
@@ -262,11 +289,12 @@ function renderCat(){
     (state.kind === "全部" || c.kind === state.kind) &&
     (!state.free || c.cost === "免费") && (!state.rubric || c.rubric_zh) &&
     (!state.q || JSON.stringify([c.title,c.title_zh,c.provider,c.summary_zh,c.units]).toLowerCase().includes(state.q)));
-  list.sort((a,b) => (used.has(b.id) - used.has(a.id)) || ((b.published||"") > (a.published||"") ? 1 : -1));
+  const rk = c => ({首选:3,补充:2}[role[c.id]] || (role[c.id] ? 0 : 1));
+  list.sort((a,b) => (used.has(b.id) - used.has(a.id)) || (rk(b) - rk(a)) || ((b.published||"") > (a.published||"") ? 1 : -1));
   $("#catcount").textContent = `显示 ${list.length} / ${cat.length} 条` + (state.area ? `（只看 ${state.area} ${areaName[state.area]}）` : "");
   $("#cat").innerHTML = list.length ? list.map(c => `<article class="item">
     <div class="item-top"><span class="mono note">${c.id}</span><h4><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title_zh || c.title)}</a></h4>
-      ${used.has(c.id) ? `<span class="chip s-doing">在学习队列</span>` : ""}</div>
+      ${role[c.id] ? `<span class="chip ${role[c.id] === "首选" ? "pick" : ""}">${role[c.id]}</span>` : ""}${used.has(c.id) ? `<span class="chip s-doing">在学习队列</span>` : ""}</div>
     <div class="sub">${esc(c.provider)} · ${esc(c.kind)} · ${esc(c.edition || "")}${c.published ? " · " + esc(c.published) : ""} · ${esc(c.cost)} · <span class="conf-${esc(c.confidence)}">可信度${esc(c.confidence)}</span></div>
     <p>${esc(c.summary_zh)}</p>
     <p class="for">对我们：${esc(c.why_for_us_zh)}</p>

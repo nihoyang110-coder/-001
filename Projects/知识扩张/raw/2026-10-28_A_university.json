@@ -1,0 +1,1049 @@
+[
+ {
+  "id_hint": "stanford-cs146s",
+  "title": "CS146S: The Modern Software Developer",
+  "title_zh": "斯坦福 CS146S：现代软件开发者（AI 原生软件工程）",
+  "provider": "Stanford University (Mihail Eric)",
+  "kind": "大学课程",
+  "url": "https://themodernsoftware.dev",
+  "alt_urls": [
+   "https://github.com/mihail911/modern-software-dev-assignments",
+   "https://github.com/mihail911/modern-software-dev-assignments/tree/fall2025",
+   "https://bulletin.stanford.edu/courses/2274401",
+   "https://www.heyuan110.com/posts/ai/2026-09-11-cs146s-fall-2026-follow-along/"
+  ],
+  "edition": "Fall 2026（进行中，2026-09-22 至 12-03；作业仓库 master 已发布到第 5 周）；Fall 2025 版保留在 fall2025 分支（约 85% 内容已被替换）",
+  "published": "2026-10-26",
+  "cost": "免费",
+  "format": [
+   "讲义",
+   "作业",
+   "评分表",
+   "代码仓库"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C2",
+   "C4",
+   "C5",
+   "C6",
+   "C7",
+   "C8",
+   "C9",
+   "C15"
+  ],
+  "units": [
+   {
+    "name": "F26 Week 1: Trace Dissection of a Real Claude Code Session（用 mitmproxy 抓 Claude Code 的真实 API 请求，解剖系统提示、工具 schema、行为）",
+    "areas": [
+     "C4",
+     "C9",
+     "C2"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/blob/master/week1/assignment.md",
+    "rubric": "100 分：抓包可复现 15 / 系统提示注解（含 <system-reminder>）25 / 工具清单与接口设计分析 25 / 有引证的行为分析 25 / 反思 10；引用中泄露凭据或无痕迹支撑的论断扣分"
+   },
+   {
+    "name": "F26 Week 2: Build an MCP Server for a Third-Party API（FastMCP + OAuth，重点是 agent ergonomics）",
+    "areas": [
+     "C7",
+     "C8"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/blob/master/week2/assignment.md",
+    "rubric": "100 分：服务器（≥3 个可串联工具+1 个写工具）25 / 工具人机工学（schema 级约束、裁剪输出、结构化错误、可串联 docstring、写工具 dry_run/预览）30 / OAuth（缓存+静默刷新、最小权限、无密钥入库、会话中过期处理）25 / 集成演示（配置、串联记录、失败路径、协议级测试）20；提交密钥或 docstring 与 schema 矛盾扣分"
+   },
+   {
+    "name": "F26 Week 3: Author a Skill（按 agentskills.io 标准写 SKILL.md 并做触发测试）",
+    "areas": [
+     "C2",
+     "C6"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md",
+    "rubric": "100 分：选对可重复且有决策点的工作流 15 / 技能本体 60（描述能触发、编码判断而非步骤、确定性部分给精确命令、正文精简+支撑文件）/ 测试 25（3 条应触发+1 条近似不应触发的 near-miss，外加端到端运行）"
+   },
+   {
+    "name": "F26 Week 4: Make a Messy Repo Agent-Ready（为陌生仓库写 AGENTS.md/CLAUDE.md）",
+    "areas": [
+     "C4",
+     "C15"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/blob/master/week4/assignment.md",
+    "rubric": "100 分：探索（准确的构建/测试/lint 命令、结构、约定）20 / 文件本体 55（五个方面覆盖、贴合仓库、精确命令、简洁）/ 试用 25（两项任务如实报告+一处有依据的改进）"
+   },
+   {
+    "name": "F26 Week 5: Agent-Readiness Report（用 Factory 的 8 支柱/5 级成熟度框架评估 3 个仓库）",
+    "areas": [
+     "C4",
+     "C6",
+     "C15",
+     "C9"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/blob/master/week5/assignment.md",
+    "rubric": "100 分：跑三份报告 40 / 归纳仓库短板并给出可辩护结论 60"
+   },
+   {
+    "name": "F25 Week 1: LLM Prompting Playground（k-shot、CoT、自洽、RAG、反思、工具调用，旧版）",
+    "areas": [
+     "C2",
+     "C3"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/tree/fall2025/week1",
+    "rubric": "60 分（按各提示技巧脚本通过情况）"
+   },
+   {
+    "name": "F25 Week 4: The Autonomous Coding Agent IRL（用 Claude Code 的 CLAUDE.md、斜杠命令、子智能体、hooks 做 ≥2 个自动化，旧版）",
+    "areas": [
+     "C4",
+     "C5"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/tree/fall2025/week4",
+    "rubric": null
+   },
+   {
+    "name": "F25 Week 6: Scan and Fix Vulnerabilities with Semgrep（SAST 扫描、分诊、修复 ≥3 个问题，旧版）",
+    "areas": [
+     "C8",
+     "C15"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/tree/fall2025/week6",
+    "rubric": null
+   },
+   {
+    "name": "F25 Week 7: AI Code Review with Graphite（实现任务后对比人审与 AI 审查，旧版）",
+    "areas": [
+     "C15"
+    ],
+    "url": "https://github.com/mihail911/modern-software-dev-assignments/tree/fall2025/week7",
+    "rubric": "100 分：每个任务 20 分 + 简短反思 20 分"
+   }
+  ],
+  "summary_zh": "斯坦福面向本科的 AI 原生软件工程课：每周一个用编码智能体完成的实操作业，2026 版聚焦技能、上下文工程、MCP、智能体代码审查与安全。",
+  "why_for_us_zh": "几乎逐周对口我们的构建：W3 的技能评分表（描述能触发、near-miss 测试、正文精简）可直接拿来验收 news-factcheck 的 SKILL.md；W4 正好补我们缺的 CLAUDE.md；W1 抓包解剖可用来做成本/上下文观测；W2 的 MCP 人机工学评分表可用于将来把 factdb.py 包成 MCP 工具；旧版 W6 Semgrep 补安全扫描。",
+  "rubric_zh": "每周作业 100 分制、按 Part 给分并附“满分标准”表，含明确扣分项（泄露密钥、无证据论断、docstring 与 schema 矛盾）；通过 Gradescope 提交，外部自学者无官方批改但可自评。无官方讲座视频；Fall 2025 幻灯片据二手来源链接在课程大纲页。",
+  "evidence": "一手：克隆 mihail911/modern-software-dev-assignments（master 最新提交 2026-10-26 “Week 5 Assignment”，README 注明 fall 2026；fall2025 分支 week1–8，最新提交 2025-11-10）直读 assignment.md 与评分表。二手：heyuan110.com（Fall 2026 日期、无官方视频、85% 内容更新）、bulletin.stanford.edu 摘要。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "mit-missing-semester-2026",
+  "title": "The Missing Semester of Your CS Education (2026)",
+  "title_zh": "MIT 计算机教育中缺失的一课（2026 版）",
+  "provider": "MIT CSAIL (IAP)",
+  "kind": "大学课程",
+  "url": "https://missing.csail.mit.edu/2026",
+  "alt_urls": [
+   "https://github.com/missing-semester/missing-semester",
+   "https://missing.csail.mit.edu/2026/agentic-coding/",
+   "https://www.youtube.com/watch?v=sTdz6PZoAnw",
+   "https://codex.danielvaughan.com/2026/04/17/mit-missing-semester-agentic-coding-enterprise-gaps/"
+  ],
+  "edition": "IAP 2026（2026-01-12 至 01-23，9 讲；取代 2020 版）",
+  "published": "2026-01（仓库最近更新 2026-10-08）",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义",
+   "作业",
+   "代码仓库"
+  ],
+  "language": "en",
+  "effort_hours": 20,
+  "areas": [
+   "C2",
+   "C4",
+   "C5",
+   "C7",
+   "C8",
+   "C15"
+  ],
+  "units": [
+   {
+    "name": "Agentic Coding（2026-01-21）：智能体原理、上下文管理（清空/回退/压缩/llms.txt）、AGENTS.md、Skills、Subagents、MCP、并行智能体、yolo 模式与沙箱",
+    "areas": [
+     "C2",
+     "C4",
+     "C5",
+     "C7",
+     "C8"
+    ],
+    "url": "https://missing.csail.mit.edu/2026/agentic-coding/",
+    "rubric": "无评分；6 道练习，其中第 4 题：为所用智能体编写并测试 AGENTS.md/CLAUDE.md、一个 skill、一个 subagent；第 6 题：在容器/VM 中搭建隔离的自主运行环境"
+   },
+   {
+    "name": "Code Quality（2026-01-23）：格式化、lint、测试与覆盖率、pre-commit、CI、正则",
+    "areas": [
+     "C15",
+     "C8"
+    ],
+    "url": "https://missing.csail.mit.edu/2026/code-quality/",
+    "rubric": "无评分；练习含让智能体循环修 lint、用智能体提升覆盖率并判断 AI 测试质量、配置 CI、用 semgrep 对比 grep 找危险代码"
+   },
+   {
+    "name": "Version Control and Git（2026-01-16）",
+    "areas": [
+     "C15"
+    ],
+    "url": "https://missing.csail.mit.edu/2026/version-control/",
+    "rubric": null
+   },
+   {
+    "name": "Debugging and Profiling（2026-01-15）：日志、调试器、strace、eBPF",
+    "areas": [
+     "C15",
+     "C9"
+    ],
+    "url": "https://missing.csail.mit.edu/2026/debugging-profiling/",
+    "rubric": null
+   },
+   {
+    "name": "Beyond the Code（2026-01-22）：协作、贡献、代码审查、AI 礼仪",
+    "areas": [
+     "C15"
+    ],
+    "url": "https://missing.csail.mit.edu/2026/beyond-code/",
+    "rubric": null
+   }
+  ],
+  "summary_zh": "MIT 经典工具课 2026 修订版，新增“Agentic Coding”整讲，并把智能体融入代码质量、调试等练习。",
+  "why_for_us_zh": "入门门槛最低、最快能补“没有测试/CI/CLAUDE.md”的短板：Agentic Coding 一讲的练习 4 恰好是给本仓库写 CLAUDE.md+skill+subagent；Code Quality 练习可直接落成 news-factcheck 脚本的 pytest+pre-commit+CI。",
+  "rubric_zh": "无评分、无证书；每讲末尾有练习题，可作为“做完即算会”的自测清单。",
+  "evidence": "一手：克隆 missing-semester/missing-semester（最新提交 2026-10-08），直读 _2026/*.md 的日期、章节与练习，agentic-coding.md 前言含 YouTube 视频 id sTdz6PZoAnw。二手：danielvaughan.com 博客、HN 讨论摘要。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "stanford-cs329z",
+  "title": "CS 329Z: Engineering AI Agents",
+  "title_zh": "斯坦福 CS329Z：智能体工程",
+  "provider": "Stanford University (Diyi Yang, Michael Ryan, John Yang)",
+  "kind": "大学课程",
+  "url": "https://web.stanford.edu/class/cs329z/",
+  "alt_urls": [
+   "https://github.com/cs329z/cs329z.github.io",
+   "https://github.com/cs329z/assignment1-harness",
+   "https://web.stanford.edu/class/cs329z/slides/lecture01.pdf",
+   "https://web.stanford.edu/class/cs329z/assignments/paper_video.pdf",
+   "https://www.heyuan110.com/posts/ai/2026-09-04-stanford-cs329z-engineering-ai-agents/"
+  ],
+  "edition": "Fall 2026（首期，2026-09-23 至 12-02，期末展示 12-07–11；进行中）",
+  "published": "2026-10-28",
+  "cost": "免费",
+  "format": [
+   "讲义",
+   "作业",
+   "评分表",
+   "测验",
+   "代码仓库"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C3",
+   "C4",
+   "C5",
+   "C6",
+   "C7",
+   "C8",
+   "C9"
+  ],
+  "units": [
+   {
+    "name": "Lecture: Retrieval-Augmented Generation (RAG)（W2）",
+    "areas": [
+     "C3"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Tool Use & Function Calling / Frameworks & Orchestration（W3）",
+    "areas": [
+     "C7",
+     "C5"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Agent Memory Architectures（W4）",
+    "areas": [
+     "C3"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Multi-Agent Systems / Optimization（W5）",
+    "areas": [
+     "C5"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Evaluation Fundamentals & Benchmark Design；LLM-as-Judge & Evaluation Infrastructure（W7–8）",
+    "areas": [
+     "C6"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Agent Safety & Guardrails（W8）",
+    "areas": [
+     "C8"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Coding & Software Agents（W9）",
+    "areas": [
+     "C15",
+     "C5"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "HW1: Build an Agentic Harness（不用框架，从邮件归档 RAG 管线做到带工具、终端沙箱、上下文压缩、跨会话持久记忆、人在回路、拒绝规则与提示注入防护的完整 harness，并做模拟用户+LLM 评委评测）",
+    "areas": [
+     "C3",
+     "C4",
+     "C5",
+     "C6",
+     "C7",
+     "C8",
+     "C9"
+    ],
+    "url": "https://github.com/cs329z/assignment1-harness",
+    "rubric": "118 分 = 88 自动测试 + 30 书面：priority 3、daily_digest 4、BM25 8、多跳 email QA 8、tool_registry 3、tool_protocol 4、agent_loop 8、cardinal 2、search_docs 5、terminal 6、compaction 8、memory 8、interactive（模式/审批/引导）7、guardrails（拒绝规则与提示注入）4、sim_eval（20 个隐藏 persona，LLM 评委，≥16 次成功满分）10、field_notes 10、design_memo 20；私有测试用保留数据防过拟合；手册含成本提示（参考解一次完整评测约 $0.18）"
+   },
+   {
+    "name": "HW2: Evaluate an Agent（代码评分器+至少一个 LLM 评委+四元组基准任务（请求/环境/停止条件/评分器）+错误分析）",
+    "areas": [
+     "C6"
+    ],
+    "rubric": "占总评 7.5%，随后 10 分钟口头测验 7.5%；细则未公开（2026-10-26 发布，仓库链接未见）"
+   }
+  ],
+  "summary_zh": "斯坦福 2026 新开的智能体工程研究生课，从 LLM 管线讲到 RAG、记忆、多智能体、评测与安全，作业要求从零手写智能体 harness 再给智能体设计评测。",
+  "why_for_us_zh": "HW1 几乎是我们 factdb + news-factcheck 的教学版：BM25 检索、跨会话记忆、上下文压缩、提示注入防护、模拟用户+LLM 评委评测都有可运行测试和分值，可借来给事实卡片库检索/记忆做对照验收；HW2 的四元组任务设计可用于 news-factcheck 的评测集。",
+  "rubric_zh": "总评：项目 40%、作业 15%（两次各 7.5%）、作业后口头测验 15%、论文讲解视频 10%（有公开评分表 PDF）、同伴互评 20%；HW1 118 分细分到 17 题，自动测试+书面备忘录。无证书；录像仅限选课学生（Canvas）。",
+  "evidence": "一手：克隆 cs329z/cs329z.github.io（最新提交 2026-10-28）直读 pages/coursework.md、data/schedule.json、deadlines.json；克隆 cs329z/assignment1-harness（2026-10-06）读 README 与手册 PDF 文本的分值。二手：heyuan110.com、frankx.ai、beri.net（录像仅限选课生、非证书项目）。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "cmu-11-768",
+  "title": "11-768: AI Agents",
+  "title_zh": "CMU 11-768：AI 智能体",
+  "provider": "Carnegie Mellon University LTI (Graham Neubig, Daniel Fried)",
+  "kind": "大学课程",
+  "url": "https://cmu-agents.com",
+  "alt_urls": [
+   "https://github.com/cmu-agents/assignment-1",
+   "https://github.com/cmu-agents/assignment-2",
+   "https://github.com/cmu-agents/assignment-3",
+   "https://github.com/cmu-agents/chess-app",
+   "https://www.heyuan110.com/posts/ai/2026-09-08-cmu-11-768-ai-agents-course/"
+  ],
+  "edition": "Fall 2026（首期，2026-08-25 至 12-03，28 讲；进行中）",
+  "published": "2026-10-25",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义",
+   "作业",
+   "评分表",
+   "测验",
+   "代码仓库"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C2",
+   "C3",
+   "C4",
+   "C5",
+   "C6",
+   "C8",
+   "C9"
+  ],
+  "units": [
+   {
+    "name": "A1: Build an Agent Harness（ReAct 循环、编码工具、技能加载与 invoke_skill、上下文压缩、ChessAgent 与沙箱 run_python）",
+    "areas": [
+     "C2",
+     "C4",
+     "C5",
+     "C9",
+     "C8"
+    ],
+    "url": "https://github.com/cmu-agents/assignment-1",
+    "rubric": "100 分逐行独立计分：Part1 提示构建 6/ReAct 生命周期 6/工具分发 6/修复补丁通过测试 8/技能发现与调用 4；Part2 压缩触发与模型摘要 6/保留原始指令与最近工具步 6/可审计地显著减少上下文 4/全上下文 vs 压缩 token 用量分析报告 4/SWE-bench 补丁 FAIL_TO_PASS+PASS_TO_PASS 8；Part3 工具 schema、状态、A/B 实验、无状态模拟、沙箱执行、技能轨迹共 40；提交合规 2；评分器只回放补丁和轨迹不调用 LLM"
+   },
+   {
+    "name": "A2: Evaluating a Data-Visualization Agent（写验证器判断智能体轨迹+输出图是否正确，设计新评测任务，人工标签，打包为 Harbor 环境并用 mutant 校验评分器）",
+    "areas": [
+     "C6",
+     "C11"
+    ],
+    "url": "https://github.com/cmu-agents/assignment-2",
+    "rubric": "报告与设计理由 40% / 验证器在私有集上的 macro-MCC 30% / 理解测验 20% / 代码质量与可复现 10%；结构检查要求 ≥5 个任务、oracle 得 1.0、一个 mutant 得 0、一个 mutant 得 1.0"
+   },
+   {
+    "name": "A3: RL Training for Agents（scottyrl：REINFORCE/GRPO、异步 GRPO、消融、TextCraft）",
+    "areas": [],
+    "url": "https://github.com/cmu-agents/assignment-3",
+    "rubric": "数据管线 20 / 同步 REINFORCE+GRPO 25 / 异步 GRPO 25 / 消融 20 / TextCraft 10；与当前构建关系弱"
+   },
+   {
+    "name": "Lectures: tool use、long context、memory & skills（前段）；sandboxing 与凭据管理；evaluation design",
+    "areas": [
+     "C3",
+     "C4",
+     "C7",
+     "C8",
+     "C6"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "OpenHands 作者 Neubig 与 Fried 新开的智能体研究生课，三份公开作业分别是手写 harness、设计评测、RL 训练，讲座录像随堂上传 YouTube。",
+  "why_for_us_zh": "A1 的“上下文压缩+token 用量对比报告”直接补我们没有成本统计的短板，技能加载部分可对照我们的 SKILL.md 渐进披露；A2 是“给智能体输出写验证器/LLM 评委”的完整范例，评分维度（MCC、mutant 校验）可借来评 news-factcheck 结论准确度，且主题是数据可视化，贴近我们的卡片图生成。A3 训练部分与当前构建关系弱。",
+  "rubric_zh": "A1 100 分细则表（每行附证据来源）；A2 按 40/30/20/10 权重，含私有集 MCC 与测验；A3 100 分按 Part；课程另有理解测验，团队研究项目占总评一半（二手）。无证书。",
+  "evidence": "一手：克隆 cmu-agents/assignment-1（2026-09-11）、assignment-2（2026-09-20）、assignment-3（2026-10-25），直读 ASSIGNMENT.md 评分表。二手：heyuan110.com、beri.net（日期、28 讲、YouTube 录像、项目占 50%）；课程站点为 JS 应用未直读；二手称 A2/A3 仅限选课生，但实测仓库公开可克隆。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "cmu-mlip-17445",
+  "title": "Machine Learning in Production / AI Engineering (17-445/17-645/17-745, 11-695)",
+  "title_zh": "CMU 生产环境中的机器学习 / AI 工程",
+  "provider": "Carnegie Mellon University (Christian Kästner)",
+  "kind": "大学课程",
+  "url": "https://mlip-cmu.github.io/f2026/",
+  "alt_urls": [
+   "https://github.com/mlip-cmu/f2026",
+   "https://mlip-cmu.github.io/s2026",
+   "https://www.youtube.com/playlist?list=PLDS2JMJnJzdmubSKnanmIwzr08cionWm_",
+   "https://mlip-cmu.github.io/book/",
+   "https://github.com/mlip-cmu/airline-support-agent-template"
+  ],
+  "edition": "Fall 2026（进行中；Spring 2026 有完整录像）",
+  "published": "2026-10-27",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义",
+   "作业",
+   "评分表",
+   "代码仓库"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C6",
+   "C7",
+   "C8",
+   "C9",
+   "C15"
+  ],
+  "units": [
+   {
+    "name": "I1: Building LLM-enabled Features for a Product（在 Zulip 上用 AI 编码工具加两个 LLM 功能）",
+    "areas": [
+     "C15"
+    ],
+    "url": "https://github.com/mlip-cmu/f2026/blob/main/assignments/I1_llm_features.md",
+    "rubric": "100 分，按规格逐条通过/不通过（无部分分），可用 token 重交；含答辩"
+   },
+   {
+    "name": "I4: Agent Security and Safety（基于 tau2-bench 的航空客服智能体+MCP 服务器：识别 CIA/安全属性、演示违规、加固直接/间接提示注入、在工具层做“即使 LLM 被攻击者控制也成立”的保证）",
+    "areas": [
+     "C8",
+     "C7",
+     "C9"
+    ],
+    "url": "https://github.com/mlip-cmu/f2026/blob/main/assignments/I4_agent_security.md",
+    "rubric": "100 分：属性分类 5 / 5 项属性违规演示日志 10 / 新增安全与安全性属性 10 / hardening.md 覆盖直接+间接注入 10 / 防护的延迟与成本开销测量 5 / guarantees.md 用实现改动保证属性 1–5 恒成立 40（2 项 10、4 项 20、5 项 40）/ 答辩 20"
+   },
+   {
+    "name": "Lecture/Lab: Model Quality、Behavioral Model Testing、Testing in Production、Automating and Testing ML Pipelines",
+    "areas": [
+     "C6",
+     "C15"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lab: Collaboration with git；Continuous Integration；Monitoring with Prometheus/Grafana",
+    "areas": [
+     "C15",
+     "C9"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Security and Privacy + Lab: Agent security",
+    "areas": [
+     "C8"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "CMU 的 AI 工程课，讲如何把模型/LLM/智能体做成能上线、可监控、可测试、安全的产品，全部材料与书以 CC 协议公开。",
+  "why_for_us_zh": "I4 是我们见过最具体的“智能体+MCP 安全”评分表，把“提示加固”和“工具层硬保证”区分开，并要求测防护的延迟/成本开销——正好对应 C8 和 C9；测试/CI/监控各讲补 C15。",
+  "rubric_zh": "规格制评分（每条规格通过/不通过、无部分分），每份作业 100 分并含面谈答辩；总评 35% 个人作业、30% 小组项目、25% 期中与参与、10% labs。无证书。",
+  "evidence": "一手：克隆 mlip-cmu/f2026（2026-10-27）直读 README、assignments/I1、I4 评分；克隆 mlip-cmu.github.io（README 链到 Fall 2026 站点与 Spring 2026 录像列表）；克隆 airline-support-agent-template（2026-10-20）。注意 f2026/schedule.md 日期疑似沿用旧学期模板（周一 8/25），排期以站点为准。二手：搜索摘要 mlip-cmu.github.io/s2026。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "berkeley-agentic-ai-f25",
+  "title": "CS294/194-196: Agentic AI (MOOC)",
+  "title_zh": "伯克利 Agentic AI 智能体 MOOC（2025 秋）",
+  "provider": "UC Berkeley RDI (Dawn Song)",
+  "kind": "大学课程",
+  "url": "https://rdi.berkeley.edu/agentic-ai/f25",
+  "alt_urls": [
+   "https://rdi.berkeley.edu/agentic-ai/slides/introduction_25.pdf",
+   "https://rdi.berkeley.edu/education",
+   "https://www.beri.net/learning/berkeley-agentic-ai-mooc-f25"
+  ],
+  "edition": "Fall 2025（2025-09-08 至 12-08）；未找到 2026 期，RDI 2026 年改办 Agentic AI Summit（8/1–2）",
+  "published": "2025-09",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义"
+  ],
+  "language": "en",
+  "effort_hours": 24,
+  "areas": [
+   "C5",
+   "C6",
+   "C8"
+  ],
+  "units": [
+   {
+    "name": "Agent evaluation 相关讲座",
+    "areas": [
+     "C6"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Agentic frameworks & infrastructure / multi-agent systems",
+    "areas": [
+     "C5"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Agentic AI safety and security（12-08 收官讲）",
+    "areas": [
+     "C8"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "AgentX–AgentBeats 竞赛（做新基准或增强已有基准并写智能体去跑）",
+    "areas": [
+     "C6"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "伯克利 RDI 智能体系列的第三期，每周一位业界/学界嘉宾讲座，录像公开在 YouTube，配套 AgentBeats 评测竞赛。",
+  "why_for_us_zh": "以讲座为主，适合挑评测与安全两讲建立概念；动手性弱，不能作为“学会”的验收依据。",
+  "rubric_zh": "未核实：F25 MOOC 是否有测验/证书来源冲突（beri.net 称无证书、非动手）；只有 AgentBeats 竞赛有评分。",
+  "evidence": "二手为主：rdi.berkeley.edu/agentic-ai/f25 与 introduction_25.pdf 的搜索摘要（讲师、课号、日期、AgentBeats）；beri.net（12 周、免费、非动手）；“无 2026 期”来自两次搜索均未找到。未直读页面（WebFetch 不可用）。",
+  "confidence": "中"
+ },
+ {
+  "id_hint": "berkeley-adv-llm-agents-sp25",
+  "title": "CS194/294-280: Advanced Large Language Model Agents (MOOC)",
+  "title_zh": "伯克利 高级大模型智能体 MOOC（2025 春）",
+  "provider": "UC Berkeley RDI (Dawn Song, Xinyun Chen 等)",
+  "kind": "大学课程",
+  "url": "https://rdi.berkeley.edu/adv-llm-agents/sp25",
+  "alt_urls": [
+   "https://rdi.berkeley.edu/adv-llm-agents/slides/llm-agents-berkeley-intro-sp25.pdf",
+   "https://github.com/dunktra/lab1_advanced_llm_agent",
+   "https://github.com/dunktra/lab2_advanced_llm_agent",
+   "https://builditdeploy.substack.com/p/join-me-in-uc-berkeleys-rdi-advanced-llm-agents-mooc"
+  ],
+  "edition": "Spring 2025（已被 Fall 2025 Agentic AI 接替，材料仍在线）",
+  "published": "2025-01",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义",
+   "作业",
+   "测验",
+   "证书"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C6",
+   "C8"
+  ],
+  "units": [
+   {
+    "name": "推理/规划、代码生成与验证、形式化数学（Lean）相关讲座与 lab",
+    "areas": [
+     "C15"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "智能体安全与防护相关讲座",
+    "areas": [
+     "C8"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "伯克利 LLM Agents 系列第二期，偏推理、代码与数学证明智能体，MOOC 版有 lab 与测验。",
+  "why_for_us_zh": "与当前构建关系弱，偏研究前沿；仅安全讲座可参考。",
+  "rubric_zh": "未核实：据学员仓库有 Lab1（Lean 证明）与 Lab2；证书分级规则沿用 F24 的可能性存在但未确认。",
+  "evidence": "二手：rdi.berkeley.edu/adv-llm-agents/sp25 与 sp25 介绍 PDF 的搜索摘要；GitHub 学员提交仓库 dunktra/lab1、lab2（只看了仓库描述）；substack 博客。",
+  "confidence": "中"
+ },
+ {
+  "id_hint": "berkeley-llm-agents-f24",
+  "title": "CS294/194-196: Large Language Model Agents (MOOC)",
+  "title_zh": "伯克利 大模型智能体 MOOC（2024 秋）",
+  "provider": "UC Berkeley RDI (Dawn Song, Xinyun Chen)",
+  "kind": "大学课程",
+  "url": "https://rdi.berkeley.edu/llm-agents/f24",
+  "alt_urls": [
+   "https://classes.berkeley.edu/content/2024-fall-compsci-294-196-lec-196",
+   "https://github.com/Liboul/berkeley-llm-agents-lab01"
+  ],
+  "edition": "Fall 2024（最早一期，已被 S25、F25 接替）",
+  "published": "2024-09",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义",
+   "作业",
+   "测验",
+   "证书"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C2",
+   "C5",
+   "C6",
+   "C8"
+  ],
+  "units": [
+   {
+    "name": "智能体基础、推理、工具使用、多智能体、编码智能体、安全等嘉宾讲座",
+    "areas": [
+     "C2",
+     "C5",
+     "C8"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "MOOC 分级证书（Trailblazer / Mastery / Ninja 等）",
+    "areas": [
+     "C6"
+    ],
+    "rubric": "按层级：完成测验 → 撰写文章 → 完成 labs，逐级解锁证书（据二手摘要）"
+   }
+  ],
+  "summary_zh": "伯克利 RDI 智能体系列首期，嘉宾讲座+测验+lab，曾按完成度发放分级证书。",
+  "why_for_us_zh": "证书分级（测验→文章→lab）的思路可借鉴来定义我们的“学到什么程度算会”；内容本身已较旧，优先看 F25 与 CS329Z。",
+  "rubric_zh": "分级证书：测验、书面文章、lab 作业分层（Trailblazer/Mastery/Ninja…），具体分数线未核实。",
+  "evidence": "二手：rdi.berkeley.edu/llm-agents/f24 搜索摘要（证书层级文字）、classes.berkeley.edu 课表、学员 lab 仓库描述。",
+  "confidence": "中"
+ },
+ {
+  "id_hint": "stanford-cs329a",
+  "title": "CS329A: Self-Improving AI Agents",
+  "title_zh": "斯坦福 CS329A：自我改进的 AI 智能体",
+  "provider": "Stanford University (Aakanksha Chowdhery, Azalia Mirhoseini)",
+  "kind": "大学课程",
+  "url": "https://cs329a.stanford.edu/",
+  "alt_urls": [
+   "https://bulletin.stanford.edu/courses/2263721",
+   "https://www.beri.net/learning/stanford-cs329a-self-improving-ai-agents"
+  ],
+  "edition": "Autumn 2025（未见 2026 期；2026-08 Stanford Online 公开 9/18 讲录像，据二手）",
+  "published": "2026-08",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义"
+  ],
+  "language": "en",
+  "effort_hours": 10,
+  "areas": [
+   "C3",
+   "C5",
+   "C6"
+  ],
+  "units": [
+   {
+    "name": "测试时计算/验证器、智能体自生成训练数据与自提问题等研讨讲座",
+    "areas": [
+     "C6",
+     "C5"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "研究生研讨课，讲智能体如何通过测试时搜索、验证与自生成数据持续自我改进。",
+  "why_for_us_zh": "与当前构建关系弱，偏研究；若将来做“事实卡片库自我修订/过时替换”的自动化可参考验证器思路。",
+  "rubric_zh": null,
+  "evidence": "二手：cs329a.stanford.edu（仍标 Autumn 2025）、bulletin、beri.net 与 heyuan110.com 摘要（录像 9 讲约 10 小时；另一来源称 20 讲，有冲突）。",
+  "confidence": "中"
+ },
+ {
+  "id_hint": "stanford-cs336",
+  "title": "CS336: Language Modeling from Scratch",
+  "title_zh": "斯坦福 CS336：从零构建语言模型",
+  "provider": "Stanford University (Tatsunori Hashimoto, Percy Liang)",
+  "kind": "大学课程",
+  "url": "https://cs336.stanford.edu",
+  "alt_urls": [
+   "https://github.com/stanford-cs336/stanford-cs336.github.io",
+   "https://github.com/stanford-cs336/lectures",
+   "https://github.com/stanford-cs336/assignment1-basics",
+   "https://github.com/stanford-cs336/assignment5-alignment"
+  ],
+  "edition": "Spring 2026（第三期，取代 2024/2025）",
+  "published": "2026-06-01",
+  "cost": "免费",
+  "format": [
+   "视频",
+   "讲义",
+   "作业",
+   "代码仓库"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C6",
+   "C9"
+  ],
+  "units": [
+   {
+    "name": "Lecture: Inference（推理成本、KV cache 等）",
+    "areas": [
+     "C9"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Lecture: Evaluation",
+    "areas": [
+     "C6"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "Assignments 1–5（basics/systems/scaling/data/alignment，自动测试+排行榜）",
+    "areas": [],
+    "rubric": "每份作业有公开单元测试与排行榜；与当前构建关系弱"
+   }
+  ],
+  "summary_zh": "从分词器到训练、推理、对齐，完整自己写一个语言模型的硬核课程。",
+  "why_for_us_zh": "与当前构建关系弱（训练模型）；仅推理与评测两讲有助理解 token 成本和评测原理。",
+  "rubric_zh": "作业以公开单元测试+排行榜自评，工作量很大。",
+  "evidence": "一手：克隆 stanford-cs336/stanford-cs336.github.io（最新提交 2026-06-01，index.html 含 Spring 2026）；GitHub 组织仓库列表。二手：summify.io、latent.space（Spring 2026 讲座视频）。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "stanford-cs25",
+  "title": "CS25: Transformers United (V6)",
+  "title_zh": "斯坦福 CS25：Transformer 联合研讨（第 6 版）",
+  "provider": "Stanford University",
+  "kind": "大学课程",
+  "url": "https://web.stanford.edu/class/cs25/",
+  "alt_urls": [
+   "https://summify.io/discover/channels/stanford-online?page=3"
+  ],
+  "edition": "V6, Spring 2026（据视频标题 2026-04-22）",
+  "published": "2026-04",
+  "cost": "免费",
+  "format": [
+   "视频"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C5"
+  ],
+  "units": [
+   {
+    "name": "嘉宾讲座（V6 主题含“From Representation Learning to World Modeling”）",
+    "areas": [],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "斯坦福面向公众开放的 Transformer 前沿嘉宾讲座系列。",
+  "why_for_us_zh": "与当前构建关系弱，只能拓宽视野，不能作为技能验收依据。",
+  "rubric_zh": null,
+  "evidence": "二手：summify.io 的 Stanford Online 视频列表摘要（CS25 V6，2026-04-22）。主 URL 凭记忆，未核实。",
+  "confidence": "低"
+ },
+ {
+  "id_hint": "sjtu-hands-on-ai-agents",
+  "title": "动手学大模型智能体 (Hands-on AI Agent)",
+  "title_zh": "动手学大模型智能体",
+  "provider": "上海交通大学 俞勇团队（伯禹 boyu-ai）",
+  "kind": "大学课程",
+  "url": "https://github.com/boyu-ai/Hands-on-AA",
+  "alt_urls": [
+   "https://adg.csdn.net/6a6a14a910ee7a33f29431f4.html"
+  ],
+  "edition": "2025-12 版（仓库最新提交 2025-12-08）",
+  "published": "2025-12-08",
+  "cost": "免费",
+  "format": [
+   "讲义",
+   "代码仓库"
+  ],
+  "language": "zh",
+  "effort_hours": null,
+  "areas": [
+   "C2",
+   "C3",
+   "C5",
+   "C6",
+   "C7",
+   "C8"
+  ],
+  "units": [
+   {
+    "name": "第3章 提示工程",
+    "areas": [
+     "C2"
+    ],
+    "url": "https://github.com/boyu-ai/Hands-on-AA/blob/main/part_1/chapter_3.ipynb",
+    "rubric": null
+   },
+   {
+    "name": "第4章 智能体评估与调试",
+    "areas": [
+     "C6",
+     "C15"
+    ],
+    "url": "https://github.com/boyu-ai/Hands-on-AA/blob/main/part_1/chapter_4.ipynb",
+    "rubric": null
+   },
+   {
+    "name": "第6章 记忆管理与检索增强",
+    "areas": [
+     "C3"
+    ],
+    "url": "https://github.com/boyu-ai/Hands-on-AA/blob/main/part_2/chapter_6.ipynb",
+    "rubric": null
+   },
+   {
+    "name": "第7章 外部工具调用",
+    "areas": [
+     "C7"
+    ],
+    "url": "https://github.com/boyu-ai/Hands-on-AA/blob/main/part_2/chapter_7.ipynb",
+    "rubric": null
+   },
+   {
+    "name": "第13章 多智能体系统",
+    "areas": [
+     "C5"
+    ],
+    "url": "https://github.com/boyu-ai/Hands-on-AA/blob/main/part_4/chapter_13.ipynb",
+    "rubric": null
+   },
+   {
+    "name": "第14章 智能体攻防",
+    "areas": [
+     "C8"
+    ],
+    "url": "https://github.com/boyu-ai/Hands-on-AA/blob/main/part_4/chapter_14.ipynb",
+    "rubric": null
+   },
+   {
+    "name": "第15章 智能体协议（MCP、A2A）",
+    "areas": [
+     "C7"
+    ],
+    "url": "https://github.com/boyu-ai/Hands-on-AA/blob/main/part_4/Chapter_15.ipynb",
+    "rubric": null
+   }
+  ],
+  "summary_zh": "上交“动手学”系列的智能体教材，15 章 Jupyter Notebook，覆盖提示、评估、记忆/RAG、工具、多智能体、攻防与协议。",
+  "why_for_us_zh": "中文、可直接运行，第 4 章评估调试和第 6 章记忆检索可作为团队成员的中文入门材料；没有评分表，需配合 CS146S/CS329Z 的验收标准。",
+  "rubric_zh": null,
+  "evidence": "一手：克隆 boyu-ai/Hands-on-AA（最新提交 2025-12-08），读取各 notebook 标题（仓库无 README）。二手：csdn.net 介绍（俞勇团队、MCP/A2A 更新快需对照官方文档）。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "sjtu-dive-into-llms",
+  "title": "动手学大模型 (Dive into LLMs)",
+  "title_zh": "动手学大模型系列编程实践教程",
+  "provider": "上海交通大学 张倬胜等（NIS8021《自然语言处理前沿技术》、NIS3353《人工智能安全技术》讲义扩展）",
+  "kind": "大学课程",
+  "url": "https://github.com/Lordog/dive-into-llms",
+  "alt_urls": [
+   "https://sjtullm.gitbook.io/dive-into-llms",
+   "https://gitee.com/hbwei/dive-into-llms"
+  ],
+  "edition": "v0.1.0（2025-06 增补 GUI 智能体等章节；仓库最新提交 2025-10-10）",
+  "published": "2025-10-10",
+  "cost": "免费",
+  "format": [
+   "讲义",
+   "代码仓库",
+   "视频"
+  ],
+  "language": "zh",
+  "effort_hours": null,
+  "areas": [
+   "C2",
+   "C8"
+  ],
+  "units": [
+   {
+    "name": "提示学习与思维链",
+    "areas": [
+     "C2"
+    ],
+    "url": "https://github.com/Lordog/dive-into-llms/tree/main/documents/chapter2",
+    "rubric": null
+   },
+   {
+    "name": "越狱攻击",
+    "areas": [
+     "C8"
+    ],
+    "rubric": null
+   },
+   {
+    "name": "智能体安全（智能体安全风险测评与分析）",
+    "areas": [
+     "C8",
+     "C6"
+    ],
+    "url": "https://github.com/Lordog/dive-into-llms/tree/main/documents/chapter10",
+    "rubric": null
+   },
+   {
+    "name": "GUI 智能体",
+    "areas": [
+     "C5"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "上交两门课讲义扩展成的中文实践教程（PDF 课件+notebook），偏微调、安全、水印、智能体安全。",
+  "why_for_us_zh": "中文的越狱/智能体安全两章适合入门 C8；其余（微调、编辑、RLHF）与当前构建关系弱。",
+  "rubric_zh": null,
+  "evidence": "一手：克隆 Lordog/dive-into-llms（2025-10-10），读 README 目录与 chapter10 README。二手：bittide.aicompass.dev 缓存摘要。“视频”仅指 README 所述《大模型开发全流程》公益教程含视频，未逐一核实。",
+  "confidence": "高"
+ },
+ {
+  "id_hint": "colorado-csci7000-building-ai-agents",
+  "title": "CSCI 7000: Building AI Agents",
+  "title_zh": "科罗拉多大学博尔德 CSCI 7000：构建 AI 智能体（软件智能体方向）",
+  "provider": "University of Colorado Boulder (Danny Dig)",
+  "kind": "大学课程",
+  "url": "https://danny.cs.colorado.edu/courses/csci7000-009_F26/index.html",
+  "alt_urls": [
+   "https://danny.cs.colorado.edu/courses/csci7000-005_Sp26/index.html"
+  ],
+  "edition": "Fall 2026（另有 Spring 2026 一期）",
+  "published": "2026-08",
+  "cost": "免费",
+  "format": [
+   "讲义"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C5",
+   "C6",
+   "C15"
+  ],
+  "units": [
+   {
+    "name": "阅读软件智能体前沿论文 + 设计/实现/评估一个智能体系统的项目",
+    "areas": [
+     "C5",
+     "C6",
+     "C15"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "软件工程研究者 Danny Dig 开的研究生课，读软件智能体论文并动手设计、实现、评估一个智能体系统。",
+  "why_for_us_zh": "可作为“软件工程×智能体”论文阅读清单来源；公开程度和作业细节未核实，优先级低于 CS146S/CS329Z。",
+  "rubric_zh": "未核实",
+  "evidence": "二手：两次搜索摘要（Zoom 授课、周一周三、两大目标、先修 CSCI 5828）。页面未直读。",
+  "confidence": "中"
+ },
+ {
+  "id_hint": "buffalo-cse410-agentic-engineering",
+  "title": "CSE 410/510: Introduction to Agentic Engineering",
+  "title_zh": "布法罗大学 CSE 410/510：智能体工程导论",
+  "provider": "University at Buffalo (Joaquin Carbonara, David Doermann)",
+  "kind": "大学课程",
+  "url": "https://cse.buffalo.edu/courses/cse410/2026_fall/cse410ae/",
+  "alt_urls": [
+   "https://engineering.buffalo.edu/computer-science-engineering/undergraduate/courses/special-topics.html"
+  ],
+  "edition": "Fall 2026（2026-08-24 至 12-07）",
+  "published": "2026-08",
+  "cost": "免费",
+  "format": [
+   "讲义"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C5",
+   "C15"
+  ],
+  "units": [
+   {
+    "name": "每周一次 Lecture / Lab / Project Studio 合体课",
+    "areas": [
+     "C5",
+     "C15"
+    ],
+    "rubric": null
+   }
+  ],
+  "summary_zh": "本科/硕士合开的智能体工程入门课，讲授+实验+项目工作室形式。",
+  "why_for_us_zh": "可能有逐周 lab，但站点无法访问，细节未核实；仅作候补。",
+  "rubric_zh": "未核实",
+  "evidence": "二手：搜索摘要（课程页时间地点、讲师、院系 special topics 列表）。WebFetch 访问 cse.buffalo.edu 被拦（DNS 不可达），未直读。",
+  "confidence": "低"
+ },
+ {
+  "id_hint": "paderborn-agentic-software-engineering",
+  "title": "Agentic Software Engineering (ASE)",
+  "title_zh": "帕德博恩大学 智能体软件工程（硕士课）",
+  "provider": "Universität Paderborn (HNI, Software Engineering)",
+  "kind": "大学课程",
+  "url": "https://www.hni.uni-paderborn.de/en/sse/lehre/ase",
+  "alt_urls": [],
+  "edition": "WS 2026/27",
+  "published": "2026-10",
+  "cost": "免费",
+  "format": [
+   "讲义"
+  ],
+  "language": "en",
+  "effort_hours": null,
+  "areas": [
+   "C15",
+   "C5"
+  ],
+  "units": [],
+  "summary_zh": "德国帕德博恩大学 2026/27 冬季学期新开的“智能体软件工程”硕士讲座。",
+  "why_for_us_zh": "题目对口 C15，但公开材料与作业情况未知，仅作线索。",
+  "rubric_zh": "未核实",
+  "evidence": "二手：仅一条搜索结果标题“Master-Vorlesung: Agentic Software Engineering (ASE) WS 2026/27”，内容未核实。",
+  "confidence": "低"
+ }
+]

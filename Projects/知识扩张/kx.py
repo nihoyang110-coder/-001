@@ -3,6 +3,7 @@
 
 用法（在 Projects/知识扩张/ 下运行）：
   python3 kx.py merge raw/*.json     把新调研结果并入 catalog.json（自动去重，记录合并日志）
+  python3 kx.py relink               事实卡片有新增后，重算资源与卡片的关联
   python3 kx.py gap                  按“(目标级-当前级)×权重”列出能力差距
   python3 kx.py level C4 3 "依据"    学完达标后给能力升级（写进 capabilities.json 的 history）
   python3 kx.py build                生成 知识扩张.html（数据嵌入页面）
@@ -97,8 +98,12 @@ def cmd_merge(files):
     log = load(LOG, [])
     before = len(cat)
     added = merged = 0
+    done = {b for c in cat for b in c.get("seen_in", [])}
     for f in files:
         batch = pathlib.Path(f).stem
+        if batch in done:
+            print(f"跳过 {batch}：这批已经并入过")
+            continue
         for it in json.loads(pathlib.Path(f).read_text(encoding="utf-8")):
             it = dict(it, seen_in=[batch])
             ks = keys(it)
@@ -113,15 +118,33 @@ def cmd_merge(files):
                 it["first_seen"] = TODAY
                 cat.append(it)
                 added += 1
-    # 和事实卡片关联：卡片正文里出现该条目的链接（规范化后）就算关联
-    cards = {p.stem: p.read_text(encoding="utf-8").lower() for p in FACTS.glob("F-*.md")} if FACTS.exists() else {}
-    for c in cat:
-        needles = {canon(u) for u in [c.get("url"), *(c.get("alt_urls") or [])] if canon(u)}
-        needles = {n.split("/", 1)[1] if n.startswith("github.com/") else n for n in needles}
-        c["cards"] = sorted(cid for cid, txt in cards.items() if any(n and n in txt for n in needles))
+    link_cards(cat)
     save(CAT, cat)
     save(LOG, log)
     print(f"目录 {before} → {len(cat)} 条：新增 {added}，合并重复 {merged}（合并明细见 dedupe_log.json）")
+
+
+def link_cards(cat):
+    """和事实卡片关联：卡片正文里出现该条目的链接（规范化后）或专属域名就算关联。"""
+    cards = {p.stem: p.read_text(encoding="utf-8").lower() for p in FACTS.glob("F-*.md")} if FACTS.exists() else {}
+    broad = {"github.com", "youtube.com", "x.com", "medium.com", "google.com", "support.google.com", "anthropic.com",
+             "openai.com", "huggingface.co", "deeplearning.ai", "learn.deeplearning.ai", "web.stanford.edu", "maven.com",
+             "coursera.org", "poynter.org", "developer.apple.com", "storage.googleapis.com", "thepaper.cn"}
+    for c in cat:
+        needles = {canon(u) for u in [c.get("url"), *(c.get("alt_urls") or [])] if canon(u)}
+        needles = {n.split("/", 1)[1] if n.startswith("github.com/") else n for n in needles}
+        # 主链接是专属域名（如课程官网）时，卡片里出现主机名就算关联
+        main = (canon(c.get("url")) or "/").split("/")[0]
+        if main not in broad and "." in main:
+            needles.add(main)
+        c["cards"] = sorted(cid for cid, txt in cards.items() if any(n and n in txt for n in needles))
+
+
+def cmd_relink():
+    cat = load(CAT, [])
+    link_cards(cat)
+    save(CAT, cat)
+    print(f"已重算 {sum(1 for c in cat if c['cards'])} 条资源的卡片关联")
 
 
 def gaps():
@@ -149,7 +172,8 @@ def cmd_level(args):
 
 def cmd_build():
     data = {"generated": TODAY, "capabilities": load(CAP, {}), "gaps": gaps(),
-            "catalog": load(CAT, []), "plan": load(PLAN, {}), "dedupe": load(LOG, [])}
+            "catalog": load(CAT, []), "plan": load(PLAN, {}), "dedupe": load(LOG, []),
+            "topics": load(HERE / "topics.json", {"groups": []})}
     tpl = (HERE / "template.html").read_text(encoding="utf-8")
     blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     out = HERE / "知识扩张.html"
@@ -159,4 +183,4 @@ def cmd_build():
 
 if __name__ == "__main__":
     cmd, *rest = sys.argv[1:] or ["gap"]
-    {"merge": lambda: cmd_merge(rest), "gap": cmd_gap, "level": lambda: cmd_level(rest), "build": cmd_build}[cmd]()
+    {"merge": lambda: cmd_merge(rest), "relink": cmd_relink, "gap": cmd_gap, "level": lambda: cmd_level(rest), "build": cmd_build}[cmd]()
