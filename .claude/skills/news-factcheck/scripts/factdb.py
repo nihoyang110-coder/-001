@@ -155,9 +155,9 @@ def cmd_due(vault, days=7):
         if c.get("superseded_by") or c.get("value") == "无用":
             continue
         rb = c.get("review_by", "")
-        if rb and c.get("last_checked", "") >= rb:
-            rb = ""  # 到期后已回看过，不再重复列出
-        if rb and rb <= horizon:
+        # 到期后已回看并定论的卡不再重复列出；仍是“待验证”的继续列
+        reviewed = c.get("last_checked", "") >= rb and c.get("status") != "待验证"
+        if rb and rb <= horizon and not reviewed:
             n += 1
             print(f"{c['id']} | {'已到期' if rb <= today.isoformat() else '即将到期'} {rb} | {c.get('claim','')}")
         elif c.get("type") == "数字" and c.get("last_checked", "9999") < stale:
