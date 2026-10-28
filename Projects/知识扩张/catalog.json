@@ -131,7 +131,14 @@
   "cards": [
    "F-0250",
    "F-0251"
-  ]
+  ],
+  "currency": "部分过时",
+  "currency_note": "Fall 2026 是最新一期，条目已含新旧两版；F26 主体（抓包解剖 Claude Code、MCP+OAuth、写 Skill、智能体就绪评估）与当前做法一致。但 F26 第 4 周作业要求 AGENTS.md/CLAUDE.md 写“架构：关键目录、入口”，而 Anthropic 已明确说这条不再适用；条目里的 F25 单元已被 F26 取代。",
+  "outdated_parts": "① F26 Week 4 Part II 要求在 AGENTS.md/CLAUDE.md 里写“Architecture: key directories, entry points”，并按这一项计分（55 分档），与 Anthropic《Best practices》中“不必在 CLAUDE.md 描述架构和目录结构，Claude 会自己读仓库”相冲突（同一作业里“文件要短、每行都要针对这个仓库”的要求仍然对）；② 条目内 F25 Week 1/4/6/7 单元（fall2025 分支）已被 F26 替换，其中 F25 Week 4 的 CLAUDE.md/子智能体用法偏旧，只能当历史参考。",
+  "superseded_by": "F25 部分 → 本条 F26 版（https://github.com/mihail911/modern-software-dev-assignments 的 master 分支）；CLAUDE.md 写法 → Anthropic Best practices for Claude Code（https://code.claude.com/docs/en/best-practices）",
+  "currency_evidence": "一手：已有克隆 cs146s/master（最新提交 2026-10-26 “Week 5 Assignment”），直读 week4/assignment.md 第 49–56 行、week2/assignment.md；Anthropic 官方 best-practices 页（brief 已确认证据 1）",
+  "last_updated": "2026-10-26",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "mit-missing-semester-2026",
@@ -225,7 +232,14 @@
   "first_seen": "2026-10-28",
   "cards": [
    "F-0256"
-  ]
+  ],
+  "currency": "部分过时",
+  "currency_note": "IAP 2026 是最新一期（IAP 2027 还没开），Git、调试、代码质量等讲仍然适用；但 Agentic Coding 一讲有几处建议已被 Anthropic 判为不再适用。",
+  "outdated_parts": "Agentic Coding 讲（_2026/agentic-coding.md）：① “Context management”一节把有限的上下文窗口当成核心约束，教手动清空/回退/压缩（第 132–138 行）——现在多数模型有 1M 窗口，并且会自动压缩；② 讲子智能体时，主要理由是“不让顶层智能体的上下文膨胀”（第 163 行）——官方已说用子智能体保护上下文不再适用，子智能体现在只推荐用于并行、隔离噪声、独立评审；③ 说“Claude Code looks for CLAUDE.md”（第 152 行）——Claude Code v2.1.277 起，没有 CLAUDE.md 时会直接读 AGENTS.md。练习 4（自己写 AGENTS.md、skill、subagent）仍可以做。",
+  "superseded_by": "Anthropic Best practices for Claude Code（https://code.claude.com/docs/en/best-practices）；Claude Code memory 文档（https://code.claude.com/docs/en/memory）",
+  "currency_evidence": "一手：已有克隆 missing/r（最新提交 2026-10-08，浅克隆，看不到单文件改动历史），直读 _2026/agentic-coding.md；Anthropic 官方 best-practices 与 memory 页（brief 已确认证据 1、2）",
+  "last_updated": "2026-10-08",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "stanford-cs329z",
@@ -346,7 +360,14 @@
   ],
   "id": "K-003",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Fall 2026 首期，正在上课，仓库当天还在更新讲义；讲的是从零手写 harness 和评测，属于原理性内容。课表把 MCP 当作工具接口之一来讲，没有发现在讲 Roots/Sampling/Logging 等已弃用的功能。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 cs329z/r（最新提交 2026-10-28 “Post Lecture 11 slides”），grep 了 data/schedule.json",
+  "last_updated": "2026-10-28",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "cmu-11-768",
@@ -434,7 +455,14 @@
   ],
   "id": "K-004",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Fall 2026 首期，正在上课；作业（手写 harness 含技能加载与上下文压缩、评测设计、RL）都是动手实现机制，不是在给 Claude Code 的使用建议，没有和已确认证据冲突。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 cmu768/assignment-1（2026-09-11）、assignment-2（2026-09-20）、assignment-3（2026-10-25）",
+  "last_updated": "2026-10-25",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "cmu-mlip-17445",
@@ -522,7 +550,14 @@
   ],
   "id": "K-005",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Fall 2026 是最新一期，正在上课，仓库 10-27 还在加实验；I4 用的智能体模板依赖 mcp>=2.0、fastmcp>=4.0，是新一代 SDK，代码里没有用到 Roots/Sampling 等已弃用功能。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 mlip/f2026（2026-10-27）、mlip/agent（2026-10-20，读了 pyproject 依赖并 grep sampling/roots）、mlip/site（2026-07-08）",
+  "last_updated": "2026-10-27",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "berkeley-agentic-ai-f25",
@@ -592,7 +627,14 @@
   "first_seen": "2026-10-28",
   "cards": [
    "F-0255"
-  ]
+  ],
+  "currency": "适用",
+  "currency_note": "两次搜索都没找到 2026 秋季或 sp26 一期；RDI 教育页把 F25 写成“Fall 2025 – Spring 2026”，所以它仍是这个系列最新的一期。内容是嘉宾讲座加评测竞赛，没有找到被取代的具体章节。未发现过时证据（证据不足：讲座页面没打开，只看了搜索摘要）。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：搜索摘要 rdi.berkeley.edu/education（“Fall 2025 - Spring 2026”）、rdi.berkeley.edu/agentic-ai/f25；2026 年 RDI 办的是 Agentic AI Summit（8/1–2），不是课程",
+  "last_updated": "2025-12（据课程日期）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "berkeley-adv-llm-agents-sp25",
@@ -651,7 +693,14 @@
   "first_seen": "2026-10-28",
   "cards": [
    "F-0255"
-  ]
+  ],
+  "currency": "已淘汰",
+  "currency_note": "伯克利 RDI 智能体系列 Spring 2025 那期，已被同一系列更新的 Fall 2025 Agentic AI（K-006）接替；材料还在网上，但按“有新一期，旧一期淘汰”的规则处理。",
+  "outdated_parts": null,
+  "superseded_by": "K-006 CS294/194-196 Agentic AI (F25) https://rdi.berkeley.edu/agentic-ai/f25",
+  "currency_evidence": "二手：搜索摘要（RDI 教育页把 F25 列为当前一期；substack 介绍 S25 课程于 1–4 月进行）",
+  "last_updated": "2025-04",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "berkeley-llm-agents-f24",
@@ -712,7 +761,14 @@
   "first_seen": "2026-10-28",
   "cards": [
    "F-0255"
-  ]
+  ],
+  "currency": "已淘汰",
+  "currency_note": "伯克利 RDI 智能体系列最早的一期（Fall 2024），先后被 S25（K-007）和 F25（K-006）接替，讲座里的模型和框架停在 2024 年。",
+  "outdated_parts": null,
+  "superseded_by": "K-006 CS294/194-196 Agentic AI (F25) https://rdi.berkeley.edu/agentic-ai/f25",
+  "currency_evidence": "二手：搜索摘要（RDI 教育页、rdi.berkeley.edu/agentic-ai/f25）",
+  "last_updated": "2024-12",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "stanford-cs329a",
@@ -759,7 +815,14 @@
   ],
   "id": "K-009",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "没找到 Autumn 2026 一期，课程站仍标 Autumn 2025，录像 2026-08 才公开，所以它仍是最新一期；内容是测试时搜索、验证、自生成数据这类研究方法，没有和已确认证据冲突。未发现过时证据（证据不足：只看了搜索摘要）。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：搜索摘要 cs329a.stanford.edu（Autumn 2025）、bulletin.stanford.edu/courses/2263721、heyuan110.com（2026-08 公开录像）",
+  "last_updated": "2026-08（录像公开）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "stanford-cs336",
@@ -820,7 +883,14 @@
   ],
   "id": "K-010",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Spring 2026 是最新一期（下一期按惯例在 2027 春）；从零写语言模型是原理性内容，不受已确认证据影响。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 cs336site/r（最新提交 2026-06-01，index.html 写的是 Spring 2026）",
+  "last_updated": "2026-06-01",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "stanford-cs25",
@@ -860,7 +930,14 @@
   ],
   "id": "K-011",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "没找到 V7 或 2026 秋季一期，V6（Spring 2026）是最新的；这门课是嘉宾讲座，没有作业。注意：课程主页按惯例每期覆盖一次，搜索快照里主页还显示 V5，旧期移到 /past/ 下，所以学的时候要认准 V6 的录像。未发现过时证据（证据不足）。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：搜索摘要 pulse.bot（V6 讲座视频）、web.stanford.edu/class/cs25/past/cs25-v5、bulletin.stanford.edu/courses/2233491",
+  "last_updated": "2026-04（V6 讲座）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "sjtu-hands-on-ai-agents",
@@ -958,7 +1035,14 @@
   ],
   "id": "K-012",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "提示、评估、记忆/RAG、多智能体、攻防这几章仍可以学；但第 15 章讲的 MCP 停在 2025 年初的规范（Streamable HTTP 刚引入），早于 2026-07-28 新规范；仓库 2025-12 以后没再更新。",
+  "outdated_parts": "第 15 章“智能体协议”的 MCP 部分：架构和示例（FastMCP + streamable-http、langchain_mcp_adapters）都按 2025 年的有状态会话模型写，没有讲 2026-07-28 规范的无状态化、多轮请求和收紧后的 OAuth；15.3 节对 MCP 演进的描述只写到 2025 年初。另外，笔记本里明文写着一个疑似 API Key，照着做时不要照抄。",
+  "superseded_by": "MCP 规范 2026-07-28 版（https://modelcontextprotocol.io/specification）；Microsoft MCP for Beginners（2026-09-09 已按新规范更新，https://github.com/microsoft/mcp-for-beginners）",
+  "currency_evidence": "一手：已有克隆 sjtu_aa/r（最新提交 2025-12-08），直读 part_4/Chapter_15.ipynb；MCP 2026-07-28 规范（brief 已确认证据 3、4）",
+  "last_updated": "2025-12-08",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "sjtu-dive-into-llms",
@@ -1028,7 +1112,14 @@
   ],
   "id": "K-013",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "内容偏微调、越狱、水印、智能体安全测评，不涉及 MCP，也不涉及 Claude Code 的用法建议，没有和已确认证据冲突；仓库从 2025-10 起停更，个别实验用到的模型和库版本可能偏旧。未发现过时证据（证据不足）。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 sjtu_dil/r（最新提交 2025-10-10），grep 全仓库无 MCP 内容",
+  "last_updated": "2025-10-10",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "colorado-csci7000-building-ai-agents",
@@ -1074,7 +1165,14 @@
   ],
   "id": "K-014",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Fall 2026 是最新一期，条目里另列的 Spring 2026 是旧一期，引用时以 F26 页面为准；内容是读论文加做项目，具体材料没有直读。未发现过时证据（证据不足）。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：既有条目的搜索摘要，本次没有再搜索",
+  "last_updated": "2026-08",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "buffalo-cse410-agentic-engineering",
@@ -1118,7 +1216,14 @@
   ],
   "id": "K-015",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Fall 2026 是当前一期（2026-08-24 至 12-07），课程材料没有直读。未发现过时证据（证据不足）。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：既有条目的搜索摘要，本次没有再搜索（cse.buffalo.edu 打不开）",
+  "last_updated": "2026-08",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "paderborn-agentic-software-engineering",
@@ -1151,7 +1256,14 @@
   ],
   "id": "K-016",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "WS 2026/27 是当前一期，刚开课；只有一条搜索结果标题，内容完全没核实。未发现过时证据（证据不足）。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：既有条目的一条搜索结果标题，本次没有再搜索",
+  "last_updated": "2026-10",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-academy-claude-code-in-action",
@@ -2763,7 +2875,14 @@
   ],
   "id": "K-039",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "agentskills 仓库远端 HEAD 与本地克隆一致（末次提交 2026-08-09），specification.mdx 与 skill-creation 五篇文档仍是现行版本，未见新版规范。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：git ls-remote github.com/agentskills/agentskills 与克隆 69ef37e 一致；直读 docs/specification.mdx、docs/skill-creation/*",
+  "last_updated": "2026-08-09",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-skill-creator",
@@ -2821,7 +2940,14 @@
   ],
   "id": "K-040",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "anthropics/skills main 分支今天（2026-10-28）仍有提交，skill-creator 目录（SKILL.md、agents/grader|comparator|analyzer、eval-viewer）在当前版本中。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：克隆 github.com/anthropics/skills（末次提交 2026-10-28）直读 skills/skill-creator 目录",
+  "last_updated": "2026-10-28",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-equipping-agent-skills",
@@ -2871,7 +2997,14 @@
   ],
   "id": "K-041",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "原文 2025-10-16，2025-12-18 追加编者注说明已作为开放标准发布；文中只要求 name、description 两个必填字段，与 agentskills 现行规范一致。渐进式披露的设计没有被修正。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：WebFetch anthropic.com 原文页（Published Oct 16, 2025；Dec 18, 2025 编者注）",
+  "last_updated": "2025-12-18",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "agents-md",
@@ -2925,7 +3058,14 @@
   "cards": [
    "F-0254",
    "F-0256"
-  ]
+  ],
+  "currency": "适用",
+  "currency_note": "agents.md 仓库远端 HEAD 与克隆一致（2026-09-10），格式没有新版本；Claude Code 从 v2.1.277 起也直接读 AGENTS.md，采用面还在扩大。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：git ls-remote github.com/agentsmd/agents.md 与克隆 d001185 一致；一手：code.claude.com/docs/en/memory（brief 证据 2）",
+  "last_updated": "2026-09-10",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "mcp-spec-2026-07-28",
@@ -3001,7 +3141,14 @@
   ],
   "id": "K-043",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "2026-07-28 仍是最新正式版：截至 2026-10-28 的仓库里只有 2026-07-28 和 draft，draft 的 changelog 是空的。补充一点：同版本把动态客户端注册（Dynamic Client Registration）也标为弃用，迁移到 Client ID Metadata Documents。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：克隆 github.com/modelcontextprotocol/modelcontextprotocol（末次提交 2026-10-28），直读 docs/specification/ 目录、2026-07-28/deprecated.mdx、draft/changelog.mdx",
+  "last_updated": "2026-07-28",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-context-engineering",
@@ -3059,7 +3206,14 @@
   ],
   "id": "K-044",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "原文发表于 2025-09-29，没有更新注。核心方法仍然成立：挑选高信号 token、即时检索、压缩、结构化笔记，而且官方现在仍说上下文聚焦答案更好、也更省。但文中把上下文当成有限预算，要求积极管理，并把子智能体当作绕过上下文限制的手段，这两条已被官方列为不再适用。",
+  "outdated_parts": "①把上下文窗口当主要约束、积极管理的整体框架（原文写“Context … must be treated as a finite resource”）；②长程任务三法中的“子智能体架构”，原文的理由是“another way around context limitations”。两者都已被 Claude Code 最佳实践取代：现在多数模型有 1M 窗口并自动压缩，子智能体只用于并行、隔离噪声和独立评审。",
+  "superseded_by": "Best practices for Claude Code（K-061）https://code.claude.com/docs/en/best-practices 的『What you can stop doing』",
+  "currency_evidence": "一手：WebFetch anthropic.com 原文（Published Sep 29, 2025，含上述原句）；一手：code.claude.com/docs/en/best-practices『What you can stop doing』表（2026-10-28 读取）",
+  "last_updated": "2025-09-29",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-writing-tools",
@@ -3108,7 +3262,14 @@
   ],
   "id": "K-045",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "原文发表于 2025-09-11，没有更新注。文中没有用到已弃用的 MCP 功能，只引用了 tool annotations，而 2026-07-28 规范仍保留 annotations。用评测驱动来改进工具的方法没有被修正。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：WebFetch anthropic.com 原文（Published Sep 11, 2025）；一手：MCP 克隆 2026-07-28/server/tools.mdx 仍含 annotations",
+  "last_updated": "2025-09-11",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-code-execution-mcp",
@@ -3164,7 +3325,14 @@
   ],
   "id": "K-046",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "原文发表于 2025-11-04（条目写的 2025-11 正确），没有更新注，98.7% 的原句已核实。文中没有依赖 Roots、Sampling、Logging 或会话机制，所以不受 MCP 2026-07-28 无状态化影响。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：WebFetch anthropic.com 原文（Published Nov 4, 2025）",
+  "last_updated": "2025-11-04",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-multi-agent-research",
@@ -3217,7 +3385,14 @@
   ],
   "id": "K-047",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "【对立观点之一，单独判断】编排者加并行子智能体做广度搜索，这一架构仍然成立，官方现在也说子智能体适合并行工作。但原文论证时有两条理由已被官方否定：一是子智能体“各有上下文窗口、起压缩作用”，二是靠多智能体得到更好的答案。实验数据也来自 Opus 4、Sonnet 4 一代模型。",
+  "outdated_parts": "①用子智能体分担或压缩上下文的理由（原文：“Subagents facilitate compression … with their own context windows”），以及“超过 200,000 token 会被截断，所以主智能体要先存计划”的前提，已被 1M 窗口加自动压缩取代；②多智能体比单智能体 Opus 4 好 90.2% 的结论不能泛化成“委派就能得到更好的答案”。官方最佳实践写明“Handing the same task to a subagent doesn't make the answer any better”，只有独立评审才有帮助。",
+  "superseded_by": "Best practices for Claude Code（K-061）https://code.claude.com/docs/en/best-practices 的『What you can stop doing』与『Know what subagents cost』",
+  "currency_evidence": "一手：WebFetch anthropic.com 原文（Published Jun 13, 2025，无更新注，含 90.2%、200,000 token 原句）；一手：code.claude.com/docs/en/best-practices『What you can stop doing』表（2026-10-28 读取）",
+  "last_updated": "2025-06-13",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "cognition-dont-build-multi-agents",
@@ -3267,7 +3442,14 @@
   ],
   "id": "K-048",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "【对立观点之二，单独判断】作者本人在 2026-04-22 的续篇里修正了 2025 原文：从“不要做多智能体、默认单线程”收窄为“写操作单线程，其他智能体只贡献推理或评审”（例如只看 diff 的干净上下文代码评审）。续篇立场与 Claude Code 现行建议一致：并行、独立评审有价值，写操作的冲突风险仍在。条目已经包含续篇，按续篇读即可。",
+  "outdated_parts": "2025-06-12 原文“Don't Build Multi-Agents”的全面反对结论，以及“默认用单线程长上下文智能体”的建议，已被作者 2026-04-22 的续篇“Multi-Agents: What's Actually Working”修正。原文“共享完整上下文、行动隐含决策”的原则仍然有效。",
+  "superseded_by": "同条目内续篇：Cognition《Multi-Agents: What's Actually Working》（2026-04-22，Walden Yan，发在 X / cognition.ai/blog）",
+  "currency_evidence": "二手：WebSearch 摘要（latent.space wiki、traeai、pulseaugur 等）一致称 2026-04-22 续篇把立场改为单写多读；原页面未打开，置信度中",
+  "last_updated": "2026-04-22",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-long-running-harness",
@@ -3322,7 +3504,14 @@
   ],
   "id": "K-049",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "后篇（2026-03-24）原文写明，换用新模型后去掉了前篇的部分机制：Opus 4.5 已基本不再出现“上下文焦虑”，因此完全取消了上下文重置；换到 Opus 4.6 后又整体去掉了 sprint 分解；独立评估者保留，但只在任务超出模型单独可靠能力时才值得用。进度文件、功能清单、git 提交、外部评估者这些做法仍然有效。",
+  "outdated_parts": "①前篇（2025-11-26）以“每个会话从全新上下文窗口开始、靠交接续上”为核心，并认为压缩不足以传递指令。后篇已取消上下文重置，Claude Code 最佳实践也说现在多数模型有 1M 窗口并自动压缩。②后篇前半部分的 sprint 分解，在 Opus 4.6 下已被作者本人删除。③evaluator 每轮都跑改成了只在结束时评一次，而且只在任务超出模型能力时才用。",
+  "superseded_by": "同条目后篇的 Opus 4.5/4.6 更新段落（https://www.anthropic.com/engineering/harness-design-long-running-apps）；Best practices for Claude Code（K-061）",
+  "currency_evidence": "一手：WebFetch anthropic.com 后篇（Published Mar 24, 2026，引用“drop context resets from this harness entirely”“removing the sprint construct entirely”）；一手：WebFetch 前篇（Published Nov 26, 2025）",
+  "last_updated": "2026-03-24",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "anthropic-demystifying-evals",
@@ -3382,7 +3571,14 @@
   ],
   "id": "K-050",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "原文发表于 2026-01-09，没有更新注；task/trial/grader 术语、三类评分方式、pass@k 与 pass^k 仍是现行做法。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：WebFetch anthropic.com 原文（Published Jan 9, 2026）",
+  "last_updated": "2026-01-09",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "hamel-evals-faq",
@@ -3453,7 +3649,14 @@
   ],
   "id": "K-051",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "PDF 版 2026-09-18，是近期还在更新的资源，未发现被修正的建议。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：沿用条目原有证据（hamel.dev 搜索摘要），本轮未另查",
+  "last_updated": "2026-09-18",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "chroma-context-rot",
@@ -3510,7 +3713,14 @@
   ],
   "id": "K-052",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "报告的结论是上下文越长、越杂，表现越不稳定，这与官方现行说法“上下文聚焦答案更好”一致，所以没有过时。要注意的是，测的是 2025 年中的 18 个模型，具体数值不代表当前 1M 窗口的模型。没有发现 Chroma 发布新版报告。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：code.claude.com/docs/en/best-practices（“a focused context gets you better answers”）；新版报告未查（证据不足）",
+  "last_updated": "2025-07-14",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "karpathy-context-engineering",
@@ -3559,7 +3769,14 @@
   ],
   "id": "K-053",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "“上下文工程”的定义和“上下文过多过少都有害”的判断仍是业界通用说法，没有被修正。这是概念性的帖子和演讲，不涉及会过期的具体做法。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：沿用条目原有证据；本轮未另查，未发现过时证据",
+  "last_updated": "2025-06",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "willison-lethal-trifecta",
@@ -3614,7 +3831,14 @@
   ],
   "id": "K-054",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "三要素风险模型仍是提示注入防护的基础框架，Meta Rule of Two（K-055）在它基础上推广，而不是取代它；标签页还在追加案例。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：沿用条目原有证据（simonwillison.net）；本轮未另查",
+  "last_updated": "2025-06-16",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "meta-agents-rule-of-two",
@@ -3662,7 +3886,14 @@
   ],
   "id": "K-055",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "没有发现 Meta 后来修订这条规则。它本身就承认需要纵深防御，与 OWASP 2026 智能体 Top 10 不冲突。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：沿用条目原有证据（ai.meta.com）；本轮未另查，未发现过时证据（证据不足）",
+  "last_updated": "2025-10-31",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "owasp-agentic-top10-2026",
@@ -3708,7 +3939,14 @@
   ],
   "id": "K-056",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "搜索没有发现新一版智能体 Top 10，2025-12-09 发布的 2026 版仍是现行版。OWASP GenAI 在 2026-09 另外发布了 Agent Control Standard、红队手册 v1.0 等配套资源，可以作为补充，但不是取代。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手/二手：WebSearch 结果中 genai.owasp.org 资源页（2025-12-09）及 2026-09-01 配套资源列表；未打开页面",
+  "last_updated": "2025-12-09",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "openai-practical-guide-agents",
@@ -3764,7 +4002,14 @@
   ],
   "id": "K-057",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "“先单智能体、必要时再拆”、模型/工具/指令三要素、分层护栏，这些原则仍然成立，也没有发现新版指南。文中示例用的 Agents SDK 仍是 OpenAI 推荐路线，没有依赖即将关停的 AgentKit Agent Builder（2026-11-30 下线）。但 2026 年新增的沙箱执行、skills、AGENTS.md 等能力，指南没有覆盖。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch（openai.com/blog/introducing-agentkit 摘要称 Agent Builder 与 Evals 2026-11-30 下线；第三方称 Agents SDK 2026-04 更新），未发现新版指南",
+  "last_updated": "2025-04-17",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "openai-harness-engineering",
@@ -3820,7 +4065,14 @@
   ],
   "id": "K-058",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "“AGENTS.md 短小、作为目录”的建议与 Claude Code 现行建议一致（200 行以内、只写模型推断不出的内容）。2026-02 发布后未见作者修正。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：code.claude.com/docs/en/best-practices；原文沿用条目证据，本轮未另查",
+  "last_updated": "2026-02-11",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "factory-agent-readiness",
@@ -3884,7 +4136,14 @@
   ],
   "id": "K-059",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "未发现过时证据（证据不足）：本轮没有复查 Factory 是否调整了支柱数或等级。条目原本就记了支柱数 8 还是 9 有出入。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：沿用条目原有证据；本轮未另查",
+  "last_updated": "2026-01-20",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "humanlayer-12-factor-agents",
@@ -3962,7 +4221,14 @@
   ],
   "id": "K-060",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "仓库停更于 2025-09-21（远端 HEAD 与克隆一致），但原则仍然适用于自建智能体：拥有控制流、上下文和状态，小而专注。注意 Factor 3“拥有你的上下文窗口”是在讲如何组织上下文内容，不能当作“上下文窗口是主要约束”来读。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：git ls-remote github.com/humanlayer/12-factor-agents 与克隆 d20c728 一致（2025-09-21）",
+  "last_updated": "2025-09-21",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "claude-code-best-practices",
@@ -4026,7 +4292,14 @@
   ],
   "id": "K-061",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "这是官方持续更新的现行页面，本身就是判断其他条目是否过时的依据，2026-10-28 已读取。单元里的“单行强调”要按现行说法理解：反复强调没用，必须遵守的规则改用 hook，文件太长就删减。页面还新增了 /doctor prompt-audit，可以找出为旧模型写的指令。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：WebFetch code.claude.com/docs/en/best-practices（2026-10-28 读取，含『What you can stop doing』表、200 行建议、/doctor 与 /doctor prompt-audit）",
+  "last_updated": "2026-10",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "zep-graphiti-temporal-kg",
@@ -4081,7 +4354,14 @@
   ],
   "id": "K-062",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "graphiti-core 2026-10-20 仍在发版，双时态、旧事实失效而不删除的设计仍是时序记忆的主流做法。没有看到论文有新版本。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：沿用条目原有证据（PyPI graphiti-core 0.31.2，2026-10-20）",
+  "last_updated": "2026-10-20",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "letta-memory-context-repositories",
@@ -4137,7 +4417,14 @@
   ],
   "id": "K-063",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "未发现过时证据（证据不足）。Letta 官方 context-repositories 博文（搜索摘要）显示，记忆正转向 git 管理的上下文仓库，后台反思在 git worktree 中运行。只有一个二手来源说 2026-03 以后 MemFS 取代了数据库式记忆工具、sleep-time 改为客户端子智能体，所以没有据此降级。letta.com 在当前网络无法访问。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch 摘要（letta.com/blog/context-repositories、letta.com/blog/memory-blocks、latent.space wiki、yespress.io）；letta.com 原页无法打开（需在会话网络设置中放行）",
+  "last_updated": "2026-03",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "bellingcat-osint-toolkit",
@@ -4231,7 +4518,14 @@
   ],
   "id": "K-064",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Bellingcat 工具目录持续维护，InVID-WeVerify 条目 2026-05 复核过（插件 v0.90，新增 WACZ 存档和声音克隆检测），失效的功能（如受 X/Twitter API 影响的部分）条目里会注明。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch 摘要 bellingcat.gitbook.io/toolkit/more/all-tools/invid（last checked May 2026）",
+  "last_updated": "2026-05",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "gni-verification-course",
@@ -4278,7 +4572,14 @@
   ],
   "id": "K-065",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "GNI 核查模块是早年的常驻课程，反向搜图部分按旧版 Google 以图搜图讲。现在入口已改成 Google Lens 加“关于这张图片”，而且整门课没讲 AI 生成图像的识别。",
+  "outdated_parts": "“反向图片搜索”一课的操作步骤和界面（旧版 Google Images 以图搜图）；缺少 AI 生成内容识别（如 SynthID、内容凭证）",
+  "superseded_by": "Google Lens /“关于这张图片”的现行用法；工具清单看 K-064，AI 识别看 K-069",
+  "currency_evidence": "二手：WebSearch 摘要（newsinitiative.withgoogle.com/resources/courses、ISOJ 2024 GNI 讲义 PDF 已把 Google Lens 列为核查工具）；课程 PDF 未直读，无法确认版本日期",
+  "last_updated": null,
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "ifcn-hands-on-fact-checking",
@@ -4333,7 +4634,14 @@
   ],
   "id": "K-066",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "这门 2018 年的 90 分钟课讲的是“能不能核查”“信源可靠性”“辟谣写作”这些原则，不依赖具体工具，现在仍免费。Poynter 另有一门更新的 Fact-checking Fundamentals with IFCN 可以作为补充。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch 摘要（poynter.org/courses/handson-factchecking 标 $0；poynter.org/courses/fact-checking-fundamentals-with-ifcn）",
+  "last_updated": "2018-04（首发）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "ifcn-code-of-principles",
@@ -4410,7 +4718,14 @@
   ],
   "id": "K-067",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "现行版本仍是 2020 年 3 月修订的五项承诺。IFCN 说过 2025–2026 年要全面复审（会考虑生成式 AI），但还没查到新版发布，值得关注。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch 摘要（poynter.org IFCN 2025 年度报告提到计划复审；poynter.org 2018/2020 修订说明）",
+  "last_updated": "2020-03（现行修订）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "ejc-verification-handbook-3",
@@ -4482,7 +4797,14 @@
   ],
   "id": "K-068",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "第 3 版出版于 2020 年，账号调查、信息操纵这些方法论仍然有用，但深度伪造一章写于扩散模型和视频生成大模型出现之前，部分平台工具也已关停或收费，目前没有查到第 4 版。",
+  "outdated_parts": "深度伪造章节（2020 年 GAN 时代的换脸识别，没覆盖 Sora 2、Veo 3 这类生成视频和图像，也没讲 C2PA、SynthID 这类溯源手段）；依赖 CrowdTangle（2024-08 关停）、免费 Twitter API/TweetDeck（已收费）的操作步骤",
+  "superseded_by": "AI 识别部分看 K-069（GIJN 2025-09 指南，2026-03 有更新）；工具部分看 K-064",
+  "currency_evidence": "二手：WebSearch 摘要（没找到 2025/2026 新版；ijnet/gijn 2020 发布说明）；CrowdTangle 关停为公开事实（模型知识，未单独检索）",
+  "last_updated": "2020-04",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "gijn-ai-content-detection-guide",
@@ -4547,7 +4869,14 @@
   ],
   "id": "K-069",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "书面指南发布于 2025-09，早于 Sora 2、Nano Banana Pro 等 2025 年底以后的生成模型。指南本身就说老的视觉破绽越来越不可靠，2026-03 的更新只以研讨会形式发布，没找到新的书面版。",
+  "outdated_parts": "“视觉破绽：解剖与物体错误、透视与阴影”作为主要检测手段的部分，对 2026 年主流图像和视频模型已经很少有效，应以来源溯源和内容凭证（C2PA、SynthID 检测）为主；书面版缺 2026-03 更新里的新工具",
+  "superseded_by": "GIJN 2026-03-26 研讨会更新版 https://gijn.org/resource/tech-focus-project-webinar-detecting-ai-generated-content-updated-techniques/",
+  "currency_evidence": "二手：WebSearch 摘要（gijn.org 研讨会回顾页说明为 2025-09 指南的更新版；没找到 2026 书面版）；生成模型的发布时间为模型知识",
+  "last_updated": "2026-03-26（研讨会更新）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "knight-center-verification-moocs",
@@ -4593,7 +4922,14 @@
   ],
   "id": "K-070",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "已淘汰",
+  "currency_note": "两门慕课分别是 2018 年（Silverman）和 2019 年（Wardle/First Draft）的期次，之后没再开课，First Draft 也已关闭。教的工具（以图搜图旧界面、CrowdTangle、免费 Twitter 接口）大多已经变了，也没讲 AI 生成内容。",
+  "outdated_parts": null,
+  "superseded_by": "Knight Center 2026 年新课“Combating Disinformation in the Age of AI”（2026-04-02 配套研讨会，knightcenter.utexas.edu）；方法和工具另见 K-064、K-069",
+  "currency_evidence": "二手：WebSearch 摘要（knightcenter.utexas.edu 2026 网络研讨会页、journalismcourses.org 旧课程页）",
+  "last_updated": "2019",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "westminster-thepaper-mingcha-study",
@@ -4640,7 +4976,14 @@
   ],
   "id": "K-071",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "2025 年的博士论文，研究澎湃明查的工作方式和透明度，属于案例研究，不存在被新技术取代的问题。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：沿用条目原有证据（westminsterresearch.westminster.ac.uk）；未发现过时证据",
+  "last_updated": "2025",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "cac-ai-content-labeling-measures",
@@ -4704,7 +5047,14 @@
   ],
   "id": "K-072",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "《标识办法》和 GB 45438-2025 从 2025-09-01 起施行至今，没查到 2026 年的修订或新的配套实施指南。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch 摘要（stdaily.com、news.cn、chinalawandpractice.com；2026-07 澎湃转载的仍是原文）",
+  "last_updated": "2025-09-01（施行）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "xhs-ai-content-governance-2026",
@@ -4760,7 +5110,14 @@
   ],
   "id": "K-073",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "2026-02、2026-04 两次公告仍是最新的可靠依据。中间还有 2026-03-10 封禁 AI 托管账号的公告，条目里没收，可以补充。7 月以后自媒体说的处罚新标准没有官方原文，没有采信。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch 摘要（thepaper.cn、stdaily.com 2026-04-27、aibase.com；sohu 自媒体文章未核实）",
+  "last_updated": "2026-04-27",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "youtube-altered-synthetic-disclosure",
@@ -4814,7 +5171,14 @@
   ],
   "id": "K-074",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "多家二手报道说 YouTube 在 2026-05 改版了 AI 标签：改名为 AI content labeling，平台检测到会自动加标，标签位置更显眼。但各家对标签位置的说法互相矛盾，需要重读帮助页确认。",
+  "outdated_parts": "“标签位置：简介区，敏感话题加视频内标签”这一单元，以及“主要靠创作者自行披露”的说法；2026-05 以后据报改为平台自动检测加标，长视频标签放到播放器下方，Shorts 用叠加层",
+  "superseded_by": "同一帮助页的 2026-05 后版本 https://support.google.com/youtube/answer/14328491（需重读）",
+  "currency_evidence": "二手：WebSearch 摘要（minimatters.com 2026-05、startupfortune.com 2026-06-18，两者说法有冲突）；YouTube 官方公告未直读，证据偏弱",
+  "last_updated": "2026-05（据二手报道）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "uwdata-visualization-curriculum",
@@ -4902,7 +5266,14 @@
   ],
   "id": "K-075",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "仓库仍在维护，已适配 Altair 6 和 marimo，编码通道、比例尺、多视图这些原理也不会过时。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 github.com/uwdata/visualization-curriculum，git log 最近提交 2026-05-20",
+  "last_updated": "2026-05-20",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "utexas-cs329e-dataviz",
@@ -4951,7 +5322,14 @@
   ],
   "id": "K-076",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "已淘汰",
+  "currency_note": "同一老师已经发布 Fall 2026 大纲，按“有新一期就用新一期”的规则，Spring 2026 版存档。课程内容（Python/JS 作业、Tufte 阅读）基本延续。",
+  "outdated_parts": null,
+  "superseded_by": "CS 329E Fall 2026（Mitra）https://www.cs.utexas.edu/~mitra/csFall2026/cs329/syllabus.html",
+  "currency_evidence": "二手：WebSearch 摘要（cs.utexas.edu/~mitra/csFall2026 大纲页）；curl 被代理拦，页面未直读",
+  "last_updated": "2026-08（Fall 2026 期）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "knight-center-cairo-dataviz-mooc",
@@ -4997,7 +5375,14 @@
   ],
   "id": "K-077",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "Cairo 2018 年那期新闻可视化慕课讲的是可视化叙事和真实呈现的原则，原则没变；之后没有新一期。用到的工具演示可能比较旧，但没查到具体证据。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：沿用条目原有证据（journalismcourses.org、latamjournalismreview.org）；未发现过时证据（证据不足）",
+  "last_updated": "2018",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "stanford-cs193p",
@@ -5041,7 +5426,14 @@
   ],
   "id": "K-078",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "Spring 2025 版录于 iOS 26/Xcode 26 之前，课程站自己也说明了这一点：代码基本兼容，但没有 Liquid Glass 和新工具链。没找到公开的 Spring 2026 版，SwiftUI 基础部分仍是首选免费课。",
+  "outdated_parts": "界面风格部分（没有 iOS 26 的 Liquid Glass 设计语言）；Xcode 部分（没有 Xcode 26 内置的 coding intelligence/LLM 辅助）；后来的 iOS 27/Xcode 27 新特性自然也没有",
+  "superseded_by": "新界面和新工具链看 K-079（Apple Develop in Swift，Xcode 26 版）和 WWDC25 相关讲座",
+  "currency_evidence": "二手：WebSearch 摘要（cs193p.stanford.edu 搜索摘要中的官方说明、9to5mac.com 2025-12-19）",
+  "last_updated": "2025-12（公开发布）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "apple-develop-in-swift",
@@ -5117,7 +5509,14 @@
   ],
   "id": "K-079",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "苹果官方教程已按 Xcode 26 更新（含 Meet Xcode、coding intelligence、Foundation Models、Image Playground）。现在 iOS 27 这一代已经发布，教程正文还写的是 Xcode 26，差一个版本，但对入门影响不大。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：curl developer.apple.com 教程 JSON（develop-in-swift.json、meet-xcode.json 中出现“Xcode 26”，2026-10-28 读取）",
+  "last_updated": "2025（Xcode 26 版，具体日期未知）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "apple-wwdc-speech-watch-audio",
@@ -5197,7 +5596,14 @@
   ],
   "id": "K-080",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "SpeechAnalyzer（WWDC25）仍是当前的端侧语音转文字 API，没找到 WWDC26 的替代讲座（开发者论坛说 WWDC26 没加说话人分离）。但手表那几讲是 watchOS 4–6 时代的，生命周期写法已经变了。",
+  "outdated_parts": "WWDC17-216、WWDC18-504 里基于 WatchKit App + WatchKit Extension 双目标、WKExtensionDelegate 的应用结构和生命周期代码，已被 SwiftUI App 生命周期、单目标手表 App（Xcode 14 起）和 WKApplicationDelegate 取代；后台录音约束这类原理可能仍然成立，但没核实",
+  "superseded_by": "SwiftUI App 生命周期 / WKApplicationDelegate 的现行文档（developer.apple.com/documentation/watchkit）",
+  "currency_evidence": "一手：curl developer.apple.com 读到 WWDC25-277、SpeechAnalyzer 页面；二手：developer.apple.com/forums/thread/829751（用户帖）；watchOS 生命周期的变化为模型知识，未单独检索",
+  "last_updated": "2025-06",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "blender-studio-fundamentals-scripting",
@@ -5254,7 +5660,14 @@
   ],
   "id": "K-081",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "Blender 已经出到 5.2 LTS（2026-07-14 发布），Fundamentals 停在 4.5 LTS，没找到 5.x 版。Scripting for Artists 是 2.8x 时代录的。基础建模和 bpy 入门思路仍然可用。",
+  "outdated_parts": "Fundamentals 中受 5.0 改版影响的界面和功能部分（相对 5.2 LTS 落后一个 LTS）；Scripting for Artists 的“From Script to Add-on”一节用的是旧的 bl_info 插件打包方式，4.2 起改为 Extensions 平台（blender_manifest.toml），5.0 的 bpy API 也有破坏性变更",
+  "superseded_by": "Blender 5.2 LTS 官方手册与 Extensions 文档（docs.blender.org/manual/en/latest/advanced/extensions/）；Blender Studio 暂无 5.x Fundamentals",
+  "currency_evidence": "二手：WebSearch 摘要（blender.org/releases/5-2、phoronix.com 2026-07-14；没搜到 Blender Studio 5.x 基础课）；Extensions 平台为模型知识",
+  "last_updated": "2025（4.5 LTS 版）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "cadquery-docs-examples",
@@ -5315,7 +5728,14 @@
   ],
   "id": "K-082",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "官方文档跟仓库一起更新，仓库仍很活跃。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 CadQuery/cadquery，git log 最近提交 2026-10-24",
+  "last_updated": "2026-10-24",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "build123d-tutorials-ttt",
@@ -5375,7 +5795,14 @@
   ],
   "id": "K-083",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "官方文档跟仓库一起更新，仓库当天还有提交。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 gumyr/build123d，git log 最近提交 2026-10-28",
+  "last_updated": "2026-10-28",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "hf-audio-course",
@@ -5456,7 +5883,14 @@
   ],
   "id": "K-084",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "部分过时",
+  "currency_note": "音频数据处理、CTC/Seq2Seq 原理、WER 评测这些单元仍然适用，但课程主体还是 2023 年写的，示例模型停在 Whisper large-v2、SpeechT5、Bark、MMS。仓库最近一次提交只是更新文档构建流程，课程内容没动。",
+  "outdated_parts": "Unit 5 预训练 ASR 模型（Whisper large-v2；现在开源准确率领先的是 Qwen3-ASR、Granite Speech、Cohere Transcribe，速度领先的是 Parakeet）；Unit 6 TTS 模型（SpeechT5/Bark/MMS-TTS，已被新一代 TTS 取代，如 NVIDIA MagpieTTS 等）；Unit 7 语音助手用的是级联管线，没讲全双工语音大模型",
+  "superseded_by": "模型选择参考 Open ASR Leaderboard（huggingface.co/spaces/hf-audio/open_asr_leaderboard）；流式 ASR/说话人分离实操看 K-086",
+  "currency_evidence": "一手：已有克隆 huggingface/audio-transformers-course，直读 chapter5/asr_models.mdx、chapter6/pre-trained_models.mdx；二手：WebSearch 摘要（Open ASR Leaderboard 2026 排名，pinggy.io 2026-10、benchmarklist.com）",
+  "last_updated": "2026-10-06（只改了构建流程；内容约为 2023）",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "stanford-cs224s",
@@ -5525,7 +5959,14 @@
   ],
   "id": "K-085",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "没查到 Spring 2026 期（课程站仍挂 Spring 2025），ASR/TTS/对话系统的原理课仍适用。2026 年是否开课证据不足。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "二手：WebSearch 摘要（web.stanford.edu/class/cs224s 仍为 Spring 2025）；未发现过时证据（证据不足）",
+  "last_updated": "2025-04",
+  "checked": "2026-10-28"
  },
  {
   "id_hint": "nvidia-nemo-speaker-asr-tutorials",
@@ -5599,6 +6040,13 @@
   ],
   "id": "K-086",
   "first_seen": "2026-10-28",
-  "cards": []
+  "cards": [],
+  "currency": "适用",
+  "currency_note": "教程都还在 main 分支、持续更新（含 Sortformer 流式说话人分离、多说话人流式 ASR）。仓库 2026 年已拆分改名为 NVIDIA-NeMo/Speech（NeMo Speech 3.0），旧链接会跳转。附带的 docs 链接是 24.12 版，建议换成最新文档。",
+  "outdated_parts": null,
+  "superseded_by": null,
+  "currency_evidence": "一手：已有克隆 NVIDIA/NeMo，README 与 tutorials/ 直读，git log 最近提交 2026-10-28",
+  "last_updated": "2026-10-28",
+  "checked": "2026-10-28"
  }
 ]
