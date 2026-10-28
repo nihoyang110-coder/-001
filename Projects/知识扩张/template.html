@@ -1,0 +1,288 @@
+<title>知识扩张地图</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 版式：一张“成绩单”——先看差距，再看学什么、怎么算学会，最后是资源目录。单栏为主，宽屏时目录变表格 */
+:root{
+  --bg:#EEF1F4; --paper:#FFFFFF; --ink:#16233A; --muted:#5B6678; --line:#D5DBE3;
+  --accent:#0E6E68; --accent-soft:#D3ECE9; --target:#B4580E; --target-soft:#F6E3D2;
+  --ok:#2F7D32; --warn:#A86A00; --bad:#B3261E;
+  --heat0:#F3F5F8; --heat1:#CDE7E4; --heat2:#8CCBC4; --heat3:#3E9C93; --heat4:#0E6E68;
+  --f-display:"Noto Serif SC","Songti SC","SimSun",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1520; --paper:#171F2C; --ink:#E5EAF1; --muted:#9AA5B5; --line:#2A3445;
+  --accent:#4FC7BA; --accent-soft:#163A3A; --target:#F0A35E; --target-soft:#3A2A1B;
+  --ok:#7BC47F; --warn:#E5B451; --bad:#F28B82;
+  --heat0:#1B2432; --heat1:#1C3B3C; --heat2:#21605C; --heat3:#2F8F86; --heat4:#4FC7BA; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1520; --paper:#171F2C; --ink:#E5EAF1; --muted:#9AA5B5; --line:#2A3445;
+  --accent:#4FC7BA; --accent-soft:#163A3A; --target:#F0A35E; --target-soft:#3A2A1B;
+  --ok:#7BC47F; --warn:#E5B451; --bad:#F28B82;
+  --heat0:#1B2432; --heat1:#1C3B3C; --heat2:#21605C; --heat3:#2F8F86; --heat4:#4FC7BA; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;gap:36px}
+h1,h2{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.25}
+h1{font-size:clamp(28px,6vw,40px);font-weight:900}
+h2{font-size:22px;font-weight:700}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.lede{color:var(--muted);max-width:62ch;margin:6px 0 0}
+section{display:grid;gap:14px;min-width:0}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+.note{font-size:13px;color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--target);outline-offset:2px}
+
+/* 摘要条 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--paper);padding:12px 14px;display:grid;gap:2px}
+.stat b{font-family:var(--f-mono);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+
+/* 差距图：每行一个能力，0–4 级刻度，圆点=现在，菱形=目标 */
+.gapbox{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 0}
+.grow{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr) 3.2em;gap:10px;align-items:center;padding:7px 14px;border:0;background:none;color:inherit;font:inherit;text-align:left;width:100%;cursor:pointer}
+.grow:hover,.grow[aria-pressed="true"]{background:var(--accent-soft)}
+.gname{font-size:14px;min-width:0}
+.gname .mono{color:var(--muted);font-size:12px;margin-right:6px}
+.track{position:relative;height:22px}
+.track .ticks{position:absolute;inset:10px 0 auto;height:2px;background:var(--line)}
+.track .tick{position:absolute;top:6px;width:1px;height:10px;background:var(--line)}
+.track .span{position:absolute;top:9px;height:4px;background:var(--target-soft);border-radius:2px}
+.track .now,.track .tgt{position:absolute;top:4px;width:14px;height:14px;margin-left:-7px}
+.track .now{border-radius:50%;background:var(--accent);border:2px solid var(--paper)}
+.track .tgt{background:var(--target);transform:rotate(45deg) scale(.8);border:2px solid var(--paper)}
+.gscore{font-family:var(--f-mono);font-size:13px;text-align:right;color:var(--muted)}
+.gscore.hi{color:var(--target);font-weight:600}
+.axis{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr) 3.2em;gap:10px;padding:0 14px 4px}
+.axis .lab{position:relative;height:16px;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.axis .lab span{position:absolute;transform:translateX(-50%)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+.legend .ln{border-radius:50%;background:var(--accent)} .legend .lt{background:var(--target);transform:rotate(45deg) scale(.85)}
+.gdetail{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--target);border-radius:8px;padding:10px 14px;font-size:14px}
+.gdetail p{margin:2px 0}
+
+/* 学习队列 */
+.queue{display:grid;gap:12px;counter-reset:q}
+.lesson{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:8px;min-width:0}
+.lesson-top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.lesson h3{margin:0;font-size:17px;font-weight:700;flex:1 1 16em;min-width:0}
+.order{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.area{border-color:transparent;background:var(--accent-soft);color:var(--accent)}
+.chip.s-todo{color:var(--muted)} .chip.s-doing{color:var(--warn);border-color:var(--warn)} .chip.s-done{color:var(--ok);border-color:var(--ok)}
+.lesson .meta{font-size:13px;color:var(--muted)}
+.lesson .why{margin:0;font-size:14px}
+.rubric{display:grid;gap:4px}
+.rrow{display:grid;grid-template-columns:3em minmax(0,1fr);gap:8px;font-size:13px;align-items:start}
+.rbar{height:6px;border-radius:3px;background:var(--accent);margin-top:8px}
+.rrow .pts{font-family:var(--f-mono);text-align:right;color:var(--accent);font-weight:600}
+.deliv{font-size:13px;padding:6px 10px;background:var(--bg);border-radius:6px}
+
+/* 热力图 */
+.heatwrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:10px}
+table.heat{border-collapse:collapse;font-size:13px;min-width:560px;width:100%}
+table.heat th,table.heat td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:center}
+table.heat th:first-child,table.heat td:first-child{text-align:left;white-space:nowrap}
+table.heat thead th{font-weight:500;color:var(--muted);font-size:12px}
+.hc{display:inline-block;min-width:2.2em;padding:2px 0;border-radius:4px;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* 目录 */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters input[type=search]{flex:1 1 220px;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font:inherit}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cat{display:grid;gap:10px}
+.item{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+.item-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.item h4{margin:0;font-size:15px;font-weight:700;flex:1 1 14em;min-width:0;overflow-wrap:anywhere}
+.item .sub{font-size:13px;color:var(--muted)}
+.item p{margin:0;font-size:14px}
+.item .for{color:var(--accent)}
+.item details{font-size:13px}
+.item summary{cursor:pointer;color:var(--muted)}
+.item ul{margin:4px 0 0;padding-left:1.2em}
+.conf-高{color:var(--ok)} .conf-中{color:var(--warn)} .conf-低{color:var(--bad)}
+.empty{padding:20px;text-align:center;color:var(--muted);background:var(--paper);border:1px dashed var(--line);border-radius:10px}
+.levels{display:grid;gap:4px;font-size:14px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.levels div{display:grid;grid-template-columns:2.2em 1fr;gap:8px}
+.dedupe{font-size:13px}
+.dedupe table{border-collapse:collapse;width:100%;min-width:520px}
+.dedupe td,.dedupe th{border-bottom:1px solid var(--line);padding:4px 6px;text-align:left;vertical-align:top}
+.scrollx{overflow-x:auto}
+@media (max-width:560px){
+  .grow,.axis{grid-template-columns:minmax(0,8.5em) minmax(0,1fr) 2.6em;gap:6px;padding-inline:10px}
+  .gname{font-size:13px}
+}
+@media (prefers-reduced-motion:no-preference){.grow{transition:background .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow" id="asof"></div>
+    <h1>知识扩张地图</h1>
+    <p class="lede">把公开课和新发布的方法去重归档，和我们自己的构建逐项对比，找出差距，再按课程原有的评分表定“学到什么程度算会”。</p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <section aria-labelledby="h-gap">
+    <div class="sec-head"><h2 id="h-gap">能力差距</h2><span class="note">按“(目标级 − 当前级) × 权重”排序，点一行看依据并筛选下方资源</span></div>
+    <div class="legend"><span><i class="ln"></i>现在</span><span><i class="lt"></i>目标</span><span>右侧数字＝差距分</span></div>
+    <div class="gapbox" id="gapchart"></div>
+    <div class="gdetail" id="gdetail" hidden></div>
+  </section>
+
+  <section aria-labelledby="h-q">
+    <div class="sec-head"><h2 id="h-q">学习队列</h2><span class="note" id="passrule"></span></div>
+    <div class="queue" id="queue"></div>
+  </section>
+
+  <section aria-labelledby="h-heat">
+    <div class="sec-head"><h2 id="h-heat">资源覆盖</h2><span class="note">每格是对口资源条数；颜色越深资源越多。差距大但资源少的方向，要靠自己摸索</span></div>
+    <div class="heatwrap" id="heat"></div>
+  </section>
+
+  <section aria-labelledby="h-cat">
+    <div class="sec-head"><h2 id="h-cat">资源目录</h2><span class="note" id="catcount"></span></div>
+    <div class="filters">
+      <input type="search" id="q" placeholder="搜索课程、机构、单元…" aria-label="搜索资源">
+      <div class="seg" id="kindseg" role="group" aria-label="按类型筛选"></div>
+      <div class="seg" id="optseg" role="group" aria-label="其他筛选"></div>
+    </div>
+    <div class="cat" id="cat"></div>
+  </section>
+
+  <section aria-labelledby="h-lv">
+    <h2 id="h-lv">评级标准</h2>
+    <div class="levels" id="levels"></div>
+  </section>
+
+  <section aria-labelledby="h-dd">
+    <details class="dedupe">
+      <summary><h2 id="h-dd" style="display:inline">去重记录</h2> <span class="note" id="ddcount"></span></summary>
+      <div class="scrollx" id="dd"></div>
+    </details>
+  </section>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const areas = D.capabilities.areas, areaName = Object.fromEntries(areas.map(a => [a.id, a.name]));
+const cat = D.catalog, items = (D.plan.items || []).slice().sort((a,b) => a.order - b.order);
+const state = {area:null, kind:"全部", free:false, rubric:false, q:""};
+
+$("#asof").textContent = "更新于 " + D.generated;
+const merged = D.dedupe.length, top = D.gaps.filter(g => g.score > 0);
+$("#stats").innerHTML = [
+  [cat.length, "条资源（已去重）"], [merged, "条重复已合并"],
+  [cat.filter(c => c.rubric_zh).length, "条带作业或评分表"],
+  [top.length, "个能力有差距"], [items.length, "个学习单元"],
+  [items.filter(i => i.status === "已达标").length, "个已达标"]
+].map(([n,l]) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+
+// 差距图
+const pct = l => (l / 4 * 100) + "%";
+$("#gapchart").innerHTML =
+  `<div class="axis"><div></div><div class="lab">${[0,1,2,3,4].map(l => `<span style="left:${pct(l)}">${l}</span>`).join("")}</div><div class="lab" style="text-align:right">分</div></div>` +
+  D.gaps.map(g => `<button class="grow" data-a="${g.id}" aria-pressed="false">
+    <span class="gname"><span class="mono">${g.id}</span>${esc(g.name)}</span>
+    <span class="track"><span class="ticks"></span>${[0,1,2,3,4].map(l => `<span class="tick" style="left:${pct(l)}"></span>`).join("")}
+      <span class="span" style="left:${pct(g.now)};width:${pct(Math.max(0,g.target-g.now))}"></span>
+      <span class="tgt" style="left:${pct(g.target)}" title="目标 ${g.target} 级"></span>
+      <span class="now" style="left:${pct(g.now)}" title="现在 ${g.now} 级"></span></span>
+    <span class="gscore ${g.score >= 4 ? "hi" : ""}">${g.score}</span></button>`).join("");
+document.querySelectorAll(".grow").forEach(b => b.addEventListener("click", () => {
+  state.area = state.area === b.dataset.a ? null : b.dataset.a;
+  document.querySelectorAll(".grow").forEach(x => x.setAttribute("aria-pressed", x.dataset.a === state.area));
+  const g = D.gaps.find(x => x.id === state.area), d = $("#gdetail");
+  d.hidden = !g;
+  if (g) d.innerHTML = `<p><b>${g.id} ${esc(g.name)}</b>：现在 ${g.now} 级 → 目标 ${g.target} 级（权重 ${g.weight}：${esc(D.capabilities.weights[g.weight])}）</p>
+    <p><b>依据</b>：${esc(g.evidence)}</p><p><b>短板</b>：${esc(g.gap)}</p>` +
+    (g.history?.length ? `<p><b>升级记录</b>：${g.history.map(h => `${h.date} ${h.from}→${h.to}（${esc(h.why)}）`).join("；")}</p>` : "");
+  renderCat();
+}));
+
+// 学习队列
+$("#passrule").textContent = D.plan.rule || "";
+const stCls = s => s === "已达标" ? "s-done" : s === "进行中" ? "s-doing" : "s-todo";
+const srcOf = id => cat.find(c => c.id === id);
+$("#queue").innerHTML = items.length ? items.map(i => {
+  const s = srcOf(i.source);
+  return `<article class="lesson">
+    <div class="lesson-top"><span class="order">#${i.order}</span><h3>${esc(i.title)}</h3>
+      <span class="chip ${stCls(i.status)}">${esc(i.status)}${i.score != null ? " · " + i.score + " 分" : ""}</span></div>
+    <div>${(i.areas||[]).map(a => `<span class="chip area">${a} ${esc(areaName[a]||"")}</span>`).join(" ")}
+      <span class="chip">${esc(i.effort||"")}</span></div>
+    <div class="meta">来源：${s ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title_zh || s.title)}</a>` : esc(i.source_text || "")}${i.unit ? " · " + esc(i.unit) : ""}</div>
+    <p class="why">${esc(i.why)}</p>
+    <div class="rubric" aria-label="评分表">${(i.rubric||[]).map(r => `<div class="rrow"><span class="pts">${r.points}</span>
+      <span><b>${esc(r.part)}</b>：${esc(r.criteria)}<span class="rbar" style="display:block;width:${r.points}%"></span></span></div>`).join("")}</div>
+    <div class="deliv"><b>交付物</b>：${esc(i.deliverable)}</div></article>`;
+}).join("") : `<div class="empty">学习单元还没排好</div>`;
+
+// 热力图：能力 × 资源类型
+const kinds = [...new Set(cat.map(c => c.kind))];
+const heatColor = n => n === 0 ? "var(--heat0)" : n <= 1 ? "var(--heat1)" : n <= 3 ? "var(--heat2)" : n <= 6 ? "var(--heat3)" : "var(--heat4)";
+const heatInk = n => n > 3 ? "var(--paper)" : "var(--ink)";
+$("#heat").innerHTML = `<table class="heat"><thead><tr><th>能力</th><th>差距分</th>${kinds.map(k => `<th>${esc(k)}</th>`).join("")}<th>合计</th></tr></thead><tbody>` +
+  D.gaps.map(g => {
+    const counts = kinds.map(k => cat.filter(c => c.kind === k && (c.areas||[]).includes(g.id)).length);
+    const tot = cat.filter(c => (c.areas||[]).includes(g.id)).length;
+    return `<tr><td>${g.id} ${esc(g.name)}</td><td class="mono">${g.score}</td>${counts.map(n => `<td><span class="hc" style="background:${heatColor(n)};color:${heatInk(n)}">${n}</span></td>`).join("")}<td class="mono">${tot}</td></tr>`;
+  }).join("") + `</tbody></table>`;
+
+// 目录
+const seg = (el, opts, key, multi) => {
+  el.innerHTML = opts.map(o => `<button data-v="${esc(o.v)}" aria-pressed="false">${esc(o.l)}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    if (multi) { state[b.dataset.v] = !state[b.dataset.v]; b.setAttribute("aria-pressed", state[b.dataset.v]); }
+    else { state[key] = b.dataset.v; el.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); }
+    renderCat();
+  }));
+  if (!multi) el.querySelector("button").setAttribute("aria-pressed", "true");
+};
+seg($("#kindseg"), [{v:"全部",l:"全部"}, ...kinds.map(k => ({v:k,l:k}))], "kind");
+seg($("#optseg"), [{v:"free",l:"免费"}, {v:"rubric",l:"有评分表"}], null, true);
+$("#q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); renderCat(); });
+const used = new Set(items.map(i => i.source));
+function renderCat(){
+  let list = cat.filter(c =>
+    (!state.area || (c.areas||[]).includes(state.area)) &&
+    (state.kind === "全部" || c.kind === state.kind) &&
+    (!state.free || c.cost === "免费") && (!state.rubric || c.rubric_zh) &&
+    (!state.q || JSON.stringify([c.title,c.title_zh,c.provider,c.summary_zh,c.units]).toLowerCase().includes(state.q)));
+  list.sort((a,b) => (used.has(b.id) - used.has(a.id)) || ((b.published||"") > (a.published||"") ? 1 : -1));
+  $("#catcount").textContent = `显示 ${list.length} / ${cat.length} 条` + (state.area ? `（只看 ${state.area} ${areaName[state.area]}）` : "");
+  $("#cat").innerHTML = list.length ? list.map(c => `<article class="item">
+    <div class="item-top"><span class="mono note">${c.id}</span><h4><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title_zh || c.title)}</a></h4>
+      ${used.has(c.id) ? `<span class="chip s-doing">在学习队列</span>` : ""}</div>
+    <div class="sub">${esc(c.provider)} · ${esc(c.kind)} · ${esc(c.edition || "")}${c.published ? " · " + esc(c.published) : ""} · ${esc(c.cost)} · <span class="conf-${esc(c.confidence)}">可信度${esc(c.confidence)}</span></div>
+    <p>${esc(c.summary_zh)}</p>
+    <p class="for">对我们：${esc(c.why_for_us_zh)}</p>
+    <div>${(c.areas||[]).map(a => `<span class="chip area">${a} ${esc(areaName[a]||"")}</span>`).join(" ")} ${(c.cards||[]).map(id => `<span class="chip">${id}</span>`).join(" ")}</div>
+    <details><summary>单元、评分与证据</summary>
+      ${c.rubric_zh ? `<p><b>评分</b>：${esc(c.rubric_zh)}</p>` : ""}
+      ${(c.units||[]).length ? `<ul>${c.units.map(u => `<li>${u.url ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(u.name)}</a>` : esc(u.name)}${(u.areas||[]).length ? " — " + u.areas.join("、") : ""}${u.rubric ? "（" + esc(u.rubric) + "）" : ""}</li>`).join("")}</ul>` : ""}
+      <p><b>证据</b>：${esc(c.evidence)}</p>
+      ${(c.alt_urls||[]).length ? `<p>其他链接：${c.alt_urls.map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,""))}</a>`).join("　")}</p>` : ""}
+    </details></article>`).join("") : `<div class="empty">没有符合条件的资源，换个筛选试试</div>`;
+}
+renderCat();
+
+$("#levels").innerHTML = Object.entries(D.capabilities.levels).map(([k,v]) => `<div><b class="mono">${k} 级</b><span>${esc(v)}</span></div>`).join("") +
+  `<div><b class="mono">权重</b><span>${Object.entries(D.capabilities.weights).map(([k,v]) => k + "＝" + esc(v)).join("；")}</span></div>`;
+$("#ddcount").textContent = `（${merged} 条）`;
+$("#dd").innerHTML = merged ? `<table><thead><tr><th>保留</th><th>并入的条目</th><th>来自</th><th>原因</th></tr></thead><tbody>${
+  D.dedupe.map(d => `<tr><td class="mono">${d.kept}</td><td>${esc(d.merged)}</td><td>${esc(d.from)}</td><td>${esc(d.why)}</td></tr>`).join("")}</tbody></table>` : "<p>没有重复</p>";
+</script>
