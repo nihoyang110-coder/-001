@@ -29,9 +29,9 @@
      "criteria": "新会话里用它跑两个真实任务（一次核查、一次回看），如实记录效果，再据此改进一处"
     }
    ],
-   "deliverable": "仓库根目录 CLAUDE.md + 作业/L01-试用记录.md",
-   "status": "未开始",
-   "score": null
+   "deliverable": "AGENTS.md + CLAUDE.md（仓库根目录）+ 作业/L01-CLAUDE.md与AGENTS.md.md",
+   "status": "待复核",
+   "score": 90
   },
   {
    "id": "L02",

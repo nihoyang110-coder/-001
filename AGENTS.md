@@ -11,7 +11,8 @@
   - `rebuild`：改完卡片必须运行（重建 `事实清单.md` 的静态表）
 - 网络体检：`bash .claude/skills/news-factcheck/scripts/check_network.sh`。核查开始前跑一次，打不开的站不要反复重试
 - 卡片出图：`node .claude/skills/news-factcheck/scripts/render_cards.cjs <cards.html> <输出目录>`
-- 知识扩张：`cd Projects/知识扩张 && python3 kx.py merge raw/<文件>.json | relink | gap | build`
+- 知识扩张：`cd Projects/知识扩张 && python3 kx.py <命令>`。只读：`gap`。会写文件：`merge raw/<文件>.json`、`relink`、`level`、`build`
+- factdb 里只读的命令：`search`、`next-id`、`due`；其余都会改文件
 - 暂无自动化测试。改了 `factdb.py` 后至少跑一遍 `search`、`next-id`、`rebuild` 确认不报错
 
 ## 事实库约定

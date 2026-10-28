@@ -231,7 +231,7 @@ document.querySelectorAll(".grow").forEach(b => b.addEventListener("click", () =
 
 // 学习队列
 $("#passrule").textContent = D.plan.rule || "";
-const stCls = s => s === "已达标" ? "s-done" : s === "进行中" ? "s-doing" : String(s).startsWith("受阻") ? "s-block" : "s-todo";
+const stCls = s => s === "已达标" ? "s-done" : (s === "进行中" || s === "待复核") ? "s-doing" : String(s).startsWith("受阻") ? "s-block" : "s-todo";
 const srcOf = id => cat.find(c => c.id === id);
 $("#queue").innerHTML = items.length ? items.map(i => {
   const s = srcOf(i.source);
