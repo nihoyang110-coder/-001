@@ -1,0 +1,312 @@
+{
+ "id": "T03",
+ "order": 4,
+ "title": "上下文工程：AI 每次到底看到了什么",
+ "areas": [
+  "C4",
+  "C9"
+ ],
+ "summary": "能列出一次会话里 AI 看到的全部内容，判断哪些该留、哪些该删",
+ "why": "核查质量和花费都取决于每次请求里装了什么：我们只知道一次每周回看约 0.32 美元，却不知道钱和注意力花在哪。懂了上下文，才能判断 Claude 的会话是否干净、该不该 /clear、规则该放哪。",
+ "plan_item": "L04",
+ "outdated": [
+  {
+   "claim": "上下文窗口是最主要的约束，要时刻盯着用量、手动精打细算地管理（MIT Missing Semester 2026《Agentic Coding》讲义仍把“有限窗口”当核心约束来教）",
+   "now": "现在多数模型有 100 万 token 窗口，快满时会自动压缩，很少会“装不下”。但要分开看：装得下不等于看得清、也不等于不花钱。不相关的任务之间仍然 /clear，原因是“更专注的上下文答案更好、花费更低”，而不是怕溢出。Missing Semester 里“清空、回退、压缩、技能按需加载”这些手法仍然对，只是动机要更新",
+   "evidence": "一手：Anthropic《Best practices for Claude Code》末尾“旧建议为何不再适用”表；code.claude.com/docs/en/context-window（2026-10-28 读取）；MIT missing.csail.mit.edu/2026/agentic-coding/（2026-01-21 讲义，部分过时）"
+  },
+  {
+   "claim": "用子智能体来保护主会话的上下文窗口；把任务交给子智能体，答案会更好",
+   "now": "子智能体适合三件事：并行干活、把大段嘈杂输出挡在主会话外、找一个没看过推理过程的独立评审。它不会让同一任务的答案更聪明，而且每个子智能体都要另外花 token，冷启动时还要重新收集上下文",
+   "evidence": "一手：Anthropic《Best practices for Claude Code》“Know what subagents cost”一节及“旧建议”表"
+  },
+  {
+   "claim": "“大海捞针”（needle-in-a-haystack）测试接近满分，说明长上下文没问题，资料尽管往里塞",
+   "now": "大海捞针多是字面匹配，太简单。Chroma 换成语义匹配、加入干扰句后，18 个模型在简单任务上也随输入变长而变得不稳定。要给 AI“最小的一组高信号内容”，而不是把能找到的都塞进去",
+   "evidence": "一手：Chroma《Context Rot》技术报告（2025-07，官方复现仓库 github.com/chroma-core/context-rot）；Anthropic《Effective context engineering for AI agents》（2025-09-29）"
+  },
+  {
+   "claim": "工具太多会把模型弄糊涂，要自己搭一个“工具检索”（把工具描述放进向量库，每次只挑不到 30 个）（微软 AI Agents for Beginners 第 12 课）",
+   "now": "“工具太多会干扰”这个道理仍然对；但在 Claude Code 里，支持的模型默认开启工具搜索：MCP 工具先只露出名字，用到时再加载完整定义，不用自己搭。我们会话里 GitHub、Google Drive 的几十个工具就是这样“延迟加载”的。自己还能做的是关掉用不到的 MCP 服务器",
+   "evidence": "一手：code.claude.com/docs/en/prompt-caching（“tool search defers MCP tools, the default on supported models”）；Best practices“turning off the ones you don't need”；微软课程 12-context-engineering/README.md（2026-10-27 版）"
+  }
+ ],
+ "material": [
+  {
+   "h": "1. 先弄懂一件事：AI 每一轮都从头读一遍",
+   "body": "**上下文**（context）就是模型这一次回答前能看到的全部文字。模型本身不记事：你每发一句话，Claude Code 都会把“系统提示 + 工具说明 + 项目说明 + 之前所有对话和工具结果 + 你的新话”整包重新发过去。\n\n这一整包分三层，按变动频率从低到高排：\n- **系统提示和工具定义**：Claude Code 自带的总规则，以及每个工具怎么用的说明书\n- **项目上下文**：CLAUDE.md、AGENTS.md、自动记忆，会话开始时读一次\n- **对话**：你的消息、Claude 的回答、每次搜索/读文件/跑命令的结果，每轮都在变长\n\n此外还有一种看不见的插话叫 `<system-reminder>`（系统提醒）：Claude Code 在对话中途插入的提示，比如“某文件被改了”“这些工具可以用了”。斯坦福 CS146S 2026 秋第 1 周就是用抓包工具把这些真实请求截下来逐段拆解，你会看到用户界面里根本不显示的大量内容。\n\n**上下文工程**（context engineering）就是管理这一整包：Anthropic 的定义是“策划并维护最优的一组 token”，好的上下文工程是“找到最小的一组高信号 token”。（token 是模型计数的单位，大约一个汉字一到两个 token。）"
+  },
+  {
+   "h": "2. 我们的一次核查会话里装了什么",
+   "body": "以一次“核查一条新闻”的会话为例，按进入的时间排：\n- **开机就在**：系统提示；工具定义（读写文件、Bash、搜索等）；CLAUDE.md + 它用 `@AGENTS.md` 导入的 AGENTS.md，共 44 行、约 4.3KB；所有技能的名字和简介（news-factcheck 的简介就有三百来字）；延迟工具只列名字（GitHub、Google Drive 等几十个）\n- **触发技能时**：news-factcheck 的 SKILL.md 正文（约 8.6KB）进入对话\n- **按需读取**：references/ 下 6 个参考文件共约 22KB，用到哪个读哪个\n- **干活过程中**：`check_network.sh` 的结果、每次搜索返回的摘要、打开的网页、`factdb.py search` 的输出、子智能体交回的总结——这部分通常最占地方，而且一旦进来就每轮重发\n- **长会话**：快满时自动压缩，把前面的对话换成一份结构化摘要\n\n我们仓库里已经有两个好做法：一是**用到才取**——`FactCheck/事实清单.md` 有 78KB，技能要求先跑 `factdb.py search 关键词` 只取相关卡片，而不是整本读进来，这正是 Anthropic 说的“只拿轻量的标识（路径、查询），运行时再加载”；二是先跑网络体检，“0/15 可直连”时直接按搜索摘要处理，不去反复撞打不开的网页，少了一堆失败结果进上下文。\n\n想看真实数字：会话里运行 `/context` 看各类占多少，运行 `/usage` 看缓存命中和各技能/子智能体的花费。"
+  },
+  {
+   "h": "3. 两件要分开的事：装得下 vs 看得清",
+   "body": "“上下文窗口是主要约束”这句话已经过时：多数模型现在有 100 万 token 窗口，快满时自动压缩，会话不会因为装满而中断。\n\n但另一件事仍然成立，叫**上下文腐烂**（context rot）：输入越长，模型对其中信息的把握越不稳。Chroma 2025 年 7 月的实验测了 18 个模型，任务故意设计得很简单（复述一串重复的词、找一句话），只改变输入长度，表现就随长度下降，而且下降得不均匀、难预测。他们还用 LongMemEval 对比了“只给相关片段（约几百 token）”和“给完整 11.3 万 token 聊天记录”两种情况：后者要先自己找出相关部分再推理，表现更差。和问题“长得像但不对”的干扰内容尤其伤害结果。\n\nAnthropic 的解释是模型有一份“注意力预算”，每多一个 token 都在分走一点。\n\n所以正确的说法是：**窗口大小不再卡脖子，但上下文越杂，答案越差、越贵**。这对核查特别要紧：一个会话里先查了 A 公司融资、再查 B 公司 ARR，A 的数字就成了 B 的“长得像的干扰项”。"
+  },
+  {
+   "h": "4. 花多少钱：提示缓存",
+   "body": "既然每轮都整包重发，为什么不贵得离谱？靠**提示缓存**（prompt caching）：服务器记住最近处理过的“开头部分”，下次请求开头一模一样时直接复用，按低价计费。\n- 按 Claude API 官方价目：读缓存一般是正常输入价的 0.1 倍（Opus 5.5、Sonnet 5.5 是 0.05 倍）；写缓存是 1.25 倍（5 分钟有效）或 2 倍（1 小时有效）\n- 订阅用户的主会话默认缓存 1 小时，用 API 密钥、子智能体默认 5 分钟\n- 匹配必须从头**一字不差**，中间任何一处变了，后面全部重算。所以 Claude Code 把最少变的放最前面\n\n**会让缓存失效的操作**：中途换模型、连接或移除 MCP 服务器（未开工具搜索时）、压缩对话、升级 Claude Code。\n**不会失效的**：改仓库文件、调用技能、/rewind 回退、开子智能体（子智能体自己另建缓存）。一个反直觉的点：会话中途改 CLAUDE.md 不会破坏缓存，但也**不会生效**，要等 /clear、/compact 或重启才读新版。\n\n我们的每周回看约 0.32 美元。按上面的机制推断，这笔钱主要花在每轮重发的固定前缀（多数按缓存价）和不断变长的搜索结果上——到底各占多少，是配套实践 L04 要用会话记录算出来的。"
+  },
+  {
+   "h": "5. 上下文出错的四种样子",
+   "body": "微软 AI Agents for Beginners 第 12 课把常见失败分成四类，放到我们的场景里：\n- **投毒**（poisoning）：错误信息进了上下文后被反复引用。例：搜索摘要把“估值”误写成“融资额”，写进卡片后，以后每次核查都从错数出发。对策：进长期记忆前先核实——我们用 `_staging/` 暂存、`import` 入库，来源分一手/二手/三手，只有摘要时降置信度\n- **分心**（distraction）：历史太长，模型盯着旧内容打转。对策：不相关的新闻之间 /clear；必要时 `/compact 保留 XX` 指定要保留什么\n- **混淆**（confusion）：无关的工具或资料太多，挑错工具。对策：关掉不用的 MCP；技能简介写清“什么时候用”\n- **冲突**（clash）：新旧说法同时在场。对策：新事实推翻旧卡时用 `supersede`，让旧卡明确标“已过时”，而不是两张卡都像现行结论\n\n这四类对应 Anthropic 说的策略：写到外面（记笔记、卡片）、按需选取、压缩、隔离（子智能体）。"
+  },
+  {
+   "h": "6. 压缩、/clear、子智能体：现在该怎么用",
+   "body": "**压缩**（compaction）后还剩什么：系统提示照旧；项目根目录的 CLAUDE.md 从磁盘重新读入；技能简介重建；已调用的技能正文重新放回，但每个技能最多 5,000 token、总共 25,000 token，超出的截掉后面；最近改过的文件最多重读 5 个。**只在聊天里说过的规则会被概括掉**。所以“保持关注”“只推这个分支”这类要长期生效的话，应写进 CLAUDE.md/AGENTS.md 或做成 hook，而不是只说一遍。我们的 SKILL.md 约 8.6KB，粗估接近 5,000 token 上限，最重要的步骤应放在文件前面。\n\n**/clear**：换到不相关的任务就清。它不花钱，下一个任务也不用每轮替上一个任务的历史买单。同一个错纠正两次还不对时，/clear 后把教训写进一条新提示，比第三次纠正更有效。\n\n**子智能体**：我们 CLAUDE.md 规定“多条新闻同时核查时用子智能体并行，各自只写 `_staging/<短名>/`，最后主会话统一 import”——这是正确用法：并行 + 隔离大量网页结果 + 只交回简短总结。不要为了“保护上下文”或“答案更好”而开子智能体。\n\n**注意导入不省地方**：CLAUDE.md 里的 `@AGENTS.md` 只是方便整理，被导入的文件照样每次全文加载。真正能省的是：只在部分场景用的规则放进技能或带 `paths:` 的规则文件；给人看的备注用 HTML 注释 `<!-- -->`（加载时会被去掉）。\n\n利益说明：本课多数一手资料来自 Anthropic（Claude 的开发商），撰写者也是 Claude；“上下文腐烂”用第三方 Chroma 的实验交叉印证。"
+  }
+ ],
+ "key_points": [
+  "模型不记事，每一轮都把系统提示、工具说明、项目说明和全部历史整包重发；看得见的聊天只是其中一部分",
+  "“窗口是主要约束”已过时（100 万窗口 + 自动压缩）；但“上下文越杂答案越差”（context rot）仍成立，二者要分开说",
+  "好的上下文 = 最小的一组高信号内容：用 factdb search 取相关卡片，而不是把 78KB 的事实清单整本读进来",
+  "提示缓存按“开头一字不差”匹配：读缓存很便宜，换模型、改 MCP、压缩会让缓存重建；中途改 CLAUDE.md 不坏缓存也不生效",
+  "不相关的任务之间 /clear：为了答案更好、更省钱，不是怕装不下",
+  "压缩后只在聊天里说过的规则可能丢失；长期规则写进 CLAUDE.md/AGENTS.md，必须遵守的做成 hook；技能要点放在 SKILL.md 前面",
+  "子智能体用于并行、隔离嘈杂输出、独立评审，不会让答案更聪明，而且另花 token",
+  "@导入不减少上下文；按场景加载的内容放技能或 paths 规则，用 /context 和 /usage 看真实占用"
+ ],
+ "sources": [
+  {
+   "title": "Effective context engineering for AI agents（Anthropic 工程博客）",
+   "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+   "note": "2025-09-29，一手；2026-10-28 读取原文：注意力预算、最小高信号 token、按需检索、压缩/笔记/子智能体"
+  },
+  {
+   "title": "Context Rot: How Increasing Input Tokens Impacts LLM Performance（Chroma）",
+   "url": "https://research.trychroma.com/context-rot",
+   "note": "2025-07，一手技术报告；本会话网络打不开该站，内容依据官方复现仓库 README 与搜索摘要（18 个模型这一数字来自搜索摘要）"
+  },
+  {
+   "title": "chroma-core/context-rot 复现仓库",
+   "url": "https://github.com/chroma-core/context-rot",
+   "note": "一手；三组实验说明：大海捞针扩展、LongMemEval（相关片段 vs 完整 11.3 万 token）、重复词"
+  },
+  {
+   "title": "Explore the context window（Claude Code 文档）",
+   "url": "https://code.claude.com/docs/en/context-window",
+   "note": "一手，2026-10-28 读取：开机加载什么、压缩后保留什么、/context"
+  },
+  {
+   "title": "How Claude Code uses prompt caching（Claude Code 文档）",
+   "url": "https://code.claude.com/docs/en/prompt-caching",
+   "note": "一手，2026-10-28 读取：缓存分层、失效操作、TTL、子智能体缓存"
+  },
+  {
+   "title": "Prompt caching 价格倍数（Claude API 文档）",
+   "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+   "note": "一手：写 1.25×/2×，读 0.1×（Opus 5.5、Sonnet 5.5 为 0.05×）"
+  },
+  {
+   "title": "Best practices for Claude Code",
+   "url": "https://code.claude.com/docs/en/best-practices",
+   "note": "一手，全文已存；“Keep cost and context down”与“旧建议为何不再适用”表"
+  },
+  {
+   "title": "How Claude remembers your project（记忆与 CLAUDE.md）",
+   "url": "https://code.claude.com/docs/en/memory",
+   "note": "一手：CLAUDE.md 目标 200 行内、@导入不省上下文、HTML 注释会被去掉"
+  },
+  {
+   "title": "AI Agents for Beginners 第 12 课：Context Engineering（微软）",
+   "url": "https://microsoft.github.io/ai-agents-for-beginners/12-context-engineering/",
+   "note": "二手教材，克隆版本 2026-10-27；四类上下文失败；“自建工具检索”部分在 Claude Code 中已由工具搜索替代"
+  },
+  {
+   "title": "CS146S 2026 秋 Week 1: Trace Dissection of a Real Claude Code Session",
+   "url": "https://github.com/mihail911/modern-software-dev-assignments/blob/master/week1/assignment.md",
+   "note": "一手课程作业（2026-10-26 版）：抓包看系统提示、工具、system-reminder；作业评分表 15/25/25/25/10 改编自此"
+  },
+  {
+   "title": "MIT Missing Semester 2026：Agentic Coding",
+   "url": "https://missing.csail.mit.edu/2026/agentic-coding/",
+   "note": "一手讲义（2026-01-21）；上下文管理手法仍对，但把有限窗口当核心约束，部分过时"
+  }
+ ],
+ "videos": [
+  {
+   "title": "Advanced Context Engineering for Agents",
+   "channel": "Y Combinator（YC Root Access）",
+   "url": "https://www.youtube.com/watch?v=rmvDxxNubIg",
+   "minutes": 15,
+   "lang": "英文",
+   "why": "HumanLayer 的 Dex Horthy 讲在大型代码库里如何靠“研究→计划→实现”分阶段、主动压缩成书面产物来保持上下文干净，和我们“先查重、再核查、最后 import”的流程很像",
+   "watch_for": "“有意压缩”（intentional compaction）：每个阶段结束把结论写成文件，下一阶段从干净会话开始；以及为什么上下文质量决定输出质量",
+   "caveat": "2025-08 的演讲，当时窗口普遍较小，“上下文用量保持在 40% 以下”这类具体阈值不是官方建议，不必照搬；1M 窗口下重点是“干净”而不是“省空间”",
+   "evidence": "WebSearch“Dex Horthy Advanced Context Engineering for Agents youtube”：结果摘要称 YC Root Access 上传、约 14 分 37 秒、2025-08-25，一篇 dev.to 文章链接到视频 ID rmvDxxNubIg；YouTube 本身未打开"
+  },
+  {
+   "title": "Missing Semester 2026 第 7 讲：Agentic Coding",
+   "channel": "MIT Missing Semester",
+   "url": "https://www.youtube.com/watch?v=sTdz6PZoAnw",
+   "minutes": null,
+   "lang": "英文",
+   "why": "MIT 讲师现场演示 /compact 后的完整摘要长什么样，并讲 AGENTS.md、技能、子智能体各自如何影响上下文",
+   "watch_for": "讲义“Context management”部分对应的演示：清空、回退、压缩、技能的按需加载",
+   "caveat": "把“有限的上下文窗口”当作核心约束、强调防止溢出，这部分已过时；“上下文变长会变差”“无关任务要清空”仍然对。讲子智能体时说它“更好地管理上下文”，现在官方更强调并行和隔离噪声",
+   "evidence": "视频 ID 取自课程官方仓库 _2026/agentic-coding.md 的 video.id 字段；WebSearch 结果确认 2026 讲座在 1/21 且录像发在 YouTube，但搜索结果里没有直接出现这个链接"
+  },
+  {
+   "title": "AI Agents for Beginners 第 12 课：Context Engineering",
+   "channel": "Microsoft Developer",
+   "url": "https://youtu.be/F5zqRV7gEag",
+   "minutes": null,
+   "lang": "英文",
+   "why": "短课把上下文分成指令、知识、工具、历史、偏好五类，并讲投毒、分心、混淆、冲突四种失败，适合对照我们的核查流程",
+   "watch_for": "四种上下文失败和各自对策",
+   "caveat": "“用向量库挑不到 30 个工具”是自建智能体的做法，Claude Code 已默认用工具搜索延迟加载；“窗口有限所以要压缩”的说法同样偏旧",
+   "evidence": "链接取自课程仓库 12-context-engineering/README.md 顶部的视频图链接（2026-10-27 版）；WebSearch 结果确认课程页面有视频，但没直接显示链接"
+  }
+ ],
+ "quiz": {
+  "mcq": [
+   {
+    "q": "关于 2026 年 Claude Code 的上下文窗口，哪种说法最准确？",
+    "options": [
+     "窗口是最主要的约束，必须时刻盯着用量，到一半就手动压缩",
+     "多数模型有 100 万窗口并会自动压缩，很少装不下；但无关任务之间仍值得 /clear，因为专注的上下文答案更好、更省钱",
+     "既然有 100 万窗口，就没有必要再 /clear，把所有新闻放在一个会话里查最省事",
+     "应该把大任务都交给子智能体，用来保护主会话的上下文窗口"
+    ],
+    "answer": 1,
+    "explain": "官方“旧建议”表：窗口不再是主要约束，但 /clear 仍值得，理由是质量和成本。A 是旧做法；C 忽略了 context rot 和重发成本；D 是已过时的子智能体用法。"
+   },
+   {
+    "q": "Chroma 的 Context Rot 实验最重要的结论是什么？",
+    "options": [
+     "只有输入超过窗口上限时，模型表现才会下降",
+     "只有小模型会受影响，前沿模型在长输入下表现稳定",
+     "即使任务很简单，只要输入变长，模型表现也会下降，而且下降得不均匀",
+     "大海捞针测试接近满分，证明长上下文已经没有问题"
+    ],
+    "answer": 2,
+    "explain": "实验故意用简单任务、只改输入长度，18 个模型都随长度变得不稳定；他们还指出大海捞针多为字面匹配，太容易，不能代表真实使用。"
+   },
+   {
+    "q": "一次长核查会话中途，下面哪个操作会让提示缓存从头重建、下一轮变慢变贵？",
+    "options": [
+     "调用 news-factcheck 技能",
+     "编辑仓库里的一张卡片文件",
+     "用 /model 切换到另一个模型",
+     "用 /rewind 回到前几轮"
+    ],
+    "answer": 2,
+    "explain": "每个模型有自己的缓存，换模型后整段历史都要按未缓存重读。技能和改文件都是在末尾追加内容，/rewind 回到的是已缓存的前缀，都不破坏缓存。"
+   },
+   {
+    "q": "核查前要查事实库里有没有相关卡片。`FactCheck/事实清单.md` 有 78KB，最好的做法是？",
+    "options": [
+     "每次会话开始先把事实清单整本读一遍，资料越全越好",
+     "运行 `factdb.py search 关键词`，只把相关卡片拿进上下文",
+     "在 CLAUDE.md 里用 `@FactCheck/事实清单.md` 导入，让它每次自动加载",
+     "派一个子智能体整本读完，再把全部内容原样交回主会话"
+    ],
+    "answer": 1,
+    "explain": "这是“用到才取”：只拿轻量的查询结果。A 和 C 让大量无关卡片每轮重发，还会成为干扰项（@导入照样全文加载）；D 交回原文等于没隔离。"
+   },
+   {
+    "q": "你在聊天里说过一次“这个会话里只推送到指定分支”，长会话自动压缩后 Claude 似乎忘了。最可靠的修法是？",
+    "options": [
+     "下次用全大写加 IMPORTANT 再说一遍",
+     "每隔几轮在聊天里重复一次",
+     "换成更大窗口的模型，就不会被压缩掉",
+     "写进 CLAUDE.md/AGENTS.md（压缩后会从磁盘重新读入），必须遵守的再做成 hook"
+    ],
+    "answer": 3,
+    "explain": "压缩后项目根目录的 CLAUDE.md 会重新注入，只在聊天里说的规则会被概括掉。全大写强调已不推荐；重复说只是增加历史；大窗口也会压缩。必须执行的规则用 hook 强制。"
+   },
+   {
+    "q": "搜索摘要把某公司“估值 20 亿”误写成“融资 20 亿”，这个错数被写进卡片，之后几次核查都以它为起点。这属于哪种上下文失败，正确对策是？",
+    "options": [
+     "分心；把会话压缩一下就好",
+     "投毒；进入长期记忆前先核实来源，发现错了就新建卡片并 supersede 旧卡",
+     "混淆；关掉一些 MCP 工具",
+     "冲突；把旧卡直接删掉，假装没发生过"
+    ],
+    "answer": 1,
+    "explain": "错误信息进入上下文（这里是长期记忆）后被反复引用就是投毒。对策是入库前核实，事后用 supersede 留下更正痕迹；我们的规则不允许改写或删除旧卡。"
+   }
+  ],
+  "short": [
+   {
+    "q": "用自己的话说清“上下文装得下”“答案好不好”“花多少钱”是三件不同的事，并结合我们的仓库说明：为什么核查完 A 公司融资、接着查 B 公司 ARR 之前，仍然值得 /clear？",
+    "rubric": [
+     {
+      "point": "指出窗口容量已不是主要问题（100 万窗口、自动压缩，不会因装满而中断）",
+      "pts": 2
+     },
+     {
+      "point": "说明 context rot：输入越长越杂，表现越差，相似但无关的内容（A 的数字）会成为干扰",
+      "pts": 3
+     },
+     {
+      "point": "说明成本：每轮整包重发，旧历史每轮都要付钱（即使多数按缓存价）",
+      "pts": 3
+     },
+     {
+      "point": "结合仓库具体说明（两条无关新闻、卡片编号、搜索结果等），并说清该存下来的结论已在卡片和笔记里，/clear 不丢东西",
+      "pts": 2
+     }
+    ],
+    "ref_answer": "装得下：现在多数模型有 100 万 token 窗口，快满会自动压缩，会话不会断，所以这不是 /clear 的理由。答案好不好：Chroma 实验显示输入越长，即使简单任务表现也会下降；A 公司的融资额、轮次和来源跟 B 公司的 ARR 长得很像，是典型干扰项，可能被错搬或混用。花多少钱：Claude Code 每一轮都把全部历史重发，A 的几十条搜索结果在查 B 的每一轮都要再付一次（多数按缓存价，但缓存过期后是全价）。A 的结论已经写进 F-xxxx 卡片和 Notes 笔记，需要时用 factdb search 取回即可，所以 /clear 既不丢信息，又让 B 的核查从干净的上下文开始。"
+   },
+   {
+    "q": "我们的 CLAUDE.md 第一行是 `@AGENTS.md`。有人建议：“把更多规则挪到被导入的文件里，就能省上下文。”这对吗？请说明在我们的会话里，哪些内容每次都在、哪些按需才加载，并提出一个真正能减少常驻内容的办法。",
+    "rubric": [
+     {
+      "point": "指出不对：@导入的文件会随 CLAUDE.md 一起全文加载，只方便整理，不省上下文",
+      "pts": 3
+     },
+     {
+      "point": "正确区分常驻：系统提示、工具定义、CLAUDE.md+AGENTS.md、技能名字和简介、延迟工具的名字",
+      "pts": 3
+     },
+     {
+      "point": "正确区分按需：SKILL.md 正文、references/ 文件、读到的文件和搜索结果、延迟工具的完整定义",
+      "pts": 2
+     },
+     {
+      "point": "给出有依据的减法：只在核查时用的规则移进技能；按路径生效的放 paths 规则；给人看的备注用 HTML 注释；关掉不用的 MCP",
+      "pts": 2
+     }
+    ],
+    "ref_answer": "不对。官方文档说导入的文件和导入它的 CLAUDE.md 一起加载，导入只帮忙整理，不减少上下文。我们每次会话都在的有：系统提示、工具定义、CLAUDE.md 加 AGENTS.md（44 行）、所有技能的名字和简介、延迟工具的名字列表。按需加载的有：触发核查时才读的 news-factcheck SKILL.md 正文、用到才读的 references（如 vault-format.md）、事实库搜索结果和网页、调用时才展开的 GitHub/Drive 工具定义。真正能减的办法：比如 AGENTS.md 里“卡片出图命令”只在发布时用，可以只留在技能里；知识扩张的规则可以放进只在 Projects/知识扩张/ 下生效的 paths 规则；给维护者看的说明用 `<!-- -->` 注释，加载时会被去掉。"
+   }
+  ]
+ },
+ "assignment": {
+  "title": "给一次核查会话记一本“上下文账”",
+  "task": "选一次最近真实做过的新闻核查会话（可以请 Claude 帮你在会话里运行 `/context`、`/usage`，或读那次的会话记录给你看摘要），用文字完成下面四件事：\n- **说清来源**：哪一天、核查的哪条新闻、信息是怎么拿到的（/context 的文字、/usage、会话记录），别人照着能复现\n- **常驻清单**：列出开机就在的内容（系统提示、工具定义、CLAUDE.md+AGENTS.md、技能简介、延迟工具名字、system-reminder），每一项写一句“它让 Claude 做对了什么、防止了什么错”\n- **按需清单和体量**：列出过程中进入的内容（技能正文、references、网络体检结果、搜索摘要、网页、factdb 输出、子智能体总结），尽量给数字（字节、行数或估算 token、次数），排出最占地方的前三名——要数字，不要“很多”\n- **行为分析**：回答 3 个问题，每条标注【观察到】或【推断】并写出依据：这次有没有压缩，压缩前后少了什么；缓存命中大致如何；有没有哪条只在聊天里说过的规则后来没被遵守\n- **精简办法**：提出 3 条有依据的精简办法，每条写依据（文档或你的数字）、预计省下什么、可能的副作用",
+  "deliverable": "一篇手机上能写完的文字报告（约 800–1500 字），含两张清单表（常驻、按需）、前三名排名、3 条带【观察到/推断】标签的行为分析、3 条精简办法",
+  "rubric": [
+   {
+    "part": "采集与复现",
+    "points": 15,
+    "criteria": "说明是哪次会话、信息怎么取得，步骤足够别人复现；引用会话内容时去掉密钥和私人信息（改编自 CS146S F26 第 1 周 Part I）"
+   },
+   {
+    "part": "常驻内容注解",
+    "points": 25,
+    "criteria": "常驻项列全，每项写清它带来的行为和防范的错误，而不是只抄名字；能指出 system-reminder 出现的位置和作用（改编自 Part II 系统提示注解）"
+   },
+   {
+    "part": "按需内容与体量",
+    "points": 25,
+    "criteria": "给出具体数字和前三名排名，区分常驻与按需、完整定义与只露名字的延迟工具（改编自 Part III“要数字不要形容词”）"
+   },
+   {
+    "part": "行为分析",
+    "points": 25,
+    "criteria": "三个问题都回答，每条都标【观察到】或【推断】并给依据；把推断写成观察的扣分（改编自 Part IV）"
+   },
+   {
+    "part": "精简办法",
+    "points": 10,
+    "criteria": "3 条办法具体、有依据、写了副作用，是论证过的立场而不是复述课文（改编自 Part V 反思）"
+   }
+  ],
+  "reference": "阅卷要点：①最占地方的通常是对话里的工具结果（搜索摘要、打开的网页、子智能体交回的内容），其次是系统提示+工具定义这类固定前缀；CLAUDE.md+AGENTS.md 只有约 4.3KB，不是大头；技能正文约 8.6KB 只在触发时进入。若有人整本读了 78KB 的事实清单，应被识别为大头并改用 factdb search。②常驻项应包括延迟工具“只列名字”，能说出完整定义是用到才加载的加分。③行为分析：压缩后项目根 CLAUDE.md 重新读入、只在聊天里的规则可能丢失；缓存命中可从 /usage 的“Prompt cache (main)”一行看到；没有数据时如实标【推断】。④合格的精简办法举例：无关新闻之间 /clear；查重只用 factdb search；网络体检后不重试打不开的站；多条新闻并行用子智能体并只要简短总结；关掉不用的 MCP；把只在发布时用的命令移出 AGENTS.md、放进技能；SKILL.md 重要步骤前置（压缩后每个技能只保留前 5,000 token）。不接受的：“用子智能体保护上下文”“用全大写强调”“把规则拆进 @导入文件来省空间”。",
+  "practice": "配套 L04「拆解一次会话的花费」（plan.json，约 1 天）：由 Claude 在仓库里写一个成本统计脚本，从会话记录读出每轮的 token、缓存命中和费用，算出系统提示、技能、工具定义、历史、网页结果各占多少，搜索/子智能体/抓取的次数和费用，以及压缩前后的变化，产出 `作业/L04-成本拆解.md` 和脚本。你的这份手写“上下文账”就是它的预测：做完 L04 后对照真实数字，看哪些估计对了。"
+ }
+}

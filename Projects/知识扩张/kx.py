@@ -13,7 +13,7 @@
 去重规则：同一主链接（规范化后）、同一 id_hint、同一 GitHub 仓库，
 或同一机构且标题相似度 ≥ 0.88，视为同一条；合并时取并集，保留置信度更高的那条的文字。
 """
-import datetime, difflib, json, pathlib, re, sys
+import datetime, difflib, json, pathlib, random, re, sys
 from urllib.parse import urlparse, parse_qs
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -223,8 +223,13 @@ def cmd_study():
         for k in ("id", "title", "material", "key_points", "quiz", "assignment", "sources"):
             assert k in l, f"{l.get('id')} 缺少 {k}"
         assert sum(r["points"] for r in l["assignment"]["rubric"]) == 100, f"{l['id']} 作业评分表不是 100 分"
-        for q in l["quiz"]["mcq"]:
+        for k, q in enumerate(l["quiz"]["mcq"]):
             assert 0 <= q["answer"] < len(q["options"]), f"{l['id']} 选择题答案越界：{q['q'][:20]}"
+            # 按题目固定打乱选项，避免正确答案总在同一位置（每次生成结果相同）
+            order = list(range(len(q["options"])))
+            random.Random(f"{l['id']}-{k}").shuffle(order)
+            q["options"] = [q["options"][i] for i in order]
+            q["answer"] = order.index(q["answer"])
     blob = json.dumps({"generated": TODAY, "lessons": ls}, ensure_ascii=False).replace("</", "<\\/")
     tpl = (HERE / "study_template.html").read_text(encoding="utf-8")
     (HERE / "学习室.html").write_text(tpl.replace("/*__DATA__*/null", blob), encoding="utf-8")

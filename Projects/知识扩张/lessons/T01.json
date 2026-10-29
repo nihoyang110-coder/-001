@@ -1,0 +1,287 @@
+{
+ "id": "T01",
+ "order": 2,
+ "title": "怎么写技能（Skill）并测试它",
+ "areas": [
+  "C2",
+  "C6"
+ ],
+ "summary": "能判断一个技能何时会被调用，并设计触发测试和断言评测来验证它",
+ "why": "news-factcheck 已经用了几十次，却从没系统测过它该不该触发、触发后做得对不对；描述写偏一点，就会该用时没用、不该用时乱用。",
+ "plan_item": "L02",
+ "outdated": [
+  {
+   "claim": "写技能就是把步骤写全，越详细越保险；顺手把背景知识也解释一遍",
+   "now": "只写 Claude 自己不知道的：项目约定、坑点清单、精确命令。写得太全反而会让模型去执行和当前任务无关的指令。逐条问自己“没有这句，它会做错吗”，不会做错就删掉",
+   "evidence": "一手：Anthropic《Best practices for Claude Code》提到“The CLAUDE.md rule applies to skills too: only write down what Claude can't find on its own”；agentskills.io/skill-creation/best-practices（Add what the agent lacks、Aim for moderate detail）；platform.claude.com Skill authoring best practices（Claude is already very smart）"
+  },
+  {
+   "claim": "要让 Claude 听话，就在技能里多写 ALWAYS、NEVER、MUST，用全大写强调",
+   "now": "写清原因，让模型理解为什么要这样做；需要靠判断的指令，写成适用于整个任务的说法。真正一次都不能漏的规则，交给 hook 强制执行（可以写进技能的 `hooks` frontmatter）",
+   "evidence": "一手：anthropics/skills 的 skill-creator SKILL.md（“写出全大写 ALWAYS/NEVER 是黄色警告”）；agentskills evaluating-skills（Explain the why）；code.claude.com/docs/en/skills 的“Claude stops following a skill”一节；Claude Code 最佳实践里“不要用 IMPORTANT/全大写”"
+  },
+  {
+   "claim": "Claude Code 只显示描述的前 250 字符，所以描述必须压到 250 字以内",
+   "now": "这个限制只在 2026-03 的 2.1.86 版存在过。2.1.105（2026-04-13）起，每条 description+when_to_use 的上限是 1,536 字符；开放标准的上限仍是 1024。要做的仍然是把关键用途放在最前面；技能很多时，可以用 `/skill-doctor`、`skillOverrides` 精简列表",
+   "evidence": "一手：Claude Code 更新日志 2.1.86、2.1.105；code.claude.com/docs/en/skills 的“Skill descriptions are cut short”一节（2026-10-28 读取）"
+  },
+  {
+   "claim": "自定义斜杠命令放 `.claude/commands/`，技能是另一回事；改了技能要重启会话才生效",
+   "now": "2026-01 起命令已经并入技能，`.claude/commands/x.md` 和 `.claude/skills/x/SKILL.md` 都会生成 `/x`。旧的命令文件仍然能用，新建的建议写成技能，因为技能能带资料和脚本。修改技能会自动热加载，新建顶层目录时运行 `/reload-skills`",
+   "evidence": "一手：Claude Code 更新日志 2.1.0（2026-01-07，自动热加载）、2.1.3（2026-01-09，Merged slash commands and skills）；code.claude.com/docs/en/skills"
+  },
+  {
+   "claim": "测技能就是自己发一两句话，看它触发了就算好了",
+   "now": "触发测试要有应触发和近似反例两类句子，每句多跑几次算触发率，按 60/40 分训练组和验证组；另外用带技能、不带技能的对照，加上断言 PASS/FAIL 和证据，来测输出质量",
+   "evidence": "一手：agentskills.io/skill-creation/optimizing-descriptions 与 evaluating-skills；code.claude.com/docs/en/skills 的 Test and evaluate a skill 一节（“Seeing a skill trigger tells you Claude found it, not that it did what you intended”）"
+  }
+ ],
+ "material": [
+  {
+   "h": "技能是怎么被“想起来”的：三层加载",
+   "body": "**技能（Skill）**就是一个文件夹，里面一份 `SKILL.md`（开头几行叫 frontmatter，写 `name` 和 `description`，下面是正文），再加可选的 `references/`（参考资料）、`scripts/`（脚本）、`assets/`（模板）。我们的 `news-factcheck` 就是这个结构。\n\nClaude 不会一开始就把技能全读进来，而是分三层按需加载，这叫**渐进披露**（progressive disclosure，先给目录，需要时再翻到那一页）：\n\n- 第一层，常驻：每次会话开始，Claude 只看到所有技能的 `name` + `description`。规范估算约 100 token 一个\n- 第二层，触发后：Claude 判断任务和描述对得上，才把整份 `SKILL.md` 正文读进对话。规范建议正文少于 500 行、5000 token\n- 第三层，用到才读：`references/` 里的文件在正文说“这种情况去读它”时才打开；`scripts/` 里的脚本直接运行，只有输出占上下文\n\n所以 **description 一个人扛下了“会不会被想起来”的全部责任**：正文写得再好，描述没对上，Claude 根本看不到。\n\n几个 2026-10 仍有效的数字：开放标准规定 description 最多 1024 字符；Claude Code 列表里每个技能的 `description`+`when_to_use` 合并后超过 1,536 字符会被截断；技能太多时，整张列表按上下文窗口的 1% 算预算，超了就先去掉**最少用**的技能的描述，只留名字。正文被调用后会一直留在对话里，Claude Code 不会每轮重读文件；自动压缩后，每个技能只重新附上前 5,000 token（所有技能合计 25,000）。所以最要紧的规则要写在正文靠前的位置。\n\n对照我们自己：描述 347 字符，正文 83 行、约 3,800 字，`references/` 里 6 个文件按需读取，整体是合格的三层结构。"
+  },
+  {
+   "h": "2026 年变了什么，没变什么",
+   "body": "没变的是核心：只有名字和描述常驻，正文按需加载。2025-12 技能成为开放标准 Agent Skills（agentskills.io），CS146S 2026 秋说“大多数智能体都支持”，Claude Code、Cursor 读的是同一种 `SKILL.md`。\n\nClaude Code 这一年的变化（来自官方更新日志）：\n\n- 2026-01：改技能不用重启就生效；自定义斜杠命令并入技能（`.claude/commands/x.md` 仍可用）\n- 2026-03 曾把每条描述截到 250 字符，2026-04 放宽到 1,536 并在截断时报警；同月 skill-creator 加入评测和描述优化\n- 2026-05：`skillOverrides` 可以关掉某个技能或只显示名字\n- 2026-09：`/skill-doctor` 查没用过的技能；插件可用 `claude plugin eval` 跑评测\n- 2026-10：压缩后会把技能列表重新发给 Claude\n\n新字段里值得知道的：`disable-model-invocation: true`（只能你手动 `/名字` 启动，适合发版这类有副作用的流程）、`paths`（碰到特定文件才启用）、`when_to_use`（补充触发场景，但只有 Claude Code 认；我们还要打包成 `news-factcheck.skill`，触发词放 `description` 更稳）。"
+  },
+  {
+   "h": "怎么写：描述管“何时用”，正文只写 Claude 自己不知道的",
+   "body": "**写描述**（几份一手资料的共识）：\n\n- 同时写“做什么”和“什么时候用”，用用户真会打出来的词，不用内部术语\n- 关键用途放最前面，被截断也不丢\n- 可以稍微“强势”一点：官方观察到 Claude 倾向于**少触发**，所以写“即使用户没说‘事实核查’也要用”\n- 写清边界：哪些看着像、其实不该用。描述太宽会误触发，太窄则永远不触发\n\n**写正文**：\n\n- **只写 Claude 自己找不到的**。这是 Claude Code 官方最佳实践的原话：CLAUDE.md 的规则同样适用于技能。比如“什么是 ARR”不用写，我们的“run rate 被写成 ARR”这种措辞漂移、“旧闻翻新”这些坑要写。最有价值的往往是一份**坑点清单**（gotchas）\n- 写判断，不只写步骤。CS146S 的评分标准是“说清模糊时怎么决定、什么不要做”；只把工具文档复述一遍不得分\n- 确定性的部分给精确命令或脚本（我们的 `factdb.py next-id`、`rebuild`），不要让 Claude 每次现写\n- 长资料放 `references/`，并且写清**什么时候读**。我们写的是“用户要求扩展时读 `references/extension.md`”，这就是对的写法；“详见 references/”这种泛泛的指引没用\n- 解释原因，少用全大写的 MUST、ALWAYS。现在的模型懂了为什么，执行反而更稳。真正一次都不能漏的规则，交给钩子（hook）去强制\n\n**拿 news-factcheck 对照**，有两处可以改进：正文写的是 `python scripts/factdb.py`，要靠 Claude 自己猜目录，官方建议用 `${CLAUDE_SKILL_DIR}/scripts/...` 写死技能目录；“改完卡片必须 rebuild”是每次都要做到的规则，可以考虑改成钩子。"
+  },
+  {
+   "h": "测试一：该触发时触发，不该触发时别触发",
+   "body": "触发测试的思路是准备一批**测试句**，每句标上“应触发”或“不应触发”，放进新会话里跑，看 Claude 有没有调用这个技能。\n\n- 数量：agentskills 指南建议约 20 句，8–10 句应触发，8–10 句不应触发。CS146S 的最低要求是 3 句应触发加 1 句“近似但不该触发”\n- **近似反例最有价值**：和技能有相同关键词、其实要干别的事。“写个斐波那契函数”当反例什么也测不出来\n- 应触发的句子要五花八门：有正式的也有口语、错别字；有直接点名的，也有只描述需求的；有短句，也有带链接和背景的长句。最有用的是那些“技能能帮上忙，但字面上不明显”的句子\n- 注意：一步就能做完的简单请求，Claude 可能自己处理、不去调用技能，所以测试句要有一定分量\n\n**模型每次回答不完全一样**，所以每句跑 3 次，算**触发率**。应触发的句子触发率超过 0.5 算通过，不应触发的低于 0.5 算通过。\n\n**防止过拟合**（只对这几句话管用、换个说法就失灵）：把测试句按 **60% 训练、40% 验证**分开，两组里正反例的比例要一致，而且分好就固定不变。改描述时只看训练组哪里没通过；不要把没通过的句子里的词直接塞进描述，而要找出它们代表的那一类情况。最后按**验证组**的通过率选最好的版本，它不一定是最后一版。一般迭代 5 轮左右就够了。描述越改越长，记得复查字数。\n\nskill-creator 的 `run_loop` 把这套流程自动化了（默认留出 40% 验证、每句 3 次、最多 5 轮）。Anthropic 用它改进自家技能，6 个公开技能里有 5 个触发得更准了。"
+  },
+  {
+   "h": "测试二：触发了不等于做对了——断言评测",
+   "body": "Claude Code 官方文档说：“看到技能触发，只说明 Claude 找到了它，不说明它按你的意思做了。”所以还要测输出质量：\n\n- **测试用例**存在 `evals/evals.json`，每条写提示词、预期结果，需要的话附上输入文件。先写 2–3 条就够，跑过第一轮再补\n- **对照组**：每条都跑两遍，一遍带技能、一遍不带（改进旧技能时，就用旧版本的快照当对照）。每次都在干净的上下文里跑，比如开子智能体，否则写技能时留下的上下文会把缺陷掩盖掉\n- **断言**（可以判对错的具体陈述）要等看过第一轮输出再写。“输出质量好”这种太虚；“必须出现原话‘总收入：X’”又太死板\n- **评分**：每条断言判 PASS 或 FAIL，并**附上证据**，引用输出里的原文。不给同情分：有“总结”标题、但只写了一句空话，判 FAIL\n- **聚合**：比较两组的通过率、耗时、token 差值（delta），判断多花的钱值不值。两组都能通过的断言区分不出好坏，删掉\n- **人工复看**：写具体意见，“缺坐标轴标签”能用，“不好看”没法用\n\nskill-creator 把这些分给子智能体：**grader**（评分员）判 PASS/FAIL、附证据，还挑断言本身的毛病；**comparator**（盲评员）在不知道版本的情况下比较两份输出；**analyzer**（分析员）解释赢的一方为什么赢。\n\n对 news-factcheck 来说，好的断言长这样：“涉及 Anthropic 时，笔记开头有利益说明”“每张新卡的 `as_of` 和 `last_checked` 是两个不同的日期，不是照抄”“有效搜索至少 5 次，并且包含至少一个反方来源”“只拿到搜索摘要的结论，置信度降了一级并写明原因”“最后运行了 rebuild”。\n\n评测还有一个用处：模型升级以后，如果不带技能也能全部通过，就说明这个技能可以退休了。"
+  }
+ ],
+ "key_points": [
+  "会话开始时只有技能的 name+description 常驻；正文在调用时才读入并一直留在对话里；references 和 scripts 用到才读、才运行",
+  "description 一个人决定技能会不会被想起来：写“做什么+何时用”，关键用途放最前面，用用户自己的话，写清边界；开放标准上限 1024 字符，Claude Code 列表里每条截到 1,536",
+  "正文只写 Claude 自己找不到的内容（坑点、约定、精确命令），写判断而不只是步骤；长资料放 references，并写明什么时候读",
+  "触发测试：应触发和近似反例各约一半，每句跑 3 次算触发率；按 60/40 分训练组和验证组，只看训练组失败来改，按验证组选版本",
+  "近似反例（共享关键词、实际要做别的事）比毫不相干的反例有用得多",
+  "触发了不等于做对了：用带技能、不带技能的对照加断言评测，每条判 PASS/FAIL 并附证据，不给同情分；删掉两组都能通过的断言",
+  "每次都不能漏的规则交给 hook；有副作用的流程加 `disable-model-invocation: true`；压缩后只保留每个技能正文的前 5,000 token，所以要紧的写在前面"
+ ],
+ "sources": [
+  {
+   "title": "Agent Skills Specification",
+   "url": "https://agentskills.io/specification",
+   "note": "一手；开放标准，仓库 agentskills/agentskills 最近提交 2026-08-09。name≤64、description≤1024、渐进披露三层、正文<500 行"
+  },
+  {
+   "title": "Best practices for skill creators",
+   "url": "https://agentskills.io/skill-creation/best-practices",
+   "note": "一手；只补模型缺的、坑点清单、写清何时读 references、给默认值而不是一串选项"
+  },
+  {
+   "title": "Optimizing skill descriptions",
+   "url": "https://agentskills.io/skill-creation/optimizing-descriptions",
+   "note": "一手；约 20 句测试、近似反例、每句 3 次算触发率、阈值 0.5、60/40 训练/验证、按验证组选版本"
+  },
+  {
+   "title": "Evaluating skill output quality",
+   "url": "https://agentskills.io/skill-creation/evaluating-skills",
+   "note": "一手；evals.json、带/不带技能对照、断言 PASS/FAIL 附证据、benchmark delta、人工复看"
+  },
+  {
+   "title": "anthropics/skills — skill-creator",
+   "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
+   "note": "一手；main 分支 2026-10-28。含 grader/comparator/analyzer 子智能体提示词，run_loop.py 默认留出 40% 验证、每句跑 3 次"
+  },
+  {
+   "title": "Extend Claude with skills（Claude Code 文档）",
+   "url": "https://code.claude.com/docs/en/skills",
+   "note": "一手；2026-10-28 读取。三层加载、1,536 字符上限、列表预算为上下文的 1%、压缩后保留每个技能前 5,000 token、排查“不触发/乱触发”"
+  },
+  {
+   "title": "Claude Code changelog",
+   "url": "https://code.claude.com/docs/en/changelog",
+   "note": "一手；2.1.0 热加载、2.1.3 命令并入技能、2.1.86/2.1.105 描述上限、2.1.261 /skill-doctor、2.1.269 plugin eval、2.1.304 压缩后重发技能列表"
+  },
+  {
+   "title": "Best practices for Claude Code",
+   "url": "https://code.claude.com/docs/en/best-practices",
+   "note": "一手；“Put team procedures in skills”：技能也只写 Claude 自己找不到的，有副作用的流程用 disable-model-invocation"
+  },
+  {
+   "title": "Skill authoring best practices",
+   "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
+   "note": "一手；描述用第三人称、references 只引一层、先写评测（至少 3 个场景）再写正文、用多个模型测试"
+  },
+  {
+   "title": "Improving skill-creator: Test, measure, and refine Agent Skills",
+   "url": "https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills",
+   "note": "一手；Anthropic 2026-03-03。“能力补足型”与“流程偏好型”两类技能；评测能发现技能已经不再需要；6 个公开技能里 5 个触发效果变好"
+  },
+  {
+   "title": "CS146S（2026 秋）Week 3: Author a Skill",
+   "url": "https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md",
+   "note": "一手课程作业；评分 15/60/25，触发测试要求 3 句应触发+1 句近似反例，并做一次端到端运行"
+  }
+ ],
+ "videos": [
+  {
+   "title": "Don't Build Agents, Build Skills Instead",
+   "channel": "AI Engineer（讲者 Barry Zhang、Mahesh Murag，Anthropic）",
+   "url": "https://www.youtube.com/watch?v=CEvIs9y1uog",
+   "minutes": 16,
+   "lang": "英文",
+   "why": "技能这套设计的作者本人讲为什么要有技能：通才模型缺的是领域流程知识；技能是一个文件夹、按需加载。看完能明白我们为什么把核查流程写成技能，而不是塞进 CLAUDE.md",
+   "watch_for": "渐进披露（先只给元数据，用到再读全文）那一段，以及“技能管专业知识、MCP 管连外部系统”的分工",
+   "caveat": "2025-12 的演讲，那时 skill-creator 还没有评测和描述优化（2026-03 才加），也没讲 Claude Code 2026 年的字数上限、热加载等变化；测试方法以本课材料为准",
+   "evidence": "WebSearch“Don't Build Agents, Build Skills Instead Anthropic AI Engineer youtube”：搜索摘要给出 youtube.com/watch?v=CEvIs9y1uog，约 16 分钟；videohighlight.com/v/CEvIs9y1uog（同一视频 ID）和 recapio 有摘要；podwise 标注 YouTube 2025-12-08。YouTube 本身没有打开"
+  },
+  {
+   "title": "Agent Skills with Anthropic（短课）",
+   "channel": "DeepLearning.AI × Anthropic（讲师 Elie Schoppik）",
+   "url": "https://www.deeplearning.ai/short-courses/agent-skills-with-anthropic/",
+   "minutes": 139,
+   "lang": "英文",
+   "why": "Anthropic 合作的系统短课：10 节视频，讲技能文件夹结构、SKILL.md 格式、渐进披露，以及技能和工具、MCP、子智能体的区别，并在 Claude Code 里动手做技能",
+   "watch_for": "讲技能结构和渐进披露的那几节，以及技能与工具、MCP、子智能体对比的那一节；动手部分可以略看",
+   "caveat": "2026 年初上线（各处说法从 2026-01-28 到 2026-03 不一），不包含 2026-09/10 的 /skill-doctor、plugin eval、压缩后重发列表等变化；评测讲得较浅，要配合 agentskills 的 evaluating-skills、optimizing-descriptions 一起看。部分功能需要 PRO 会员",
+   "evidence": "WebSearch“DeepLearning.AI Agent Skills with Anthropic course”：deeplearning.ai 课程页、community.deeplearning.ai 上线公告，列表显示 2 小时 19 分、10 节视频、1 个作业；本仓库 catalog.json 也收录了这门课"
+  }
+ ],
+ "quiz": {
+  "mcq": [
+   {
+    "q": "新开一个 Claude Code 会话，还没提任何新闻。这时 Claude 对 news-factcheck 技能知道多少？",
+    "options": [
+     "SKILL.md 正文和 references/ 里的全部文件都已读入",
+     "只知道它的 name 和 description",
+     "什么都不知道，必须由用户输入 /news-factcheck 才能用",
+     "知道 name、description 和正文的前 500 行"
+    ],
+    "answer": 1,
+    "explain": "第一层只常驻名字和描述；正文要等判断该用时才读入，references 更是用到才读。技能默认允许 Claude 自己启动，不一定要手动输入斜杠命令。"
+   },
+   {
+    "q": "按 2026-10 的 Claude Code 文档，下面关于技能描述长度的说法哪个正确？",
+    "options": [
+     "描述超过 250 字符就会被截掉，所以必须压缩到 250 字以内",
+     "每个技能的 description+when_to_use 超过 1,536 字符会被截断；技能太多时还会先去掉最少用的那些技能的描述",
+     "描述没有长度限制，写得越长越容易触发",
+     "描述的上限是 5,000 token，和正文一样"
+    ],
+    "answer": 1,
+    "explain": "250 字符的限制只在 2026-03 的 2.1.86 版存在过，4 月就放宽到 1,536 了。整张列表另有一个预算（上下文的 1%），超出时先去掉最少用技能的描述。5,000 token 是对正文的建议。"
+   },
+   {
+    "q": "你给 news-factcheck 写了 20 句触发测试句，想改进它的 description。哪种做法最不容易过拟合？",
+    "options": [
+     "用全部 20 句反复改，直到每句都通过",
+     "分好 60% 训练、40% 验证，只根据训练组的失败来改，最后按验证组通过率选版本",
+     "把没触发的句子里的关键词直接加进描述",
+     "只测应触发的句子，因为多触发几次也没坏处"
+    ],
+    "answer": 1,
+    "explain": "验证组不能参与修改，这样才能看出改动在新说法上是否依然有效。直接塞关键词正是过拟合。误触发也有代价：会把整份正文塞进无关任务，甚至把 Claude 带偏。"
+   },
+   {
+    "q": "下面哪一句最适合当 news-factcheck 的“近似反例”（看着像、但不该触发）？",
+    "options": [
+     "帮我写一个斐波那契函数",
+     "今天北京天气怎么样",
+     "拆解一下这篇爆款小红书文案的标题和结构，我想学它的写法",
+     "（空消息）"
+    ],
+    "answer": 2,
+    "explain": "它和描述共用“拆解这篇文章”“小红书”这些词，但用户要学的是写作技巧，不是核查真假，正好能测出描述是否太宽。A、B 跟技能毫不相干，什么也测不出来。"
+   },
+   {
+    "q": "给技能做输出质量评测时，哪种做法符合 agentskills 和 skill-creator 的要求？",
+    "options": [
+     "断言写成“输出质量好”，让模型自己判断",
+     "每条断言判 PASS/FAIL 并引用输出原文作证据；有标题、没实质内容的判 FAIL",
+     "只跑带技能的版本就够了，不用对照",
+     "断言越多越好，带技能和不带技能都能通过的断言也保留，让通过率更好看"
+    ],
+    "answer": 1,
+    "explain": "证据要引用输出原文，不给同情分。需要和不带技能（或旧版本）对照才能看出技能的作用；两组都能通过的断言区分不出好坏，应该删掉。"
+   },
+   {
+    "q": "news-factcheck 正文写着“改完卡片运行 rebuild”。Claude 在第一次回复里照做了，后面几轮就忘了。按 2026 年官方的建议，最合适的改法是？",
+    "options": [
+     "在 SKILL.md 里改成全大写的 MUST ALWAYS RUN REBUILD",
+     "把这种必须每次成立的规则交给 hook（可以写进技能的 hooks frontmatter）；需要判断的指令改写成适用于整个任务的说法",
+     "把整份 SKILL.md 复制进 CLAUDE.md，让它每轮都在",
+     "每轮都对 Claude 说一句 keep going"
+    ],
+    "answer": 1,
+    "explain": "技能正文只在调用时读入一次，之后不会重读；“必须每次成立”的事交给每次都会运行的 hook 最可靠。全大写强调和 keep going 都是过时做法，把技能复制进 CLAUDE.md 则会让每个无关任务都背着它。"
+   }
+  ],
+  "short": [
+   {
+    "q": "用自己的话解释：为什么 news-factcheck 的正文可以写 83 行，references/ 里还放了 6 个文件，而 CLAUDE.md 里关于核查只写一两行？请结合技能的三层加载，说清楚各类内容应该放在哪一层。",
+    "rubric": [
+     {
+      "point": "说清三层：name+description 常驻；正文在触发后读入；references 和 scripts 用到才读、才运行",
+      "pts": 4
+     },
+     {
+      "point": "对应到我们的仓库：触发条件写在 description；流程和判断写在正文；平台规则、卡片格式等放 references，并在正文写明何时读；CLAUDE.md 只放每次会话都需要的东西（比如“核查时用 news-factcheck”）",
+      "pts": 3
+     },
+     {
+      "point": "讲出代价：CLAUDE.md 每个会话都会加载，技能正文只在用到时才付出；调用后正文一直留在对话里，压缩后只保留前 5,000 token，所以要紧的写在前面",
+      "pts": 3
+     }
+    ],
+    "ref_answer": "技能分三层加载：每个会话一开始，Claude 只看到 news-factcheck 的名字和那 347 字符的描述，凭这些判断要不要用。用户发来一条要核查的新闻，它才把 83 行正文读进来；正文里写着“要做小红书时读 references/publish.md”，它才去翻那个文件，factdb.py 则是直接运行、只看输出。CLAUDE.md 每个会话都会整份加载，哪怕你只是在改知识扩张页面，所以只放每次都要的信息，比如“核查新闻时用 news-factcheck 技能”和几条常用命令。核查流程很长，但只在核查时才需要，放进技能就不会拖累无关任务。还要注意，正文读进来后会一直留在对话里，压缩后只保留前 5,000 token，所以最重要的步骤，比如先查重、最后 rebuild，要写在靠前的位置。"
+   },
+   {
+    "q": "有人说：“我对 news-factcheck 说了 3 句话，它都触发了，说明这个技能没问题。”请指出这个测试至少两处缺陷，并说明你会怎么改进（结合我们的仓库举例）。",
+    "rubric": [
+     {
+      "point": "缺少反例，尤其是近似反例，测不出描述是否太宽；能举出一句本仓库的近似反例（如“查一下事实库里 OpenAI 估值是哪张卡”）",
+      "pts": 3
+     },
+     {
+      "point": "触发了不等于做对了：需要带技能和不带技能的对照，并写可判 PASS/FAIL、附证据的断言（如 as_of 和 last_checked 分开、是否运行了 rebuild）",
+      "pts": 3
+     },
+     {
+      "point": "模型回答有随机性：每句要多跑几次算触发率；句子要多一些，并按 60/40 分训练组和验证组，防止过拟合",
+      "pts": 2
+     },
+     {
+      "point": "要在新会话或子智能体的干净上下文里测；写技能那个会话留下的上下文会掩盖问题",
+      "pts": 2
+     }
+    ],
+    "ref_answer": "第一，只测了应触发的句子。描述里有“查一下”“帮我判断”这种很宽的词，可能在“查一下事实库里 OpenAI 估值的卡片编号”这种只需跑一条 search 命令的请求上误触发；要加 5 句左右的近似反例。第二，触发只说明 Claude 找到了技能，不说明它做对了。要挑两三条真实新闻，分别带技能和不带技能各跑一次，用断言逐条判 PASS/FAIL 并引用原文作证据，比如“新卡的 as_of 不等于核查日”“只看到搜索摘要的结论降了置信度”“最后运行了 rebuild”。第三，3 句话、各跑一次，样本太小，而模型每次回答不一样。应该写 15 句左右，每句跑 3 次算触发率，按 60/40 分训练组和验证组，按验证组的结果来判断。第四，如果是在写技能的同一个会话里测，Claude 已经知道技能内容，结果不可信，要在新会话或子智能体里跑。"
+   }
+  ]
+ },
+ "assignment": {
+  "title": "给 news-factcheck 设计触发测试集，并评审它的 description",
+  "task": "先读 `.claude/skills/news-factcheck/SKILL.md` 开头的 description（347 字符，中文在前，最后一句英文），然后在手机上完成下面四件事：\n\n- 一、写清工作流和边界：用 3–5 句话说清这个技能里真正需要判断的地方（例如拆命题、判断来源级别、更新旧卡还是推翻旧卡），以及它和这三件事的边界：只是查已有卡片、修改技能本身、学写作技巧\n- 二、触发测试集：写 10 句**应触发**的话、5 句**近似但不该触发**的话。应触发的要五花八门：口语和书面都有，有带链接、截图或视频的，也有只描述需求、不提“核查”的，有单条也有批量，并且覆盖财经以外的话题。反例要和描述共享关键词（如“查一下”“拆解”“小红书”“ARR”），但实际需要的是别的事。按 60/40 标出训练组（6 句应触发+3 句反例）和验证组（4 句应触发+2 句反例）\n- 三、评审 description：找出至少 3 处可能**误触发**的地方和至少 3 处可能**漏触发**的地方，每处指出是哪个词、哪类情况引起的，并配一句会出问题的话。然后写一版改进后的 description：不超过 1024 字符，关键用途放在最前面，写清不该用的情况，不要把你测试句里的词照抄进去\n- 四、断言：挑一条你写的应触发句，假设技能完整跑完一遍，写 3 条可以判 PASS/FAIL 的断言，并说明阅卷人去哪里找证据（笔记、卡片的哪个字段、命令输出）",
+  "deliverable": "一段文字：四部分依次排列（边界说明、15 句标好训练组/验证组的测试句、误触发和漏触发分析加改写后的 description、3 条断言及证据来源）",
+  "rubric": [
+   {
+    "part": "一、工作流与边界",
+    "points": 15,
+    "criteria": "说出至少 2 个真实的判断点；三条边界讲清楚，并能说明理由（如 CLAUDE.md 写明“只是查卡片、取编号，不必读技能”）。改编自 CS146S 第 3 周 Part I（15 分：可重复、有真实判断点）"
+   },
+   {
+    "part": "二、description 评审与改写",
+    "points": 60,
+    "criteria": "误触发分析 20 分：≥3 处，每处指出具体词并配例句；漏触发分析 20 分：≥3 处，覆盖非财经话题、视频或群聊转发、更新旧卡或批量核查等至少两类；改写 20 分：≤1024 字符，关键用途放在最前面，写明边界，没有照抄测试句里的关键词，“做什么”和“何时用”都有。改编自 CS146S 第 3 周 Part II（60 分：描述能触发、写进判断、正文精简）"
+   },
+   {
+    "part": "三、测试设计（测试句+断言）",
+    "points": 25,
+    "criteria": "测试句 15 分：10 句应触发足够多样，5 句反例确实是近似反例（与描述共享关键词），没有“写个斐波那契”这类凑数句子；训练/验证切分 5 分：按 6+3/4+2 分好，两组都有正有反；断言 5 分：3 条都能客观判 PASS/FAIL，并写明证据位置，不写“质量好”这类断言。改编自 CS146S 第 3 周 Part III（25 分：含近似反例的触发测试加端到端运行）"
+   }
+  ],
+  "reference": "可能误触发（描述太宽）：\n- “查一下”“帮我判断”太通用。比如“查一下事实库里 OpenAI 估值是哪张卡”，按 CLAUDE.md 直接跑 search 就行；又如“帮我判断这段 factdb.py 报错是什么原因”\n- “拆解这篇文章”。比如“拆解这篇爆款文案的标题和结构，我想学写法”，要的是写作分析\n- “做成小红书/视频号内容”没有限定是已核查的新闻。比如“把这周学的技能课做成一张小红书笔记”\n- ARR、估值这类数字词。比如“ARR 和 MRR 怎么换算”，是概念题\n- 描述里没写不该用的情况。比如“改一下 news-factcheck 的 description”，应该用 skill-creator\n\n可能漏触发（描述太窄）：\n- 输入只列了截图、公众号、推文、文章，没有视频（抖音、B 站）、群聊转发、口头传闻\n- 例子偏财经和科技（融资、ARR、估值），政策、健康、社会类传言可能漏掉，比如“听说下月起个税起征点提到 1 万”\n- 没提“新消息推翻旧卡片”“多条新闻一起查”\n- 只列了“这是真的吗”，没有“靠谱吗”“是不是谣言”“最早谁说的”这类说法\n\n做得好的地方：关键用途放在最前面；写了“即使用户没说‘事实核查’”；347 字符，远低于 1024 和 1,536 的上限。英文那句帮助匹配英文请求。\n\n应触发示例：\n- “[截图] 说某 AI 公司成立 18 个月 ARR 破 10 亿，靠谱吗”\n- “群里转了个抖音，说下个月起个人养老金能随时取，真的假的”\n- “这篇公众号说 Cursor 已死，帮我看看论点哪里站不住”\n- “彭博和 36 氪对同一笔融资报的金额不一样，到底多少”\n- “这条新消息和上个月那张卡说法矛盾了，要不要更新”\n- “把昨天查过的那条新闻做成小红书图文”\n- “fact check this tweet: OpenAI loses $5B a year”\n- “这 5 条链接一起查”\n- “朋友说日本便利店要全面取消塑料袋，有这回事吗”\n- “‘大模型价格战让 XX 亏损’最早是谁说的”\n\n近似反例示例：\n- 查已有卡片的编号\n- 改技能描述\n- 学爆款文案的写法\n- ARR 和 MRR 怎么换算\n- 把学习笔记做成小红书\n\n改写示例（约 215 字符）：“核查新闻和网传说法的真假与出处，并把结论写成 Obsidian 事实卡片；可接着做影响分析，或把已核查的新闻做成小红书/视频号内容。用户转来新闻截图、文章/推文/视频链接、群聊转发或听来的说法，问‘是真的吗’‘靠谱吗’‘最早谁说的’，或怀疑某个数字（融资、营收、ARR、估值）、政策、‘XX 已死’类断言时使用，即使没说‘事实核查’；多条一起查、新消息推翻旧卡时也用。只是按编号或关键词查已有卡片、学写作技巧或修改本技能时不要用。”\n\n断言示例：\n- 笔记里每个命题都有状态和置信度（看 Notes 里的笔记）\n- 新卡的 `as_of` 和 `last_checked` 都填了，而且 `as_of` 不是照抄核查日（看卡片 frontmatter）\n- 搜索日志里至少 5 次有效搜索，并含一个反方来源（看笔记的搜索日志）\n- 最后运行了 `rebuild`，事实清单的表里出现了新卡（看命令输出和事实清单.md）",
+  "practice": "配套实践 L02「给核查技能做触发测试和断言评测」（约 1 天，由 Claude 在仓库里做）：1）以学习者写的 15 句为种子，补到约 20 句，存成 `.claude/skills/news-factcheck/evals/trigger_queries.json`；用 skill-creator 的 run_loop 跑（默认留出 40% 验证、每句 3 次、最多 5 轮），按验证分挑出最好的描述。注意 run_eval 会在 `.claude/commands/` 下临时建命令文件，跑完要确认没有残留。2）挑 2–3 条真实新闻写进 `evals/evals.json`，用子智能体分别跑带技能和不带技能两组（输出只写到 `FactCheck/_staging/`，不进正式库），由 grader 按断言逐条判 PASS/FAIL 并附证据，汇总通过率、耗时和 token 的差值。3）结论写进 `作业/L02-报告.md`。如果改了技能，重新打包 `news-factcheck.skill`，并记进 `FactCheck/变更记录.md`。"
+ }
+}
